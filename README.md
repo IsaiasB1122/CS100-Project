@@ -4,7 +4,7 @@
  [Isaias Bernal](https://github.com/IsaiasB1122)
  [Dang Nguyen](https://github.com/Nhin0928)
  [Cristian Roberts](https://github.com/crisapi)
- [Reuben Self](https://github.com/jmcda001)
+ [Reuben Self](https://github.com/rselfucr)
 
  ## Project Description
  > CaTaBoard will be a console application where a user is able to maintain a local Directory of Task Boards, via a command REPL loop.
