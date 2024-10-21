@@ -1,29 +1,40 @@
- > As you complete each section you **must** remove the prompt text. Every *turnin* of this project includes points for formatting of this README so keep it clean and keep it up to date. 
- > Prompt text is any lines beginning with "\>"
- > Replace anything between \<...\> with your project specifics and remove angle brackets. For example, you need to name your project and replace the header right below this line with that title (no angle brackets). 
-# \<Project title\>
- > Your author list below should include links to all members GitHub (remove existing author).
- 
- > Authors: \<[Jeffrey McDaniel](https://github.com/jmcda001)\>
+ # Categorized Task Board (CaTaBoard) (Name Tenative)
+ Simple C++ CLI program for creating and managing Kanban-like task boards.
+ > Authors: 
+ [Isaias Bernal](https://github.com/IsaiasB1122)
+ [Dang Nguyen](https://github.com/Nhin0928)
+ [Cristian Roberts](https://github.com/crisapi)
+ [Reuben Self](https://github.com/jmcda001)
 
- > You will be forming a group of **FOUR** students and working on an interesting project. The project has 4 phases, each one with specific requirements. A list of proposed project ideas that have been successful in previous quarters is listed in the project specifications document on Canvas. You can select an idea from the list and start thinking about the features you will implement. If you want to propose your own original idea, you will have to contact your instructor to discuss the project and obtain written permission before you submit your project proposal (Phase 1). The project work should be divided almost equally among team members. You can of course help each other, but it needs to be clear who will be responsible for which features. Additionally, you are expected to follow Scrum patterns, specifically the use of a Scrum (Project) board, Sprints, and Scrum meetings.
+ ## Project Description
+ > CaTaBoard will be a console application where a user is able to maintain a local Directory of Task Boards, via a command REPL loop.
+ > ### Primary Features
+ > * Ability to customize the available Categories for Tasks (e.g. TODO, In Progress, Completed, Needs Review..)
+ > * Creation of multiple Task Boards.
+ > * Track members assigned to a Task or Task Board, and view statistics related to their contributions.
+ > * Ability to assosciate extra information related to a Task or Task Board via a list of Notes, which can be appended to over time to not only describe tasks but also track issues and events during development.
+ > * Ability to sort existing Tasks within a Task Board by recent activity, creation ID, and filter by Category or assigned Member.
+ > * Full timestamped Log of all changing actions made in the Directory.
+ > * Display a Task Board in a pretty table-like view with each Category having a column.
+ > ### Potential Extra Features
+ > * Users: Have a user set for each "session" (changeable via command) that is also logged for each action.
+ > * Text Graphics Extras: Associate a color with each Category that will color the name of tasks in all output, generate charts like burndown charts, workload split charts, etc.
+ > * Undo: Allow all actions recorded in the Log to be undone.
+ > * Syncing: Configure a Directory to try to sync with a server of some sort.
+ > ### Implementation Details
+ > * C++ CLI application.
+  > * Targeting unix (hard target: running on UCR CS SSH machines)
+    (Ideally should be able to compile and run on windows, but certain terminal features which we may use are not completely platform independent.)
+ > * No third party libraries outside of C++ stdlib are expected to be necessary.
+ > * Persistent data structures such as the task Directory itself, Task Boards, etc, will be mapped to specific classes, and all functionality of those structures will be implemented as class methods. The Directory will be given as an argument when running and either be created or loaded. Writes will be made immediately after a changing command is ran, to avoid data loss due to crashing.
+ > * The console interface will be entirely modular, meaning that no actual program functionality is implemented by code that handles parsing commands or returning command output. This will make the program more extensible, supporting hypothetical potential features like a GUI or web API.
 
- > ## Expectations
- > * The backend of your project should be implemented in C++. If you wish to choose anoher programming language (e.g. Java, Python), please discuss with your lab TA to obtain permission.
- > * You can incorporate additional technologies/tools but they must be approved (in writing) by the instructor or the TA.
- > * Each member of the group **must** be committing code regularly and make sure their code is correctly attributed to them. We will be checking attributions to determine if there was equal contribution to the project.
- > * **Each member of the group must actively participate in the Github Project board, writing unit tests, and reviewing commited code.**
-> * All project phases are to be submitted to this GitHub repository. You should modify this README file to reflect the different phases of the project. In addition, you should regularly hold sprint meetings with your group. You will need to hold two to three scrum/check-in meetings with your lab TA/reader at different times in addition to the final demo.
+## Project Interst
+> We believe this project will be interesting for several reasons.
+> 1. The topic will relate to what we are learning in this semester of CS100, and give us a chance to directly apply and reinforce that knowledge.
+> 2. The program itself will have a practical application, while also being simple to implement and use.
+> 3. The project will be an approachable opportunity to gain experience in concepts that are key to software development. (designing file formats, working with a system of classes, creating a system to parse and run commands, sorting, filtering, and managing database-like structures)
 
-## Project Description
- > Your project description should summarize the project you are proposing. Be sure to include:
- > * Why is it important or interesting to you?
- > * What languages/tools/technologies do you plan to use? (This list may change over the course of the project)
- > * What will be the input/output of your project?
- > * What are the features that the project provides?
- > This description should be in enough detail that the TA/instructor can determine the complexity of the project and if it is sufficient for the team members to complete in the time allotted. 
- > 
- > You also need to set up an empty project board using GitHub projects (board view with default columns). Make sure you add the board under your project repository. You should also have a Product Backlog and In testing columns added. All columns should be in the right order.
  > ## Phase II
  > In addition to completing the "User Interface Specification" and "Class Diagram" sections below, you will need to:
  > * Create an "Epic" (note) for each feature. Place these epics in the `Product Backlog` column
