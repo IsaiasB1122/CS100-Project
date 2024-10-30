@@ -28,6 +28,9 @@
  > * No third party libraries outside of C++ stdlib are expected to be necessary.
  > * Persistent data structures such as the task Directory itself, Task Boards, etc, will be mapped to specific classes, and all functionality of those structures will be implemented as class methods. The Directory will be given as an argument when running and either be created or loaded. Writes will be made immediately after a changing command is ran, to avoid data loss due to crashing.
  > * The console interface will be entirely modular, meaning that no actual program functionality is implemented by code that handles parsing commands or returning command output. This will make the program more extensible, supporting hypothetical potential features like a GUI or web API.
+ > ### Input / Output
+ > The software receives inputs from commands in an interactive loop.
+ > Commands output results as simple text split by line. More advanced text graphics will be avoided. (Colored text may be used, and the output of some commands may be calculated based on the current terminal width.)
 
 ## Project Interest
 > We believe this project will be interesting for several reasons.
