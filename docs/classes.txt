@@ -1,0 +1,159 @@
+TODO:
+	Add class for Task
+	Add class for TaskList
+	Add class for ActionLogItem
+	Add class for ActionLog
+	Check that required methods are present
+
+
+struct Note:
+	+ uint id
+	+ string title
+	+ string text
+	+ Member* author
+	+ time_t creation_time
+	+ time_t modified_time
+
+struct CategoryInfo:
+	+ uint id
+	# Name of the category as lowercase. (must be unique)
+	+ string name
+	+ time_t creation_time
+	+ time_t modified_time
+
+struct Member:
+	+ uint id
+	# Name of the member as lowercase. (must be unique)
+	+ string name
+	+ NoteList notes
+	+ time_t creation_time
+	+ time_t modified_time
+
+NoteList:
+	members:
+		- vector<Note*> notes
+		- uint next_note_id
+	methods:
+		+ vector<const Note&> get_notes()
+		+ const Note& get_note(uint id)
+		# Creates note and returns reference to it
+		+ const Note& add_note(string title, string text, const Member& author)
+		+ const Note& edit_note(string title, string text, const Member& author)
+		+ void remove_note(uint id)
+
+CategoryList:
+	members:
+		- vector<CategoryInfo*> categories
+		# Keep track of the next ID to assign (begins at 0, incremented each time)
+		- uint next_category_id
+	methods:
+		+ vector<const CategoryInfo&> get_categories()
+		+ const CategoryInfo& get_category(uint id)
+		+ const CategoryInfo& get_category_by_name(string name)
+		# Creates category and returns reference to it
+		+ const CategoryInfo& add_category(CategoryInfo category)
+		+ void remove_category(uint id category)
+		# Moves given category to be the given position. Throws if index out of range.
+		+ void move_category(uint id, uint index)
+		# Renames given category. Name must be in lowercase and be unique
+		+ void rename_category(uint id, string name)
+
+MemberList:
+	members:
+		- vector<Member*> members
+		- uint next_member
+	methods:
+		+ vector<const Member&> get_members()
+		+ const Member& get_member(uint id)
+		+ const Member& get_member_by_name(string name)
+		+ const Member& add_member(string name)
+		+ void rename_member(uint id, string name)
+
+TaskBoard:
+	members
+		- uint id
+		- vector<CategoryInfo> categories
+		- Directory* parent
+		+ time_t creation_time
+		+ time_t modified_time
+
+		+ TaskList tasks
+		+ MemberList members
+		+ NoteList notes
+		+ CategoryList categories
+	methods
+		# Writes taskboard to disk. Should be called whenever any changes are made to this taskboard 
+		+ write()
+		+ uint get_id()
+
+# Class representing all the data associated with the data directory
+Directory:
+	members 
+		# The filepath of the directory on disk.
+		- string path;
+		- string name;
+		- vector<TaskBoard*> boards;
+		- ActionLog action_log;
+		# Keep track of the next ID to assign (begins at 0, incremented each time)
+		- uint next_id
+		# Categories given to new task boards by default
+		+ CategoryList default_categories
+	methods
+		# Constructs Directory by loading from the given path. Throws exception if path is invalid
+		+ static Directory load_from_path(string path)
+		# Constructs a new Directory and then saves its initial state to the given path. 
+		# Throws an exception if cannot write or path is invalid
+		+ static Ditectory new_at_path(string path, string name)
+		
+		+ string get_path()
+		+ string get_name()
+		
+		# Creates and adds an empty board with name.
+		+ TaskBoard* add_board(string name)
+		# Removes given board and immediately deletes it from disk
+		+ void remove_board(TaskBoard* board)
+		+ vector<TaskBoard*> get_boards()
+		+ TaskBoard* get_board(uint id)
+		# Returns all the boards matching the search (include if their name contains the query as a substring)
+		+ vector<TaskBoard*> filter_board_name(string query)
+		
+
+namespace CommandManager:
+	enum COMMAND_PARSE_RESULT {BAD_COMMAND, BAD_PARAMETERS, OK}
+	# Parses one line and tries to run a command from in, printing results to out
+	# Calls Command::run
+	# Return will be OK if a command is found and ran (even if the command itself gives an error)
+	COMMAND_PARSE_RESULT parse_command(istream& in, ostream& out)
+	
+	# A map where a given parameter name is mapped to a "remembered" set parameter
+	map<string, string> set_parameters
+	# Sets a parameter in the set_parameters map
+	void set_parameter(string name, string value)
+	# Forgets a parameter in the set_parameters map
+	void unset_parameter(string name)
+
+# This is a class constructed in parse_command and given to Command::run
+CommandParametersData:
+	members
+		- vector<string> positional_parameters
+		- map<string,string> named_parameters
+	methods
+		# Gets a parameter by index [0, length of required parameters]
+		+ string get_parameter(uint index)
+		# Gets a parameter by name
+		+ string get_parameter(string name)
+
+# The base class for commands
+# Commands will be implemented by defining a class that inherits this command
+abstract Command:
+	# Return value of run
+	enum COMMAND_RUN_RESULT {ERROR, OK}
+	methods
+		# Returns the name of the command in lowercase
+		+ virtual string get_name()
+		# Returns a vector of the required parameter names for the command
+		+ virtual vector<string> get_required_parameters()
+		# Returns a vector of the accepted optional parameter names for the command.
+		+ virtual vector<string> get_optional_parameters()
+		# 
+		+ virtual COMMAND_RUN_RESULT run(CommandParametersData parameters, ostream& out)
