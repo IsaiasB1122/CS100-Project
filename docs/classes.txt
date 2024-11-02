@@ -40,6 +40,10 @@ NoteList:
 		+ const Note& add_note(string title, string text, const Member& author)
 		+ const Note& edit_note(string title, string text, const Member& author)
 		+ void remove_note(uint id)
+		# Serializes self to a vector of bytes
+		+ vector<unsigned char> serialize()
+		# Reads self from a vector of bytes
+		+ NoteList deserialize(vector<unsigned char> data)
 
 CategoryList:
 	members:
@@ -57,6 +61,10 @@ CategoryList:
 		+ void move_category(uint id, uint index)
 		# Renames given category. Name must be in lowercase and be unique
 		+ void rename_category(uint id, string name)
+		# Serializes self to a vector of bytes
+		+ vector<unsigned char> serialize()
+		# Reads self from a vector of bytes
+		+ CategoryList deserialize(vector<unsigned char> data)
 
 MemberList:
 	members:
@@ -68,6 +76,17 @@ MemberList:
 		+ const Member& get_member_by_name(string name)
 		+ const Member& add_member(string name)
 		+ void rename_member(uint id, string name)
+		# Serializes self to a vector of bytes
+		+ vector<unsigned char> serialize()
+		# Reads self from a vector of bytes
+		+ MemberList deserialize(vector<unsigned char> data)
+
+Task:
+	members:
+		- uint id
+		- uint category_id
+		- vector<uint> assigned_members
+		+ NoteList notes
 
 TaskBoard:
 	members
@@ -82,9 +101,9 @@ TaskBoard:
 		+ NoteList notes
 		+ CategoryList categories
 	methods
-		# Writes taskboard to disk. Should be called whenever any changes are made to this taskboard 
-		+ write()
 		+ uint get_id()
+		# Writes entire taskboard to disk relative to the Directory parent
+		+ int write()
 
 # Class representing all the data associated with the data directory
 Directory:
