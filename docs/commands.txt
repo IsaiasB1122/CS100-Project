@@ -1,0 +1,47 @@
+List of commands
+format:
+- COMMAND_NAME <parameters...>
+# lines describe command
+>> lines show example command input
+> lines show example command output
+<parameters> are required
+[parameters] are optional
+
+Notes on specific paramters:
+	<board>:
+		When this parameter is used, the command will first check if there is a board with this exact name.
+		If there is no board with that name, it will then try to treat it as an integer and use that as the board ID.
+		If it doesn't match any name or ID, then the command will give an error.
+
+exit
+# Exits the program
+
+help [command]
+# If [command] is not given, lists commands
+# Otherwise, it will print the help message of the given command,
+# or say no command found if the name is invalid
+
+list-boards [filter]
+# Returns list of boards, filtered by [filter].
+# Example:
+>> list-boards
+> 0	Board1
+> 1 Task Board Group 1
+> 2 Group 2
+>> list-boards board
+> 0 Board1
+> 2 Group 2
+
+new-board <name>
+# Creates a new board with the given name
+# Example:
+>> new-board Board1
+> 0	Board1
+>> new-board "Final Project Board"
+> 1 Final Project Board 
+
+remove-board <board>
+# Deletes the given board
+>> remove-board "Final Project Board"
+> REMOVED	1	Final Project Board
+
