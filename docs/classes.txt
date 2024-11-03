@@ -1,40 +1,41 @@
 TODO:
-	Add class for Task
-	Add class for TaskList
 	Add class for ActionLogItem
 	Add class for ActionLog
 	Check that required methods are present
 
+# Base class for all of the object types which can indexed by id and have a name
+# That way we can use common algorithms for filtering & sorting these types
+base DataEntry:
+	enum SORT_TYPE {NONE,ID,MODIFIED}
+	members:
+		+ uint id
+		+ string name
+		+ time_t creation_time
+		+ time_t modified_time
+	methods:
+		# Filters the given data entry vector by name, returning a new vector
+		# Uses given sort type
+		static vector<DataEntry*> filter_data(vector<DataEntry*> data, string filter, SORT_TYPE sort = NONE)
+		# Returns a string representation of the data entry using ID and name
+		string to_string()
 
-struct Note:
-	+ uint id
-	+ string title
+
+DataEntry->Note:
 	+ string text
-	+ Member* author
-	+ time_t creation_time
-	+ time_t modified_time
+	+ uint author_id
 
-struct CategoryInfo:
-	+ uint id
-	# Name of the category as lowercase. (must be unique)
-	+ string name
-	+ time_t creation_time
-	+ time_t modified_time
+DataEntry->CategoryInfo:
 
-struct Member:
-	+ uint id
-	# Name of the member as lowercase. (must be unique)
-	+ string name
-	+ NoteList notes
-	+ time_t creation_time
-	+ time_t modified_time
+
+DataEntry->Member:
+
 
 NoteList:
 	members:
 		- vector<Note*> notes
 		- uint next_note_id
 	methods:
-		+ vector<const Note&> get_notes()
+		+ const vector<Note*> get_notes()
 		+ const Note& get_note(uint id)
 		# Creates note and returns reference to it
 		+ const Note& add_note(string title, string text, const Member& author)
@@ -44,6 +45,8 @@ NoteList:
 		+ vector<unsigned char> serialize()
 		# Reads self from a vector of bytes
 		+ NoteList deserialize(vector<unsigned char> data)
+		# Returns a list of categories filtered by the query
+		+ vector<Task*> filter_note_name(string query, DataEntry::SORT_TYPE sort = DataEntry::SORT_TYPE::NONE)
 
 CategoryList:
 	members:
@@ -51,7 +54,7 @@ CategoryList:
 		# Keep track of the next ID to assign (begins at 0, incremented each time)
 		- uint next_category_id
 	methods:
-		+ vector<const CategoryInfo&> get_categories()
+		+ const vector<CategoryInfo*> get_categories()
 		+ const CategoryInfo& get_category(uint id)
 		+ const CategoryInfo& get_category_by_name(string name)
 		# Creates category and returns reference to it
@@ -65,13 +68,15 @@ CategoryList:
 		+ vector<unsigned char> serialize()
 		# Reads self from a vector of bytes
 		+ CategoryList deserialize(vector<unsigned char> data)
+		# Returns a list of categories filtered by the query
+		+ vector<Task*> filter_category_name(string query, DataEntry::SORT_TYPE sort = DataEntry::SORT_TYPE::NONE)
 
 MemberList:
 	members:
 		- vector<Member*> members
 		- uint next_member
 	methods:
-		+ vector<const Member&> get_members()
+		+ const vector<Member*> get_members()
 		+ const Member& get_member(uint id)
 		+ const Member& get_member_by_name(string name)
 		+ const Member& add_member(string name)
@@ -80,23 +85,27 @@ MemberList:
 		+ vector<unsigned char> serialize()
 		# Reads self from a vector of bytes
 		+ MemberList deserialize(vector<unsigned char> data)
+		# Returns a list of members filtered by the query
+		+ vector<Task*> filter_member_name(string query, DataEntry::SORT_TYPE sort = DataEntry::SORT_TYPE::NONE)
 
-Task:
-	members:
-		- uint id
-		- uint category_id
-		- vector<uint> assigned_members
-		+ NoteList notes
+DataEntry->Task:
+	+ uint category_id
+	+ vector<uint> assigned_members
+	+ NoteList notes
+	# This task will only be written by the TaskBoard if this value is true
+	+ bool changed
 
-TaskBoard:
+DataEntry->TaskBoard:
 	members
-		- uint id
 		- vector<CategoryInfo> categories
 		- Directory* parent
-		+ time_t creation_time
-		+ time_t modified_time
-
-		+ TaskList tasks
+		- vector<Tasks*> tasks
+		# _changed: These are set to false on load, and set to false on write
+		# Write will only write the member/notes/category list if its _changed is true
+		- bool tasks_changed
+		- bool members_changed
+		- bool notes_changed
+		- bool categories_changed
 		+ MemberList members
 		+ NoteList notes
 		+ CategoryList categories
@@ -104,6 +113,16 @@ TaskBoard:
 		+ uint get_id()
 		# Writes entire taskboard to disk relative to the Directory parent
 		+ int write()
+		
+		# Returns a vector of all tasks
+		+ const vector<Task*> get_tasks()
+		# Adds a task with given name and returns reference to it
+		+ const Task& add_task(string name, uint author=0, uint category=0)
+		+ void remove_task(uint id)
+		# Moves task to given category
+		+ void move_task(uint id, uint category)
+		# Returns a list of tasks filtered by the query
+		+ vector<Task*> filter_task_name(string query, DataEntry::SORT_TYPE sort = DataEntry::SORT_TYPE::NONE)
 
 # Class representing all the data associated with the data directory
 Directory:
@@ -134,7 +153,7 @@ Directory:
 		+ vector<TaskBoard*> get_boards()
 		+ TaskBoard* get_board(uint id)
 		# Returns all the boards matching the search (include if their name contains the query as a substring)
-		+ vector<TaskBoard*> filter_board_name(string query)
+		+ vector<TaskBoard*> filter_board_name(string query, DataEntry::SORT_TYPE sort = DataEntry::SORT_TYPE::NONE)
 		
 
 namespace CommandManager:
@@ -159,8 +178,10 @@ CommandParametersData:
 	methods
 		# Gets a parameter by index [0, length of required parameters]
 		+ string get_parameter(uint index)
-		# Gets a parameter by name
+		# Gets a parameter by name. (If it is not given will throw error)
 		+ string get_parameter(string name)
+		# Returns true if the given optional command is given or not
+		+ bool has_parameter(string name)
 
 # The base class for commands
 # Commands will be implemented by defining a class that inherits this command
@@ -170,9 +191,12 @@ abstract Command:
 	methods
 		# Returns the name of the command in lowercase
 		+ virtual string get_name()
+		# Returns a help message associated with the command
+		+ virtual string get_help()
 		# Returns a vector of the required parameter names for the command
 		+ virtual vector<string> get_required_parameters()
 		# Returns a vector of the accepted optional parameter names for the command.
 		+ virtual vector<string> get_optional_parameters()
 		# 
 		+ virtual COMMAND_RUN_RESULT run(CommandParametersData parameters, ostream& out)
+
