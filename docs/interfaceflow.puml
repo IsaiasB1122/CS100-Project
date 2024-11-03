@@ -11,7 +11,7 @@ if (Valid Directory at Path?) then (yes)
   :Load Directory from Path;
 else (no)
   if (Able to Write?) then (yes)
-    :Initiailize Directory and write it to Path;
+    :Initialize Directory and write it to Path;
   else (no)
     :Terminate with error;
     end
@@ -23,7 +23,7 @@ repeat
 :Parse Line of Input;
 
 if (Command Valid?) then (yes)
-note left: Valid = Line contains at least 1 word, and that word matches a Comamnd's name
+note left: Valid = Line contains at least 1 word, and that word matches a Command's name
   switch (Match Command Given)
   case ( Exit )
     stop
@@ -38,6 +38,7 @@ note left: Valid = Line contains at least 1 word, and that word matches a Comamn
   endswitch
   :Check Input against Command's Parameter data;
   if (Parameters Valid?) then (yes)
+  note left: Valid = Contains all required parameters
     :Execute Command;
     :Print Output of Command;
   else (no)
