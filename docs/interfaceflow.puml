@@ -1,0 +1,52 @@
+@startuml
+
+title User Interface Flow
+
+start
+
+:Program Run; 
+note right: argv1 = Path: The path to program Directory
+
+if (Valid Directory at Path?) then (yes)
+  :Load Directory from Path;
+else (no)
+  if (Able to Write?) then (yes)
+    :Initialize Directory and write it to Path;
+  else (no)
+    :Terminate with error;
+    end
+  endif
+endif
+
+:Enter Command loop;
+repeat
+:Parse Line of Input;
+
+if (Command Valid?) then (yes)
+note left: Valid = Line contains at least 1 word, and that word matches a Command's name
+  switch (Match Command Given)
+  case ( Exit )
+    stop
+  case (A)
+    :Command = ComandA;
+  case(           B)
+    :Command = ComandB;
+  case(C)
+    :Command = ComandC;
+  case (  ...)
+    :Command = ...;
+  endswitch
+  :Check Input against Command's Parameter data;
+  if (Parameters Valid?) then (yes)
+  note left: Valid = Contains all required parameters
+    :Execute Command;
+    :Print Output of Command;
+  else (no)
+    :Print Parameter Error;
+  endif
+else (no)
+  :Print Command Error;
+endif
+repeat while (Repeat)
+
+@enduml
