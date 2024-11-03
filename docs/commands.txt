@@ -30,7 +30,7 @@ list-boards [filter]
 > 2 Group 2
 >> list-boards board
 > 0 Board1
-> 2 Group 2
+> 1 Task Board Group 1
 
 new-board <name>
 # Creates a new board with the given name
