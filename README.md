@@ -38,29 +38,67 @@
 > 2. The program itself will have a practical application, while also being simple to implement and use.
 > 3. The project will be an approachable opportunity to gain experience in concepts that are key to software development. (designing file formats, working with a system of classes, creating a system to parse and run commands, sorting, filtering, and managing database-like structures)
 
- > ## Phase II
- > In addition to completing the "User Interface Specification" and "Class Diagram" sections below, you will need to:
- > * Create an "Epic" (note) for each feature. Place these epics in the `Product Backlog` column
- > * Complete your first *sprint planning* meeting to plan out the next 7 days of work.
- >   * Break down the "Epics" into smaller actionable user stories (i.e. smaller development tasks). Convert them into issues and assign them to team members. Place these in the `TODO` column (aka Sprint Backlog).
- >   * These cards should represent roughly 7 days worth of development time for your team. Then, once the sprint is over you should be repeating these steps to plan a new sprint, taking you until your second scrum meeting with the reader in phase III.
- > * Each team member needs to submit the Individual Contributions Form on Canvas for this phase. In this form, you need to fill in the names of all team members, the percentage of work contributed by each member for phase  II, and a description of their contributions. Remember that each team member should submit the form individually.
- > * Schedule two check-ins using Calendly. Both time slots should be during your lab on week 6. Your entire team must be present for both check-ins.
- >   * The first check-in needs to be scheduled with your lab TA. During that meeting, you will discuss your project design/class diagram from phase II.
- >   * The second check-in should be scheduled with a reader. During that meeting you will discuss:
- >     * The tasks you are planning for the first sprint
- >     * How work will be divided between the team members
+
 ## User Interface Specification
- > Include a navigation diagram for your screens and the layout of each of those screens as desribed below. For all the layouts/diagrams, you can use any tool such as PowerPoint or a drawing program. (Specification requirement is adapted from the User Interface Design Document Template of CMSC 345 at the University of Maryland Global Campus)
 
 ### Navigation Diagram
-> Draw a diagram illustrating how the user can navigate from one screen to another. Here is an [example](https://creately.com/diagram/example/ikfqudv82/user-navigation-diagram-classic?r=v). It can be useful to label each symbol that represents a screen so that you can reference the screens in the next section or the rest of the document if necessary. Give a brief description of what the diagram represents.
+> As our project is a terminal application where each command takes input and gives output non-interactively, a screen navigation diagram is not applicable. 
+To clarify the operation of our program, see the interface logic diagram here:
+
+![](docs/interfaceflow.png)
 
 ### Screen Layouts
-> Include the layout of each of your screens. The layout should describe the screen’s major components such as menus and prompts for user inputs and expected output, or any graphical user interface components if applicable (e.g. buttons, text boxes, etc). Explain what is on the layout, and the purpose of each menu item, button, etc. If many screens share the same layout, start by describing the general layout and then list the screens that will be using that layout and the differences between each of them.
+> As our project shows output via printed text and not a drawn screen, a screen layout diagram is not applicable.
+For clarity, see an example session of our program (user input lines marked by >>)
+See docs\commands.txt for additional command specifications
+```
+# exact output format subject to change
+cataboard /Cataboard # run program
+>> list-boards
+[0 Lab1 Taskboard]
+[1 Lab2 Taskboard]
+[2 Todolist]
+[3 Final]
+>> set --board Todolist
+board = Todolit
+>> list-tasks --category TODO
+[2  TODO  Check Registration]
+[12 TODO  Clean room]
+[13 TODO  HW04]
+>> show-task 13
+Task #13 HW04
+Category: TODO
+Notes:
+[0  Assignment Link] ------------------------------------
+"https://elearn.ucr.edu/courses/147069/assignments/757552"
+---------------------------------------------------------
+>> categorize-task 13 Finished
+CATEGORIZE TASK [13 Finished  HW04] TODO-->Finished
+>> summary Board1 --start TODO --end "In Progress"
+|------------------------------------------------------------------------|
+||          TODO                  ||          In Progress               || 
+|---------------------------------||------------------------------------||
+|| 2 Check Registration           || 10 Review for econ midterm         ||
+|| 12 Clean Room                  || 1 Write resume                     ||
+||                                || 14 Lab3                            ||
+||                                || 0  Clean old tasklist              ||
+||                                ||                                    ||
+|------------------------------------------------------------------------|
+>> add-task --board "Lab2 Taskboard" "Start lab" --category TODO
+ADD TASK [0 TODO  Start Lab]
+>> exit
+```
 
 ## Class Diagram
- > Include a **class diagram(s)** for your project and a **description** of the diagram(s). Your class diagram(s) should include all the main classes you plan for the project. This should be in sufficient detail that another group could pick up the project this point and successfully complete it. Use proper UML notation (as discussed in the course slides).
+> This is a UML diagram of our class hierarchy and relationships.
+Some notes:
+CommandManager is listed as a class for the purpose of showing its relationships but is actually just a namespace.
+Command is the base class which the Command classes that implement the functionality of each command will inherit.
+The Directory class is the "root" object of the data and only one such object exists in the program session.
+All others can have multiple instances.
+The base class DataEntry is used so that a common filter and sort function can be used for its derived classes. Note that some of its derived classes do not have any additional members; this is intentional and is done to better reflect the intent of those data types, rather than using the base class itself.
+
+![](docs/ClassRelationDiagram.png)
  
  > ## Phase III
  > You will need to schedule a check-in for the second scrum meeting with the same reader you had your first scrum meeting with (using Calendly). Your entire team must be present. This meeting will occur on week 8 during lab time.
