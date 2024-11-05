@@ -12,36 +12,241 @@ Notes on specific paramters:
 		When this parameter is used, the command will first check if there is a board with this exact name.
 		If there is no board with that name, it will then try to treat it as an integer and use that as the board ID.
 		If it doesn't match any name or ID, then the command will give an error.
+	<category>:
+		Same as above but with categories
+	<member>:
+		Same as above but with member
+	<task>:
+		Same as above but with...
 
 exit
 # Exits the program
+
 
 help [command]
 # If [command] is not given, lists commands
 # Otherwise, it will print the help message of the given command,
 # or say no command found if the name is invalid
 
+set [...]
+# Sets the given parameter name's saved value to be the value
+# Until unset is ran with that same name, all parameters with that name will get that value
+>> set --board 0
+> board = 0
+>> set --board 1 --author Bob
+> board = 1
+> author = Bob
+
+unset <name>
+# Unsets the given parameter
+>> unset board
+> board unset
+>> unset author
+> author unset
+
 list-boards [filter]
 # Returns list of boards, filtered by [filter].
-# Example:
 >> list-boards
-> 0	Board1
-> 1 Task Board Group 1
-> 2 Group 2
+> [0	Board1]
+> [1 Task Board Group 1]
+> [2 Group 2]
 >> list-boards board
-> 0 Board1
-> 1 Task Board Group 1
+> [0 Board1]
+> [1 Task Board Group 1]
 
 new-board <name>
 # Creates a new board with the given name
-# Example:
 >> new-board Board1
-> 0	Board1
+> NEW BOARD	[0	Board1]
 >> new-board "Final Project Board"
-> 1 Final Project Board 
+> NEW BOARD	[1	Final Project Board ]
 
 remove-board <board>
 # Deletes the given board
 >> remove-board "Final Project Board"
-> REMOVED	1	Final Project Board
+> REMOVED BOARD	[1	Final Project Board]
 
+add-board-note <title> <text> <author> <board>
+>> add-board-note "TODO: Finish task categories" "We need to add more task categories.\nI hope we can meet sometime!" --author Siddharth --board Board2
+> ADD NOTE [0	TODO: Finish task categories]
+
+remove-board-note <note> <board>
+>> remove-board-note 0 Board2
+> REMOVE NOTE [0	TODO: Finish task categories]
+
+show-board-note <note> <board>
+>> show-board-note 0 Board2
+> Note #01:	TODO: Finish task categories
+> Author: [6	Siddharth]
+> "We need to add more task categories.
+> I hope we can meet sometime!"
+
+list-board-notes <board> [filter] [sort] [full]
+# Sort accepts options ID, RECENT, OLD. Defaults to ID
+# Recent = Most recently modified. Old = Least recently modified
+# If full is given, will show each note in full like show-board-note
+>> list-board-notes Board2
+> [0	TODO: Finish task categories]
+> [1	RE: TODO: Finish task categories]
+>> list-board-notes Board2 --full true
+> Note #01:	TODO: Finish task categories
+> Author: [6	Siddharth]
+> "We need to add more task categories.
+> I hope we can meet sometime!"
+> ------------------------------------------------
+> Note #02:	RE: TODO: Finish task categories
+> Author: [3	Amanda]
+> "But I thought we already made all of them? :p"
+> ------------------------------------------------
+
+add-category <name> <board>
+# Adds a category with the given name to the given board
+>> add-category Finished Board1
+> NEW CATEGORY	[1	Finished]
+>> add-category "In Testing" --board Board1
+> NEW CATEGORY	[2	In Testing]
+
+remove-category <category> <board>
+# Removes the category with given id from the given board
+>> remove-category "In Testing" --board Board1
+> REMOVE CATEGORY	[2	In Testing]
+>> remove-category 1 --board Board1
+> REMOVE CATEGORY	[1	Finished]
+>> remove-category 0 --board Board1
+>> ERROR: Cannot remove default category [0	TODO]
+
+list-categories <board>
+# Lists categories in a given board
+# Listed in the order they are show on the summary left->right
+>> list-categories Board1
+> [0	TODO]
+> [1	Finished]
+> [2	In Testing]
+>> list-categories EpicBoard
+> [1	Product Backlog]
+> [0	TODO]
+> [2	In Progress]
+> [3	In Testing]
+> [4	Completed]
+
+move-category <category> <position> <board>
+# Moves the category to the given position (starting from 1)
+>> list-categories Board1
+> [0	TODO]
+> [1	Finished]
+> [2	In Testing]
+>> move-category "In Testing" 2 --Board1
+> MOVE CATEGORY	[2	In Testing]	#3 --> #2
+>> list-categories Board1
+> [0	TODO]
+> [2	In Testing]
+> [1	Finished]
+>> move-category "In Testing" 4 --Board1
+> ERROR: Category #4 out of range. (board [0	Board1] only has 3 categories)
+
+add-member <name> <board>
+>> add-member Bob Board1
+> NEW MEMBER [0	Bob]
+>> add-member Bob --board EpicBoard
+> NEW MEMBER [16	Bob]
+
+list-members <board> [filter]
+>> list-members CoolBoard
+> [0	Bob]
+> [1	Billy]
+> [2	Sam]
+> [3	Salamander]
+> [4	Xian]
+> [5	Roberto]
+>> list-members --filter ob CoolBoard
+> [0	Bob]
+> [5	Roberto]
+
+remove-member <member> <board>
+>> remove-member --board CoolBoard Bob
+> REMOVE MEMBER	[0	Bob]
+>> remove-member --board CoolBoard 2
+> REMOVE MEMBER	[2	Sam]
+
+add-task <name> <board> [category]
+>> add-task "Add more tasks" Board1 --category Backlog
+> NEW TASK [0	Backlog	Add more tasks]
+>> add-task --board Board1 "Implement a feature" 
+> NEW TASK [1	TODO	Implement a feature]
+>> add-task --board Board1 "Fix leak in ceiling" --category EpicCategory
+> ERROR: Category "EpicCategory" does not match any Category name or ID of board [0	Board1]
+
+categorize-task <task> <category> <board>
+# Sets task's category to new category
+>> categorize-task "Implement a feature" --category Backlog --board Board1
+> CATEGORIZE TASK [1	Backlog	Implement a feature] TODO-->Backlog
+>> categorize-task --task 0 --category EpicCategory --board Board1
+> ERROR: Category "EpicCategory" does not match any Category name or ID of board [0	Board1]
+
+remove-task <task> <board>
+>> remove-task 1 --board Board1
+> REMOVE TASK [1	Backlog	Implement a feature]
+
+list-tasks <board> [filter] [category] [sort]
+# Lists tasks in the board. The filter will filter by task name.
+# Category filters by category
+# Sort accepts options ID, RECENT, OLD. Defaults to ID
+# Recent = Most recently modified. Old = Least recently modified
+>> list-tasks Board1
+> [0	Backlog	Add more tasks]
+> [1	TODO	Implement a feature]
+> [2	TODO	Print the papers]
+> [3	TODO	Cut the papers into pieces]
+> [4	TODO	Sell the papers]
+> [5	Testing	Determine what is paper]
+>> list-tasks Board1 --filter paper --sort RECENT
+> [5	Testing	Determine what is paper]
+> [3	TODO	Cut the papers into pieces]
+> [4	TODO	Sell the papers]
+> [2	TODO	Print the papers]
+>> list-tasks Board1 paper --category Testing
+> [5	Testing	Determine what is paper]
+
+assign-member <task> <member> <board>
+>> assign-member 5 Bob Board1
+> ASSIGN [0	Bob] to [5	Testing	Determine what is paper]
+>> assign-member 5 Shizuku Board1
+> ASSIGN [9	Shizuku] to [5	Testing	Determine what is paper]
+>> assign-member 5 Bob Board1
+> ERROR: Cannot assign [0	Bob] as they are already assigned to this task.
+
+show-task <task> <board>
+# Lists info on a task
+>> show-task 5 Board1
+> Task #05: Determine what is paper
+> Category: [2	In Testing]
+> Assigned Members: [0	Bob], [9	Shizuku]
+> Notes:
+> - none -
+
+summary <board> [start] [end]
+# Prints a pretty kanban-style summary
+# [start] is the category to start from, [end] is the category to go up to.
+# (Default tries to include all)
+# *If you use a number for these, instead of ID it will be category position
+# TODO: Decide on final style, decide on options
+>> summary Board1
+|------------------------------------------------------------------------|
+||      Backlog        ||        TODO          ||     In Testing        || 
+|------------------------------------------------------------------------|
+|| 0 Add more tasks    || 1 Implement a feat.. || 5 Determine what i..  ||
+||                     || 2 Print the papers   ||                       ||
+||                     || 3 Cut the papers i.. ||                       ||
+||                     || 4 Sell the papers    ||                       ||
+||                     ||                      ||                       ||
+|------------------------------------------------------------------------|
+>> summary Board1 2 3
+|------------------------------------------------------------------------|
+||          TODO                  ||          In Testing                || 
+|---------------------------------||------------------------------------||
+|| 1 Implement a feature          || 5 Determine what is paper          ||
+|| 2 Print the papers             ||                                    ||
+|| 3 Cut the papers into pieces   ||                                    ||
+|| 4 Sell the papers              ||                                    ||
+||                                ||                                    ||
+|------------------------------------------------------------------------|
