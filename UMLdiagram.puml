@@ -60,7 +60,7 @@ class NoteList {
     + void remove_note(uint id)
     + vector<unsigned char> serialize()
     + NoteList deserialize(vector<unsigned char> data)
-    + vector<Task*> filter_note_name(string query, DataEntry::SORT_TYPE sort = DataEntry::SORT_TYPE::NONE)
+    + vector<Note*> filter_note_name(string query, DataEntry::SORT_TYPE sort = DataEntry::SORT_TYPE::NONE)
 }
 
 class CategoryList {
@@ -75,7 +75,7 @@ class CategoryList {
     + void rename_category(uint id, string name)
     + vector<unsigned char> serialize()
     + CategoryList deserialize(vector<unsigned char> data)
-    + vector<Task*> filter_category_name(string query, DataEntry::SORT_TYPE sort = DataEntry::SORT_TYPE::NONE)
+    + vector<CategoryInfo*> filter_category_name(string query, DataEntry::SORT_TYPE sort = DataEntry::SORT_TYPE::NONE)
 }
 
 class MemberList {
@@ -88,7 +88,7 @@ class MemberList {
     + void rename_member(uint id, string name)
     + vector<unsigned char> serialize()
     + MemberList deserialize(vector<unsigned char> data)
-    + vector<Task*> filter_member_name(string query, DataEntry::SORT_TYPE sort = DataEntry::SORT_TYPE::NONE)
+    + vector<Member*> filter_member_name(string query, DataEntry::SORT_TYPE sort = DataEntry::SORT_TYPE::NONE)
 }
 
 class Directory {
@@ -114,6 +114,7 @@ class CommandManager {
     + COMMAND_PARSE_RESULT parse_command(istream& in, ostream& out)
     + void set_parameter(string name, string value)
     + void unset_parameter(string name)
+    + map<string, string> set_parameters
 }
 
 class CommandParametersData {
@@ -137,6 +138,7 @@ class ActionLogItem {
     + uint id
     + string action_description
     + time_t timestamp
+    + string user
 }
 
 class ActionLog {
@@ -145,7 +147,7 @@ class ActionLog {
     + vector<ActionLogItem> get_actions()
 }
 
- skinparam linetype ortho
+skinparam linetype ortho
 
 NoteList *-- Note
 CategoryInfo -* CategoryList
@@ -153,6 +155,7 @@ MemberList *- Member
 TaskBoard *-- NoteList
 TaskBoard *- CategoryList
 TaskBoard *--  MemberList
+TaskBoard *- Task
 Directory *- TaskBoard
 Directory *- ActionLog
 ActionLog *-  ActionLogItem
@@ -161,5 +164,4 @@ CommandManager  *--  CommandParametersData
 CommandManager *--  ActionLog
 CommandManager *-  Directory
 Command  *-  CommandParametersData
-Task *- NoteList
 @enduml
