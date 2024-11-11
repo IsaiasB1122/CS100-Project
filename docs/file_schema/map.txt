@@ -1,0 +1,10 @@
+DIR Directory:
+    - DirectoryMetaData
+    - ActionLog
+    - DIR TaskBoard[n]:
+        - TaskBoardMetaData
+        - MemberList
+        - NoteList
+        - CategoryInfoList
+        - DIR Task[n]
+            
