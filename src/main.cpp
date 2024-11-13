@@ -12,6 +12,8 @@
 #include <Task.hpp>
 #include <TaskBoard.hpp>
 
+#include <lib/file_io.hpp>
+
 #include <iostream>
 #include <cctype>
 
@@ -20,6 +22,7 @@ void handle_usage() {
 }
 
 int main(int argc, char** argv) {
+
 
     if (argc < 2) {
         handle_usage();
@@ -31,10 +34,11 @@ int main(int argc, char** argv) {
     Directory dir;
     path.assign(argv[1]);
     // First check if exists at path
-    if (Directory::exists_at_path(path)) {
+    if (FileIOManager::directory_exists_at_path(path)) {
         // Load
             try {
-                dir = Directory::load_from_path(path);
+                //dir = Directory::load_from_path(path);
+                FileIOManager::directory_load_from_path(dir, path);
             }
             catch(std::runtime_error& e) {
                 std::cout << "ERROR: " << e.what() << '\n';
@@ -48,7 +52,8 @@ int main(int argc, char** argv) {
             std::cout << "New Directory name: ";
             std::getline(std::cin, buffer);
             try {
-                dir = Directory::new_at_path(path, buffer);
+                //dir = Directory::new_at_path(path, buffer);
+                FileIOManager::directory_new_at_path(dir, path, buffer);
             }
             catch(std::runtime_error& e) {
                 std::cout << "ERROR: " << e.what() << '\n';
@@ -56,7 +61,10 @@ int main(int argc, char** argv) {
             
         } else return 0;
 
-       
+    // TEMP: Testing
+    TaskBoard* board = dir.add_board("wee hoo");
+    FileIOManager::taskboard_write(*board);
+
     }
 
     return 0;

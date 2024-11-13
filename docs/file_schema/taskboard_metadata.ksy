@@ -1,6 +1,6 @@
 meta:
-  id: cataboard_directory_metadata
-  file-extension: cdm
+  id: cataboard_taskboard_metadata
+  file-extension: cbm
   endian: le
 types:
   string:
@@ -13,15 +13,13 @@ types:
         size: len
 seq:
   - id: magic
-    contents: "CTBDN"
-  - id: version
+    contents: "CTBBN"
+  - id: id
     type: u4
   - id: name
     type: string
-  - id: next_board_id
+  - id: task_num
     type: u4
-  - id: board_num
+  - id: task_id
     type: u4
-  - id: board_id
-    type: u4
-    repeat: board_num
+    repeat: task_num

@@ -5,13 +5,13 @@
 #include <vector>
 #include <cstdint>
 #include <stdexcept>
-#include <filesystem>
+
 
 #include <CategoryList.hpp>
 #include <ActionLog.hpp>
 #include <TaskBoard.hpp>
 
-typedef std::filesystem::path fspath;
+
 
 const uint32_t current_version = 1;
 const uint32_t minimum_supported_version = 1;
@@ -28,14 +28,15 @@ class Directory {
 
     uint32_t next_id;
 
-    fspath get_metadata_path();
-    fspath get_boards_path();
-    fspath get_board_path(TaskBoard* board);
+    void write_metadata();
 
 public:
     class invalid_path : std::runtime_error {using std::runtime_error::runtime_error;};
     class unsupported_version : std::runtime_error {using std::runtime_error::runtime_error;};
     CategoryList default_categories;
+    // fspath get_metadata_path();
+    // fspath get_boards_path();
+    // fspath get_board_path(TaskBoard* board);
     static bool exists_at_path(std::string path);
     static Directory load_from_path(std::string path);
     static Directory new_at_path(std::string path, std::string name);
@@ -46,6 +47,8 @@ public:
     std::vector<TaskBoard*> get_boards();
     TaskBoard* get_board(uint32_t id);
     std::vector<TaskBoard*> filter_board_name(std::string query, DataEntry::SORT_TYPE sort = DataEntry::SORT_TYPE::NONE);
+
+    friend class FileIOManager;
 };
 
 
