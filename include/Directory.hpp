@@ -16,7 +16,7 @@
 const uint32_t current_version = 1;
 const uint32_t minimum_supported_version = 1;
 
-const char directory_magic[6] = "CTBDN";
+
 
 
 class Directory {

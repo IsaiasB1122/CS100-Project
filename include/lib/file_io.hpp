@@ -9,6 +9,9 @@
 
 typedef std::filesystem::path fspath;
 
+const char directory_magic[6] = "CTBDN";
+const char taskboard_magic[6] = "CTBBN";
+
 // This is only a class to use friendship for convenience
 class FileIOManager {
 public:

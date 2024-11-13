@@ -8,7 +8,7 @@
 #include <ActionLog.hpp>
 #include <MemberList.hpp>
 
-const char taskboard_magic[6] = "CTBBN";
+
 
 class Directory;
 
