@@ -20,3 +20,7 @@ TaskBoard* Directory::add_board(std::string name) {
 
     return board;
 }
+
+std::string Directory::get_name() {
+    return this->name;
+}

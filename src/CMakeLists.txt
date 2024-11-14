@@ -17,4 +17,7 @@ add_executable(cataboard
   NoteList.cpp
   Task.cpp
   TaskBoard.cpp
+
+  Commands.cpp
+  _command_index.cpp
 )
