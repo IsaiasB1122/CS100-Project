@@ -1,5 +1,6 @@
 // TODO: Move exceptions to here and make a better variety
 //  - And following add exceptions to all file-opening statements
+// # 427, 457: Read and write tasks
 #include <Directory.hpp>
 #include <TaskBoard.hpp>
 
@@ -269,6 +270,12 @@ public:
         write_string(f, note.text);
         // Write author id
         std::fwrite(&note.author_id, 4, 1, f);
+        // Write time created
+        uint64_t time_created = (uint64_t) note.creation_time;
+        std::fwrite(&time_created,8,1,f);
+        // Write time modified
+        uint64_t time_modified = (uint64_t) note.modified_time;
+        std::fwrite(&time_modified,8,1,f);
     }
     // Reads note from file
     static void note_read(Note& note, FILE* f) {
@@ -276,6 +283,12 @@ public:
         note.name = read_string(f);
         note.text = read_string(f);
         std::fread(&note.author_id, 4, 1, f);
+        uint64_t time_created;
+        std::fread(&time_created,8,1,f);
+        uint64_t time_modified;
+        std::fread(&time_modified,8,1,f);
+        note.creation_time = time_created;
+        note.modified_time = time_modified;
     }
 
     static void note_list_write(const NoteList& nl, FILE* f) {
@@ -324,11 +337,16 @@ public:
         write_string(f, task.name);
         // Write category id
         std::fwrite(&task.category_id,4,1,f);
+        // Write time created/modified
+        uint64_t time_created = task.creation_time;
+        std::fwrite(&time_created,8,1,f);
+        uint64_t time_modified = task.modified_time;
+        std::fwrite(&time_modified,8,1,f);
         // Write assigned member num
         uint32_t assigned_member_num = task.assigned_members.size();
         std::fwrite(&assigned_member_num,4,1,f);
         // Write assigned members
-        for (uint32_t i = 0; i < assigned_member_num; i += 1) std::fwrite(&task.assigned_members[0],4,1,f);
+        for (uint32_t i = 0; i < assigned_member_num; i += 1) std::fwrite(&task.assigned_members[i],4,1,f);
         // Write notelist
         note_list_write(task.notes,f);
 
@@ -347,11 +365,18 @@ public:
         task.name =  read_string(f);
         // Read category id
         std::fread(&task.category_id, 4, 1, f);
+        // Rdad time created/modified
+        uint64_t time_created;
+        std::fread(&time_created,8,1,f);
+        uint64_t time_modified;
+        std::fread(&time_modified,8,1,f);
+        task.creation_time = time_created;
+        task.modified_time = time_modified;
         // Read assigned member num
         uint32_t assigned_member_num;
         std::fread(&assigned_member_num,4,1,f);
         // read assigned members
-        for (uint32_t i = 0; i < assigned_member_num; i += 1) std::fread(&task.assigned_members[0],4,1,f);
+        for (uint32_t i = 0; i < assigned_member_num; i += 1) std::fread(&task.assigned_members[i],4,1,f);
         // Read notelist
         note_list_read(task.notes, f);
 
@@ -406,13 +431,31 @@ public:
         std::fread(&read_id,4,1,metadata);
         if (read_id != board.id) throw Directory::invalid_path("Taskboard metadata invalid/corrupted");
 
+        // Read time created/modified
+        uint64_t time_created;
+        std::fread(&time_created,8,1,metadata);
+        uint64_t time_modified;
+        std::fread(&time_modified,8,1,metadata);
+        board.creation_time = time_created;
+        board.modified_time = time_modified;
+
         // Read board name
         board.name = read_string(metadata);
+        // Read next task id
+        std::fread(&board.next_task_id,4,1,metadata);
         // Read task num
         uint32_t task_num;
         std::fread(&task_num,4,1,metadata);
         // Read tasks
-        // ...
+        for (uint32_t i = 0; i < task_num; i += 1) {
+            Task* task = new Task;
+            // Read task ID
+            std::fread(&(task->id),4,1,metadata);
+
+            task_read(*task, board);
+
+            board.tasks.push_back(task);
+        }
 
         // Read categorylist
         FILE* categorylist = std::fopen(taskboard_get_categories_path(board).string().c_str(),"rb");
@@ -436,13 +479,22 @@ public:
         std::fwrite(taskboard_magic,1,5,metadata);
         // Write task board ID
         std::fwrite(&(board.id),4,1,metadata);
+        // Write time created/modified
+        uint64_t time_created = board.creation_time;
+        std::fwrite(&time_created,8,1,metadata);
+        uint64_t time_modified = board.modified_time;
+        std::fwrite(&time_modified,8,1,metadata);
         // Write task board name
         write_string(metadata, board.name);
+        // Write next task id
+        std::fwrite(&board.next_task_id,4,1,metadata);
         // Write task #
         uint32_t task_num = board.tasks.size();
         std::fwrite(&task_num,4,1,metadata);
-        // Write tasks paths
-        // ...
+        // Write tasks IDs
+        for (uint32_t i = 0; i < task_num; i += 1) {
+            std::fwrite(&(board.tasks[i]->id),4,1,metadata);
+        }
 
         std::fclose(metadata);
     }

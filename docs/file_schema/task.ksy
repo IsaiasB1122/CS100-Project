@@ -23,6 +23,10 @@ seq:
     type: string
   - id: category_id
     type: u4
+  - id: time_created
+    type: u8
+  - id: time_modified
+    type: u8
   - id: assigned_member_num
     type: u4
   - id: assigned_member

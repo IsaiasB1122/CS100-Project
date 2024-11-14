@@ -21,6 +21,10 @@ types:
         type: string
       - id: author_id
         type: u4
+      - id: time_created
+        type: u8
+      - id: time_modified
+        type: u8
 seq:
   - id: magic
     contents: "CTNL"

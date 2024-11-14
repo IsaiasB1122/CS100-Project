@@ -24,6 +24,8 @@ const Task& TaskBoard::add_task(std::string name, uint32_t category) {
     new_task->name = name;
     new_task->category_id = category;
     new_task->changed = true;
+    std::time(&new_task->creation_time);
+    std::time(&new_task->modified_time);
 
     this->tasks.push_back(new_task);
     this->tasks_changed = true;
