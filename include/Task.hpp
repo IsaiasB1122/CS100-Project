@@ -11,8 +11,8 @@ public:
     NoteList notes;
     bool changed;
 
-    std::vector<unsigned char> serialize();
-    static Task deserialize(std::vector<unsigned char> data);
+
+    friend class FileIOManager;
 };
 
 

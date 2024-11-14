@@ -15,11 +15,10 @@ public:
     const Note& edit_note(std::string title, std::string text, const Member& author);
     void remove_note(uint32_t id);
 
-    std::vector<unsigned char> serialize();
-    static NoteList deserialize(std::vector<unsigned char> data);
 
     std::vector<Note*> filter_note_name(std::string query, DataEntry::SORT_TYPE sort = DataEntry::SORT_TYPE::NONE);
 
+    friend class FileIOManager;
 };
 
 

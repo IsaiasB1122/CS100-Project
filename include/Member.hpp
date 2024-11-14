@@ -5,7 +5,7 @@
 
 
 class Member : public DataEntry {
-
+    using DataEntry::DataEntry;
 };
 
 

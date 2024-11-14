@@ -6,6 +6,8 @@
 
 class Note : public DataEntry {
 public:
+    using DataEntry::DataEntry;
+    Note(uint32_t id, std::string name, std::string text, uint32_t author_id);
     std::string text;
     uint32_t author_id;
 };
