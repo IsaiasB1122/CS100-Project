@@ -5,7 +5,7 @@
 
 
 class CategoryInfo : public DataEntry {
-
+    using DataEntry::DataEntry;
 };
 
 

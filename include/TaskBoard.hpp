@@ -15,6 +15,9 @@ class Directory;
 class TaskBoard : public DataEntry {
     Directory* parent;
     std::vector<Task*> tasks;
+
+    uint32_t next_task_id;
+
 public:
     bool tasks_changed;
     bool members_changed;
@@ -28,7 +31,7 @@ public:
     CategoryList categories;
 
     const std::vector<Task*> get_tasks();
-    const Task& add_task(std::string name, uint32_t author = 0, uint32_t category = 0);
+    const Task& add_task(std::string name, uint32_t category = 0);
     void remove_task(uint32_t id);
     void move_task(uint32_t id, uint32_t category_id);
 

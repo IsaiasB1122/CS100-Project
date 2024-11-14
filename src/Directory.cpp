@@ -7,12 +7,14 @@
 
 TaskBoard* Directory::add_board(std::string name) {
     TaskBoard* board = new TaskBoard(this);
-    this->boards.push_back(board);
 
     board->name = name;
     board->id = this->next_id;
-    this->next_id += 1;
+    board->categories = this->default_categories;
 
+    this->boards.push_back(board);
+
+    this->next_id += 1;
 
     return board;
 }

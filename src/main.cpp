@@ -60,12 +60,10 @@ int main(int argc, char** argv) {
             }
             
         } else return 0;
-
-    // TEMP: Testing
-    TaskBoard* board = dir.add_board("wee hoo");
-    FileIOManager::taskboard_write(*board);
-
     }
+
+
+    
 
     return 0;
 }

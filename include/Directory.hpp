@@ -13,8 +13,8 @@
 
 
 
-const uint32_t current_version = 1;
-const uint32_t minimum_supported_version = 1;
+const uint32_t current_version = 2;
+const uint32_t minimum_supported_version = 2;
 
 
 

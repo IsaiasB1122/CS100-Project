@@ -7,6 +7,7 @@ TaskBoard::TaskBoard(Directory* _parent) {
     this->members_changed = true;
     this->notes_changed = true;
     this->categories_changed = true;
+    this->next_task_id = 0;
 }
 
 TaskBoard::~TaskBoard() {
@@ -15,22 +16,19 @@ TaskBoard::~TaskBoard() {
     }
 }
 
-// fspath TaskBoard::get_members_path() {
-//     return this->parent_path / this->name / "member_list.cml";
-// }
+const Task& TaskBoard::add_task(std::string name, uint32_t category) {
+    Task* new_task = new Task;
+    
+    new_task->id = this->next_task_id;
 
-// fspath TaskBoard::get_notes_path() {
-//     return this->parent_path / this->name / "note_list.cnl";
-// }
+    new_task->name = name;
+    new_task->category_id = category;
+    new_task->changed = true;
 
-// fspath TaskBoard::get_categories_path() {
-//     return this->parent_path / this->name / "note_list.ccl";
-// }
+    this->tasks.push_back(new_task);
+    this->tasks_changed = true;
 
-// int TaskBoard::write() {
-//     // write metadata
-//     FILE* metadata = std::fopen(this->get_metadata_path().string().c_str(),"wb");
-//     //if (!metadata) throw Directory::invalid_path("Path invalid.");
+    this->next_task_id += 1;
 
-//     // TODO: make schema for this file
-// }
+    return *new_task;
+}
