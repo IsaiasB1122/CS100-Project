@@ -12,10 +12,14 @@
 #include <Task.hpp>
 #include <TaskBoard.hpp>
 
+#include <Commands.hpp>
+
 #include <lib/file_io.hpp>
 
 #include <iostream>
 #include <cctype>
+
+Directory dir;
 
 void handle_usage() {
     std::cout << "Usage: cataboard <path to directory>" << std::endl;
@@ -31,7 +35,6 @@ int main(int argc, char** argv) {
     // Use first argument as path
     std::string path;
     std::string buffer;
-    Directory dir;
     path.assign(argv[1]);
     // First check if exists at path
     if (FileIOManager::directory_exists_at_path(path)) {
@@ -62,6 +65,37 @@ int main(int argc, char** argv) {
         } else return 0;
     }
 
+    // Initialize command sys
+    CommandManager::init();
+
+    std::cout << "CaTaBoard Version " << current_version << " - Built " << __DATE__ << std::endl;
+    std::cout << "Loaded Directory {" << dir.get_name() << "} at [" << std::filesystem::absolute(path).string() << "]" << std::endl;
+
+    // Read command until exit
+    while (true) {
+        std::cout << "> ";
+        CommandManager::COMMAND_PARSE_RESULT r = CommandManager::parse_command(std::cin,std::cout);
+
+        switch (r) {
+        case CommandManager::COMMAND_PARSE_RESULT::BAD_COMMAND:
+            std::cout << "ERROR: Command not found. (run help for list)" << std::endl;
+            break;
+        case CommandManager::COMMAND_PARSE_RESULT::BAD_PARAMETERS:
+            std::cout << "ERROR: Command parameters invalid." << std::endl;
+            break;
+        case CommandManager::COMMAND_PARSE_RESULT::OK:
+            break;
+        case CommandManager::COMMAND_PARSE_RESULT::OK_EXIT_AFTER:
+            goto exit;
+            break;
+        case CommandManager::COMMAND_PARSE_RESULT::BAD_EXIT_AFTER:
+            goto exit;
+            break;
+        default:
+            break;
+        }
+    }
+    exit:
 
     
 

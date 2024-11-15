@@ -1,6 +1,9 @@
 // TODO: Move exceptions to here and make a better variety
 //  - And following add exceptions to all file-opening statements
 // # 427, 457: Read and write tasks
+#ifndef FILE_IO_HPP
+#define FILE_IO_HPP
+
 #include <Directory.hpp>
 #include <TaskBoard.hpp>
 
@@ -538,6 +541,15 @@ public:
             board.notes_changed = false;
         }
     }
+    static void taskboard_delete(Directory& dir, uint32_t id) {
+        // Dummy just to get path
+        TaskBoard board(&dir);
+        board.id = id;
+        fspath p = taskboard_get_path(board);
+
+        std::filesystem::remove_all(p);
+    }
 
 };
 
+#endif
