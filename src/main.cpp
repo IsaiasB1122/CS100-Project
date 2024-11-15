@@ -82,6 +82,7 @@ int main(int argc, char** argv) {
             break;
         case CommandManager::COMMAND_PARSE_RESULT::BAD_PARAMETERS:
             std::cout << "ERROR: Command parameters invalid." << std::endl;
+            break;
         case CommandManager::COMMAND_PARSE_RESULT::OK:
             break;
         case CommandManager::COMMAND_PARSE_RESULT::OK_EXIT_AFTER:

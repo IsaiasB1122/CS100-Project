@@ -1,6 +1,6 @@
 #include <Commands.hpp>
 
-class Command_exit : public Command {
+class CommandExit : public Command {
 public:
     std::string get_name() {
         return "exit";

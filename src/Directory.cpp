@@ -24,3 +24,27 @@ TaskBoard* Directory::add_board(std::string name) {
 std::string Directory::get_name() {
     return this->name;
 }
+
+std::vector<TaskBoard*> Directory::get_boards() {
+    std::vector<TaskBoard*> boards;
+    for (auto b : this->boards) boards.push_back(b);
+    return boards;
+}
+
+TaskBoard* Directory::get_board(uint32_t id) {
+    // If needed could use a binary search here for performance as the vector is sorted by ID
+    for (auto b = this->boards.begin(); b < this->boards.end(); b += 1) {
+        if ((*b)->id == id) return *b;
+    }
+
+    return nullptr;
+}
+
+void Directory::remove_board(TaskBoard* board) {
+    for (auto b = this->boards.begin(); b < this->boards.end(); b += 1) {
+        if (*b == board) {
+            this->boards.erase(b);
+            delete board;
+        }
+    }
+}

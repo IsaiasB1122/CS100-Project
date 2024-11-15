@@ -39,13 +39,11 @@ CommandManager::COMMAND_PARSE_RESULT CommandManager::parse_command(std::istream&
     }
     // Invalid if empty
     if (args.size() < 1) return CommandManager::BAD_COMMAND;
-    // Treat every arg as lowercase
-    for (size_t i = 0; i < args.size(); i += 1) {
-        std::string ns;
-        for (auto c : args[i]) ns.push_back(std::tolower(c));
-        args[i] = ns;
-    }
     std::string command_name = args[0];
+    // Treat command name arg as lowercase
+    std::string ns;
+    for (auto c : command_name) ns.push_back(std::tolower(c));
+    command_name = ns;
     // Check if command is indexed
     if (!command_map.count(command_name)) return CommandManager::BAD_COMMAND;
     Command& command = *command_map[command_name];
@@ -53,11 +51,15 @@ CommandManager::COMMAND_PARSE_RESULT CommandManager::parse_command(std::istream&
     
     std::map<std::string,std::string> named_parameters;
     std::vector<std::string> positional_parameters;
-    auto arg = args.begin();
+    auto arg = args.begin()+1; // +1 to skip command name
     while (arg < args.end()) {
         // Check if is a name
         if ((*arg).size() > 3 and (*arg)[0] == '-' and (*arg)[1] == '-') {
             std::string n = (*arg).substr(2);
+            // Put parametr name to lowercase
+            std::string n_lower;
+            for (auto c : n) n_lower.push_back(std::tolower(c));
+            n = n_lower;
             // Now read next
             arg += 1;
             // If name is last parameter that is invalid
@@ -76,11 +78,11 @@ CommandManager::COMMAND_PARSE_RESULT CommandManager::parse_command(std::istream&
     std::vector<std::string> required_parameters = command.get_required_parameters();
     std::vector<std::string> optional_parameters = command.get_optional_parameters();
     size_t i = 0;
-    for (auto arg = required_parameters.begin(); arg < required_parameters.begin() and i < positional_parameters.size(); arg += 1, i += 1) {
+    for (auto arg = required_parameters.begin(); arg < required_parameters.end() and i < positional_parameters.size(); arg += 1, i += 1) {
         // Maybe check here and throw error if named paramter was already defined?
         named_parameters[*arg] = positional_parameters[i];
     }
-    for (auto arg = optional_parameters.begin(); arg < optional_parameters.begin() and i < optional_parameters.size(); arg += 1, i += 1) {
+    for (auto arg = optional_parameters.begin(); arg < optional_parameters.end() and i < optional_parameters.size(); arg += 1, i += 1) {
         named_parameters[*arg] = optional_parameters[i];
     }
     // Now check that all required exist and throw error if not
@@ -93,10 +95,12 @@ CommandManager::COMMAND_PARSE_RESULT CommandManager::parse_command(std::istream&
     exit = false;
     COMMAND_RUN_RESULT r = command.run(paramdata, out);
 
-    if (exit and r == COMMAND_RUN_RESULT::GOOD) {
-        return OK_EXIT_AFTER;
-    } 
-    else return BAD_EXIT_AFTER;
+    if (exit) {
+        if (r == COMMAND_RUN_RESULT::GOOD){
+            return OK_EXIT_AFTER;
+        } 
+        else return BAD_EXIT_AFTER;
+    }  
 
     return COMMAND_PARSE_RESULT::OK;
 
