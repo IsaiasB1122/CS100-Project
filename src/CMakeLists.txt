@@ -21,3 +21,5 @@ add_executable(cataboard
   Commands.cpp
   _command_index.cpp
 )
+
+target_link_libraries(cataboard libstdc++fs.a)
