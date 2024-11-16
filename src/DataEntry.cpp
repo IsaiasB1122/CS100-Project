@@ -21,7 +21,7 @@ std::vector<DataEntry*> DataEntry::filter_data(std::vector<DataEntry*> data, std
     std::vector<DataEntry*> filtered_data;
 
     // If filter 
-    if (filter.size() > 1) {
+    if (filter.size() > 0) {
         for (auto d : data) {
             if (filter.size() > d->name.size()) continue;
             bool pass = false;
