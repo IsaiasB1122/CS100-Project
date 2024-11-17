@@ -6,7 +6,7 @@
 
 std::string CommandParametersData::get_parameter(unsigned int index) {
     if (index > this->positional_parameters.size()) throw std::logic_error("Bad CommandParametersData parameter index get");
-
+ 
     return this->positional_parameters[index];
 }
 std::string CommandParametersData::get_parameter(std::string name) {
