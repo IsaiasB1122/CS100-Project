@@ -22,7 +22,7 @@ class CommandOutputHelp : public Command {
 		CommandManager::COMMAND_RUN_RESULT run(CommandParametersData parameters, std::ostream& out){
 				//if there is a paramter print all commands
 				if (parameters.has_parameter("command"))  { 
-					string requestedCommand = parameters.get_parameter(0);
+					string requestedCommand = parameters.get_parameter("command");
 					//print given command with description
 					if (CommandManager::command_map.count(requestedCommand)) {
 						out << CommandManager::command_map[requestedCommand]->get_help() << endl;
