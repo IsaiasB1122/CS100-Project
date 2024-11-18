@@ -4,11 +4,6 @@
 #include <iostream>
 #include <iomanip>
 
-std::string CommandParametersData::get_parameter(unsigned int index) {
-    if (index > this->positional_parameters.size()) throw std::logic_error("Bad CommandParametersData parameter index get");
-
-    return this->positional_parameters[index];
-}
 std::string CommandParametersData::get_parameter(std::string name) {
     return this->named_parameters[name];
 }
@@ -82,8 +77,8 @@ CommandManager::COMMAND_PARSE_RESULT CommandManager::parse_command(std::istream&
         // Maybe check here and throw error if named paramter was already defined?
         named_parameters[*arg] = positional_parameters[i];
     }
-    for (auto arg = optional_parameters.begin(); arg < optional_parameters.end() and i < optional_parameters.size(); arg += 1, i += 1) {
-        named_parameters[*arg] = optional_parameters[i];
+    for (auto arg = optional_parameters.begin(); arg < optional_parameters.end() and i < positional_parameters.size(); arg += 1, i += 1) {
+        named_parameters[*arg] = positional_parameters[i];
     }
     // Now check that all required exist and throw error if not
     for (auto arg : required_parameters) if (!named_parameters.count(arg)) return CommandManager::BAD_PARAMETERS;

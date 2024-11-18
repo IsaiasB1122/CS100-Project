@@ -33,7 +33,6 @@ class CommandParametersData {
     std::vector<std::string> positional_parameters;
     std::map<std::string, std::string> named_parameters;
 public:
-    std::string get_parameter(unsigned int index);
     std::string get_parameter(std::string name);
     bool has_parameter(std::string name);
 
