@@ -21,7 +21,6 @@ class CommandOutputHelp : public Command {
 
 		CommandManager::COMMAND_RUN_RESULT run(CommandParametersData parameters, std::ostream& out){
 				//if there is a paramter print all commands
-				out << parameters.get_parameter("command") << endl;
 				if (parameters.has_parameter("command"))  { 
 					string requestedCommand = parameters.get_parameter(0);
 					//print given command with description
