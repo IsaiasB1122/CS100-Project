@@ -12,6 +12,6 @@
 
 #define COMMAND_HELP_OUTPUT_HELP \
 "Prints all commands available to user if command is not given.\n\
-Otherwise, prints help message of the given command.\n\"
+Otherwise, prints help message of the given command."
 
 #endif
