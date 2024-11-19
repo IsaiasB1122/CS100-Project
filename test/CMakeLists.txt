@@ -5,6 +5,9 @@ add_subdirectory(googletest)
 
 add_executable(run_tests
 	test_fileio.cpp
+
+	../src/_command_index.cpp
+	test_commands.cpp
 )
 
 TARGET_LINK_LIBRARIES(run_tests gmock gtest gtest_main cataboard_lib)
