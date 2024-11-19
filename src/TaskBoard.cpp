@@ -34,3 +34,15 @@ const Task& TaskBoard::add_task(std::string name, uint32_t category) {
 
     return *new_task;
 }
+
+void TaskBoard::add_category(std::string category_name) {
+    CategoryInfo new_category;
+    new_category.name = category_name;
+    this->categories.add_category(new_category);
+    this->categories_changed = true;
+}
+
+void TaskBoard::remove_category(uint32_t category_id) {
+    this->categories.remove_category(category_id);
+    this->categories_changed = true;
+}
