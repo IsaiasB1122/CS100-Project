@@ -12,7 +12,7 @@ public:
     std::vector<std::string> get_optional_parameters() {return {};};
 
     CommandManager::COMMAND_RUN_RESULT run(CommandParametersData parameters, std::ostream& out) {
-        CommandManager::exit = true;
+       this->parent->exit = true;
 
         return CommandManager::COMMAND_RUN_RESULT::GOOD;
     }
