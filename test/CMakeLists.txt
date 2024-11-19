@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.16)
 add_subdirectory(googletest)
 
 add_executable(run_tests
-	test.cpp
+	test_fileio.cpp
 )
 
 TARGET_LINK_LIBRARIES(run_tests gmock gtest gtest_main cataboard_lib)
