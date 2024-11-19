@@ -12,10 +12,10 @@ bool CommandParametersData::has_parameter(std::string name) {
 }
 
 void CommandManager::set_parameter(std::string name, std::string value) {
-    CommandManager::set_parameters[name] = value;
+    this->set_parameters[name] = value;
 }
 void CommandManager::unset_parameter(std::string name) {
-    CommandManager::set_parameters.erase(name);
+    this->set_parameters.erase(name);
 }
 
 CommandManager::COMMAND_PARSE_RESULT CommandManager::parse_command(std::istream& in, std::ostream& out) {

@@ -1,6 +1,6 @@
 #include <Commands.hpp>
 
-#define register_command(n, c) CommandManager::command_map[n] = new c;
+#define register_command(n, c) CommandManager::command_map[n] = new c; CommandManager::command_map[n]->parent = this;
 
 // Include command headers here
 #include <Exit.cpp>

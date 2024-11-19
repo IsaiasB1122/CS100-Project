@@ -19,15 +19,12 @@
 #include <iostream>
 #include <cctype>
 
-Directory dir;
-
 void handle_usage() {
     std::cout << "Usage: cataboard <path to directory>" << std::endl;
 }
 
 int main(int argc, char** argv) {
-
-
+    Directory dir;
     if (argc < 2) {
         handle_usage();
         return 1;
@@ -66,7 +63,9 @@ int main(int argc, char** argv) {
     }
 
     // Initialize command sys
-    CommandManager::init();
+    CommandManager command_manager;
+    command_manager.dir = &dir;
+    command_manager.init();
 
     std::cout << "CaTaBoard Version " << current_version << " - Built " << __DATE__ << std::endl;
     std::cout << "Loaded Directory {" << dir.get_name() << "} at [" << std::filesystem::absolute(path).string() << "]" << std::endl;
@@ -74,7 +73,7 @@ int main(int argc, char** argv) {
     // Read command until exit
     while (true) {
         std::cout << "> ";
-        CommandManager::COMMAND_PARSE_RESULT r = CommandManager::parse_command(std::cin,std::cout);
+        CommandManager::COMMAND_PARSE_RESULT r = command_manager.parse_command(std::cin,std::cout);
 
         switch (r) {
         case CommandManager::COMMAND_PARSE_RESULT::BAD_COMMAND:
