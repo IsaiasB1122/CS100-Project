@@ -24,8 +24,8 @@ class CommandOutputHelp : public Command {
 				if (parameters.has_parameter("command"))  { 
 					string requestedCommand = parameters.get_parameter("command");
 					//print given command with description
-					if (CommandManager::command_map.count(requestedCommand)) {
-						out << CommandManager::command_map[requestedCommand]->get_help() << endl;
+					if (parent->command_map.count(requestedCommand)) {
+						out << parent->command_map[requestedCommand]->get_help() << endl;
 					}
 					//if the user inputed an invalid parameter, let the user know.
 					else{
@@ -35,7 +35,7 @@ class CommandOutputHelp : public Command {
 				else { //when there is no parameter after "help"
 					out << "Available Commands: " << endl;
 					out << "-------------------" << endl; 
-					for(const auto& c : CommandManager::command_map) {
+					for(const auto& c : parent->command_map) {
 						out << "<" << c.first << ">" << endl;
 						out << c.second->get_help() << endl;
 					}
