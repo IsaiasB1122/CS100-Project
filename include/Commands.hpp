@@ -5,6 +5,8 @@
 #include <string>
 #include <map>
 
+#include "Directory.hpp"
+
 #include <command_help.hpp>
 
 class Command;
@@ -14,24 +16,27 @@ public:
     enum COMMAND_PARSE_RESULT {BAD_COMMAND, BAD_PARAMETERS, OK, OK_EXIT_AFTER, BAD_EXIT_AFTER};
     enum COMMAND_RUN_RESULT {ERROR, GOOD};
 
-    static inline std::map<std::string,std::string> set_parameters;
-    static inline std::map<std::string, Command*> command_map;
+    std::map<std::string,std::string> set_parameters;
+    std::map<std::string, Command*> command_map;
 
-    static inline bool exit;
+    bool exit;
 
-    static void set_parameter(std::string name, std::string value);
-    static void unset_parameter(std::string name);
+    void set_parameter(std::string name, std::string value);
+    void unset_parameter(std::string name);
 
-    static COMMAND_PARSE_RESULT parse_command(std::istream& in, std::ostream& out);
+    COMMAND_PARSE_RESULT parse_command(std::istream& in, std::ostream& out);
 
-    static void _index_commands();
+    void _index_commands();
+    // * This should be done in a class inheriting from CommandManager ideally but trying to keep project simpler
+    Directory* dir;
 
-    static void init();
+    void init();
 };
 
 class CommandParametersData {
     std::vector<std::string> positional_parameters;
     std::map<std::string, std::string> named_parameters;
+    CommandManager* parent;
 public:
     std::string get_parameter(std::string name);
     bool has_parameter(std::string name);
@@ -41,6 +46,7 @@ public:
 
 class Command {
 public:
+    CommandManager* parent;
     virtual std::string get_name() = 0;
     virtual std::string get_help() = 0;
     virtual std::vector<std::string> get_required_parameters() = 0;

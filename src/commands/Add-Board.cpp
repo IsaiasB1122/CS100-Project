@@ -3,8 +3,6 @@
 #include <Directory.hpp>
 #include <lib/file_io.hpp>
 
-extern Directory dir;
-
 class CommandAddBoard : public Command {
 public:
     std::string get_name() {
@@ -18,9 +16,9 @@ public:
 
     CommandManager::COMMAND_RUN_RESULT run(CommandParametersData parameters, std::ostream& out) {
         // Work
-        TaskBoard* board = dir.add_board(parameters.get_parameter("name"));
+        TaskBoard* board = this->parent->dir->add_board(parameters.get_parameter("name"));
         // Write
-        FileIOManager::directory_write_metadata(dir);
+        FileIOManager::directory_write_metadata(*this->parent->dir);
         FileIOManager::taskboard_write(*board);
         // Output
         out << "ADD BOARD " << board->to_string() << std::endl;
