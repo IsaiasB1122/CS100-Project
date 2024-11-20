@@ -31,20 +31,21 @@ const Member& MemberList::get_member(std::string name) {
     return nullptr;
 }
 
-const Member& MembersList::add_member(Member category) {
-    Members* member = new Member(this);
+const Member& MembersList::add_member(Member member) {
+    Members* member = new Member();
     member->name = name;
     member->id = next_members_id;
     this->next_members_id += 1;
 
-    return member;
+    this->members.push_back(member);
+
 }
 
-void remove_member(uint32_t id) {
+void MemberList::remove_member(uint32_t id) {
     for (auto m = this->members.begin(); m < this->members.end(); m += 1) {
-        if (m*->id == id) {
+        if ((*m)->id == id) {
             this->members.erase(m);
-            delete member;
+            delete *m;
         }
     }
 }
