@@ -22,21 +22,4 @@ TaskBoard* get_board(Directory& dir, std::string board) {
     }
 }
 
-TaskCategory* get_category(Directory& dir, std::string category) {
-    // First try category as string name
-    auto categories = dir.get_categories();
-    for (auto c : categories) {
-        if (c->name == category) return c;
-    }
-    // Now try as ID
-    uint32_t id;
-    try {
-        id = std::stoul(category);
-        return dir.get_category(id);
-    } 
-    catch (std::invalid_argument&) {
-        return nullptr;
-    }
-}
-
 #endif
