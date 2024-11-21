@@ -7,6 +7,7 @@
 #include <Add-Board.cpp>
 #include <Remove-Board.cpp>
 #include <Help.cpp>
+#include <List-Boards.cpp>
 
 void CommandManager::_index_commands() {
     // Include command registering here
@@ -14,4 +15,5 @@ void CommandManager::_index_commands() {
     register_command("add-board",CommandAddBoard);
     register_command("remove-board",CommandRemoveBoard);
     register_command("help", CommandOutputHelp);
+    register_command("list-boards", CommandListBoards);
 }
