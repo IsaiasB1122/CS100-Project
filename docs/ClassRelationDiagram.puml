@@ -156,7 +156,41 @@ class ActionLog {
 }
 
 class FileIOManager {
-    
+    + void write_string(FILE* f, string s)
+    + string read_string(FILE* f)
+    + fspath directory_get_metadata_path(const Directory& dir)
+    + fspath directory_get_boards_path(const Directory& dir)
+    + fspath directory_get_board_path(const Directory& dir, Taskboard* board)
+    + void directory_write_metadata(const Directory& dir)
+    + bool directory_exists_at_path(string path)
+    + void directory_load_from_path(Directory& dir, string path)
+    + void directory_new_at_path(Directory& dir, string path, string name)
+    + void category_info_write(const CategoryInfo& category, FILE* f)
+    + void category_list_write(const CategoryList& cl, FILE* f)
+    + void category_list_read(CategoryList& cl, FILE* f)
+    + void member_write(const Member& member, FILE* f)
+    + void member_read(Member& member, FILE* f)
+    + void member_list_write(const MemberList& ml, FILE* f)
+    + void member_list_read(MemberList& ml, FILE* f)
+    + void note_write(const Note& note, FILE* f)
+    + void note_read(Note& note, FILE* f)
+    + void note_list_write(const NoteList& nl, FILE* f)
+    + void note_list_read(NoteList& nl, FILE* f)
+    + fspath task_get_path(const Task& task, const TaskBoard& board)
+    + void task_write(const Task& task, const TaskBoard& board)
+    + void task_write(const Task& task, const TaskBoard& board)
+    + void task_read(Task& task, const TaskBoard& board)
+    + bool taskboard_path_exists(const TaskBoard& board)
+    + bool taskboard_tasks_path_exists(const TaskBoard& board)
+    + fspath taskboard_get_path(const TaskBoard& board)
+    + fspath taskboard_get_tasks_path(const TaskBoard& board)
+    + fspath taskboard_get_members_path(const TaskBoard& board)
+    + fspath taskboard_get_notes_path(const TaskBoard& board)
+    + fspath taskboard_get_categories_path(const TaskBoard& board)
+    + void taskboard_load(TaskBoard& board, uint32_t id)
+    + void taskboard_write_metadata(const TaskBoard& board)
+    + void taskboard_write(TaskBoard& board)
+    + void taskboard_delete(Directory& dir, uint32_t id)
 }
 
 skinparam linetype ortho
