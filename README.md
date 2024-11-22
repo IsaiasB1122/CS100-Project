@@ -104,6 +104,7 @@ The base class DataEntry is used so that a common filter and sort function can b
 Some changes were made from the initial class specification as we began to work on the project.<br>
 A major change was splitting the program's file IO handling functionality into the FileIOManager class. Previously, we had each class designed to take care of its own writing and reading. This was in violation of the Single Responsibility principle, as classes mean to manage abstract TaskBoard data were being asked to handle the complex responsibility of reading and writing that data to and from the disk. It also violated the Open-closed principle, as baking the file system IO directly into the fundamental data classes made the program less open to being extended in the event that we wanted to change to a different method of storing data.<br>
 There were also some minor changes made to the existing interfaces. For example, the ability to access command paramters by index was removed, in favor of only having the ability to access them by name. This simplified the interface by removing a redundant method, and also made the code more clear to read as now the parameter named was being used and not simply an integer literal.<br>
+Several redundant and unneeded methods were also trimmed for he purpose of keeping the interfaces clean.<br>
 There were no other major changes made to the class specifications.
 
  
