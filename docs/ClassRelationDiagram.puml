@@ -14,8 +14,6 @@ abstract class DataEntry {
     + string name
     + time_t creation_time
     + time_t modified_time
-    + DataEntry()
-    + DataEntry(uint32_t id, string name)
     + static vector<DataEntry*> filter_data(vector<DataEntry*> data, string filter, SORT_TYPE sort = NONE)
     + string to_string()
 }
@@ -44,8 +42,6 @@ TaskBoard : - bool categories_changed
 TaskBoard : + MemberList members
 TaskBoard : + NoteList notes
 TaskBoard : + CategoryList categories
-TaskBoard : + uint get_id()
-TaskBoard : + int write()
 TaskBoard : + const vector<Task*> get_tasks()
 TaskBoard : + const Task& add_task(string name, uint author = 0, uint category = 0)
 TaskBoard : + void remove_task(uint id)
@@ -67,8 +63,6 @@ class CategoryList {
     - vector<CategoryInfo*> categories
     - uint next_category_id
     
-    + CategoryList()
-    + ~CategoryList();
     + const vector<CategoryInfo*> get_categories()
     + const CategoryInfo& get_category(uint id)
     + const CategoryInfo& get_category(string name)
@@ -83,8 +77,6 @@ class MemberList {
     - vector<Member*> members
     - uint next_members_id
     
-    + MemberList()
-    + ~MemberList()
     + const vector<Member*> get_members()
     + const Member& get_member(uint id)
     + const Member& get_member(string name)
@@ -100,7 +92,6 @@ class Directory {
     - vector<TaskBoard*> boards
     - ActionLog action_log
     - uint next_id
-    - void write_metadata();
     
     + CategoryList default_categories
     + string get_name()
@@ -109,13 +100,11 @@ class Directory {
     + vector<TaskBoard*> get_boards()
     + TaskBoard* get_board(uint id)
     + vector<TaskBoard*> filter_board_name(string query, DataEntry::SORT_TYPE sort = DataEntry::SORT_TYPE::NONE)
-    class Directory::invalid_path 
-    class Directory::unsupported_version
 }
 
 class CommandManager {
-    enum class COMMAND_PARSE_RESULT { BAD_COMMAND, BAD_PARAMETERS, OK, OK_EXIT_AFTER, BAD_EXIT_AFTER }
-    enum class COMMAND_RUN_RESULT {ERROR, GOOD};
+    enum COMMAND_PARSE_RESULT { BAD_COMMAND, BAD_PARAMETERS, OK, OK_EXIT_AFTER, BAD_EXIT_AFTER }
+    enum COMMAND_RUN_RESULT {ERROR, GOOD};
     + map<string, Command*> command_map;
     + bool exit
     + COMMAND_PARSE_RESULT parse_command(istream& in, ostream& out)
@@ -210,5 +199,4 @@ CommandManager  *--  CommandParametersData
 CommandManager *--  ActionLog
 CommandManager *-  Directory
 Command  *-  CommandParametersData
-FileIOManager <.. CategoryList
 @enduml
