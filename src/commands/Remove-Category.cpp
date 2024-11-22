@@ -19,13 +19,13 @@ public:
     }
 
     CommandManager::COMMAND_RUN_RESULT run(CommandParametersData parameters, std::ostream& out) {
-        // Get the task board
+        // Work
         TaskBoard* board = get_board(*this->parent->dir, parameters.get_parameter("board"));
         if (board == nullptr) {
-            out << "ERROR: Board " << parameters.get_parameter("board") << " not found." << std::endl;
-            return CommandManager::COMMAND_RUN_RESULT::ERROR;
+            out << "ERROR: Board [" << parameters.get_parameter("board") << "] is not found." << std::endl;
+            return CommandManager::COMMAND_RUN_RESULT::ERROR; 
         }
-
+        
         // Attempt to remove the category by name
         try {
             const CategoryInfo& category = board->categories.get_category(parameters.get_parameter("category"));
@@ -34,7 +34,7 @@ public:
            // Output success message with category info
           out << "REMOVE CATEGORY" << category.id << category.name << std::endl;
         }
-        catch (const std::invalid_argument& e) {
+        catch (const std::invalid_argument&) {
         // If category is not found by name, attempt removal by ID
         try {
             uint32_t id = std::stoul(parameters.get_parameter("category"));
@@ -42,8 +42,8 @@ public:
             board->categories.remove_category(category.id);
 
             // Output success message with category info
-            out << "REMOVE CATEGORY" << category.id << category.name << std::endl;
-        } catch (const std::invalid_argument& e) {
+            out << "REMOVE CATEGORY " << category.id << " " << category.name << std::endl;
+        } catch (const std::invalid_argument&) {
             out << "ERROR: Category" << parameters.get_parameter("category") << " not found on board." << std::endl;
             return CommandManager::COMMAND_RUN_RESULT::ERROR;
         }

@@ -44,7 +44,7 @@ const CategoryInfo& CategoryList::add_category(CategoryInfo category) {
 void CategoryList::remove_category(uint32_t id) {
     for (auto it = categories.begin(); it != categories.end(); ++it) {
         if ((*it)->id == id) {
-            delete *it; // Free memory
+
             categories.erase(it); // Remove from the list
             return;
         }
