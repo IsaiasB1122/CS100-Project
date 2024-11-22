@@ -30,20 +30,20 @@ class CommandListBoards : public Command {
              
             vector<DataEntry*> filteredBoards = DataEntry::filter_data(boards_as_data_entry, filter, DataEntry::SORT_TYPE::NONE);
             if (filteredBoards.empty()) {
-                out << "No boards match the filter provided." << endl;
+                out << "No boards have: " << filter <<  endl;
+                return CommandManager::COMMAND_RUN_RESULT::ERROR;
             }
             else {
                 for (auto board : filteredBoards) {
-                    //TaskBoard* itr = dynamic_cast<TaskBoard*>(board);
-                    if(board) {
+                    if(board != nullptr) {
                         out << board->to_string() << endl;
                     }
                     else {
-                        out << "Failed to cast DataEntry to TaskBoard" << endl;
+                        out << "Failed to get boards" << endl;
+                        return CommandManager::COMMAND_RUN_RESULT::ERROR;
                     }
                 }
             }
             return CommandManager::COMMAND_RUN_RESULT::GOOD;
     }
-    
 };
