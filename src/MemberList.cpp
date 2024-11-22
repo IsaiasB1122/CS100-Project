@@ -18,17 +18,17 @@ const std::vector<Member*> MemberList::get_members() {
 }
 
 const Member& MemberList::get_member(uint32_t id) {
-    for (auto m = this->members.begin(); m < members.end(); m += 1) { 
-        if ((m*)->id == id) return *m;
+    for (auto it = members.begin(); it != members.end(); ++it) {
+        if ((*it)->id == id) return **it; 
     }
-    return nullptr;
+    throw std::runtime_error("Member not found");
 }
 
 const Member& MemberList::get_member(std::string name) {
-    for (auto m = this->members.begin(); m < members.end(); m += 1) { 
-        if ((m*)->name == name) return *m;
+    for (auto it = members.begin(); it != members.end(); ++it) {
+        if ((*it)->name == name) return **it; 
     }
-    return nullptr;
+    throw std::runtime_error("Member not found");
 }
 
 const Member& MembersList::add_member(Member member) {
