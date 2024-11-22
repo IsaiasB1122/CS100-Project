@@ -14,6 +14,7 @@ abstract class DataEntry {
     + string name
     + time_t creation_time
     + time_t modified_time
+    + DataEntry()
     + static vector<DataEntry*> filter_data(vector<DataEntry*> data, string filter, SORT_TYPE sort = NONE)
     + string to_string()
 }
@@ -59,13 +60,16 @@ class NoteList {
     + const Note& edit_note(string title, string text, const Member& author)
     + void remove_note(uint id)
     + vector<unsigned char> serialize()
-    + NoteList deserialize(vector<unsigned char> data)
     + vector<Note*> filter_note_name(string query, DataEntry::SORT_TYPE sort = DataEntry::SORT_TYPE::NONE)
+    + FileIOManager
 }
 
 class CategoryList {
     - vector<CategoryInfo*> categories
     - uint next_category_id
+    
+    + CategoryList()
+    + ~CategoryList();
     + const vector<CategoryInfo*> get_categories()
     + const CategoryInfo& get_category(uint id)
     + const CategoryInfo& get_category_by_name(string name)
@@ -73,21 +77,21 @@ class CategoryList {
     + void remove_category(uint id)
     + void move_category(uint id, uint index)
     + void rename_category(uint id, string name)
-    + vector<unsigned char> serialize()
-    + CategoryList deserialize(vector<unsigned char> data)
     + vector<CategoryInfo*> filter_category_name(string query, DataEntry::SORT_TYPE sort = DataEntry::SORT_TYPE::NONE)
 }
 
 class MemberList {
     - vector<Member*> members
-    - uint next_member
+    - uint next_members_id
+    
+    + MemberList()
+    + ~MemberList()
     + const vector<Member*> get_members()
     + const Member& get_member(uint id)
-    + const Member& get_member_by_name(string name)
-    + const Member& add_member(string name)
+    + const Member& get_member(string name)
+    + const Member& add_member(Member category)
+    + void remove_member(uint id)
     + void rename_member(uint id, string name)
-    + vector<unsigned char> serialize()
-    + MemberList deserialize(vector<unsigned char> data)
     + vector<Member*> filter_member_name(string query, DataEntry::SORT_TYPE sort = DataEntry::SORT_TYPE::NONE)
 }
 
@@ -97,6 +101,8 @@ class Directory {
     - vector<TaskBoard*> boards
     - ActionLog action_log
     - uint next_id
+    - void write_metadata();
+    
     + CategoryList default_categories
     + static Directory load_from_path(string path)
     + static Directory new_at_path(string path, string name)
@@ -107,19 +113,34 @@ class Directory {
     + vector<TaskBoard*> get_boards()
     + TaskBoard* get_board(uint id)
     + vector<TaskBoard*> filter_board_name(string query, DataEntry::SORT_TYPE sort = DataEntry::SORT_TYPE::NONE)
+    class Directory::invalid_path {
+    <<Exception>>
+    }
+    class Directory::unsupported_version {
+    <<Exception>>
+    }
+    class Directory::invalid_path {
+    <<Exception>>
+    }
 }
 
 class CommandManager {
-    enum class COMMAND_PARSE_RESULT { BAD_COMMAND, BAD_PARAMETERS, OK }
+    enum class COMMAND_PARSE_RESULT { BAD_COMMAND, BAD_PARAMETERS, OK, OK_EXIT_AFTER, BAD_EXIT_AFTER }
+    enum class COMMAND_RUN_RESULT {ERROR, GOOD};
+    + map<string, Command*> command_map;
+    + bool exit
     + COMMAND_PARSE_RESULT parse_command(istream& in, ostream& out)
     + void set_parameter(string name, string value)
     + void unset_parameter(string name)
     + map<string, string> set_parameters
+    + void _index_commands
+    + voidi init*()
 }
 
 class CommandParametersData {
     - vector<string> positional_parameters
     - map<string, string> named_parameters
+    - parent CommandManager*
     + string get_parameter(uint index)
     + string get_parameter(string name)
     + bool has_parameter(string name)
@@ -127,6 +148,7 @@ class CommandParametersData {
 
 abstract class Command {
     enum COMMAND_RUN_RESULT {ERROR, OK}
+    + parent : CommandManager*
     + virtual string get_name()
     + virtual string get_help()
     + virtual vector<string> get_required_parameters()
@@ -136,7 +158,7 @@ abstract class Command {
 
 class ActionLogItem {
     + uint id
-    + string action_description
+    + string action
     + time_t timestamp
     + string user
 }
