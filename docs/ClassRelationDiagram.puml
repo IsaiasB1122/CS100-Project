@@ -15,6 +15,7 @@ abstract class DataEntry {
     + time_t creation_time
     + time_t modified_time
     + DataEntry()
+    + DataEntry(uint32_t id, string name)
     + static vector<DataEntry*> filter_data(vector<DataEntry*> data, string filter, SORT_TYPE sort = NONE)
     + string to_string()
 }
@@ -59,9 +60,7 @@ class NoteList {
     + const Note& add_note(string title, string text, const Member& author)
     + const Note& edit_note(string title, string text, const Member& author)
     + void remove_note(uint id)
-    + vector<unsigned char> serialize()
     + vector<Note*> filter_note_name(string query, DataEntry::SORT_TYPE sort = DataEntry::SORT_TYPE::NONE)
-    + FileIOManager
 }
 
 class CategoryList {
@@ -72,7 +71,7 @@ class CategoryList {
     + ~CategoryList();
     + const vector<CategoryInfo*> get_categories()
     + const CategoryInfo& get_category(uint id)
-    + const CategoryInfo& get_category_by_name(string name)
+    + const CategoryInfo& get_category(string name)
     + const CategoryInfo& add_category(CategoryInfo category)
     + void remove_category(uint id)
     + void move_category(uint id, uint index)
@@ -104,24 +103,14 @@ class Directory {
     - void write_metadata();
     
     + CategoryList default_categories
-    + static Directory load_from_path(string path)
-    + static Directory new_at_path(string path, string name)
-    + string get_path()
     + string get_name()
     + TaskBoard* add_board(string name)
     + void remove_board(TaskBoard* board)
     + vector<TaskBoard*> get_boards()
     + TaskBoard* get_board(uint id)
     + vector<TaskBoard*> filter_board_name(string query, DataEntry::SORT_TYPE sort = DataEntry::SORT_TYPE::NONE)
-    class Directory::invalid_path {
-    <<Exception>>
-    }
-    class Directory::unsupported_version {
-    <<Exception>>
-    }
-    class Directory::invalid_path {
-    <<Exception>>
-    }
+    class Directory::invalid_path 
+    class Directory::unsupported_version
 }
 
 class CommandManager {
@@ -132,23 +121,20 @@ class CommandManager {
     + COMMAND_PARSE_RESULT parse_command(istream& in, ostream& out)
     + void set_parameter(string name, string value)
     + void unset_parameter(string name)
-    + map<string, string> set_parameters
     + void _index_commands
-    + voidi init*()
+    + void init()
 }
 
 class CommandParametersData {
     - vector<string> positional_parameters
     - map<string, string> named_parameters
-    - parent CommandManager*
-    + string get_parameter(uint index)
+    - CommandManager* parent
     + string get_parameter(string name)
     + bool has_parameter(string name)
 }
 
 abstract class Command {
-    enum COMMAND_RUN_RESULT {ERROR, OK}
-    + parent : CommandManager*
+    + CommandManager* parent
     + virtual string get_name()
     + virtual string get_help()
     + virtual vector<string> get_required_parameters()
