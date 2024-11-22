@@ -210,4 +210,5 @@ CommandManager  *--  CommandParametersData
 CommandManager *--  ActionLog
 CommandManager *-  Directory
 Command  *-  CommandParametersData
+FileIOManager <.. CategoryList
 @enduml
