@@ -147,6 +147,10 @@ class ActionLog {
     + vector<ActionLogItem> get_actions()
 }
 
+class FileIOManager {
+    
+}
+
 skinparam linetype ortho
 
 NoteList *-- Note
