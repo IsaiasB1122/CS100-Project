@@ -100,26 +100,11 @@ The base class DataEntry is used so that a common filter and sort function can b
 
 ![](docs/ClassRelationDiagram.png)
  
- > ## Phase III
- > You will need to schedule a check-in for the second scrum meeting with the same reader you had your first scrum meeting with (using Calendly). Your entire team must be present. This meeting will occur on week 8 during lab time.
- 
- > BEFORE the meeting you should do the following:
- > * Update your class diagram from Phase II to include any feedback you received from your TA/grader.
- > * Considering the SOLID design principles, reflect back on your class diagram and think about how you can use the SOLID principles to improve your design. You should then update the README.md file by adding the following:
- >   * A new class diagram incorporating your changes after considering the SOLID principles.
- >   * For each update in your class diagram, you must explain in 3-4 sentences:
- >     * What SOLID principle(s) did you apply?
- >     * How did you apply it? i.e. describe the change.
- >     * How did this change help you write better code?
- > * Perform a new sprint plan like you did in Phase II.
- > * Make sure that your README file (and Project board) are up-to-date reflecting the current status of your project and the most recent class diagram. Previous versions of the README file should still be visible through your commit history.
->  * Each team member should also submit the Individual Contributions Form on Canvas for phase III. In this form, you need to fill in the names of all team members, the percentage of work contributed by each member for phase III, and a description of their contributions. Remember that each team member should submit the form individually.
- 
-> During the meeting with your reader you will discuss: 
- > * How effective your last sprint was (each member should talk about what they did)
- > * Any tasks that did not get completed last sprint, and how you took them into consideration for this sprint
- > * Any bugs you've identified and created issues for during the sprint. Do you plan on fixing them in the next sprint or are they lower priority?
- > * What tasks you are planning for this next sprint.
+### Class Specification Changes
+Some changes were made from the initial class specification as we began to work on the project.<br>
+A major change was splitting the program's file IO handling functionality into the FileIOManager class. Previously, we had each class designed to take care of its own writing and reading. This was in violation of the Single Responsibility principle, as classes mean to manage abstract TaskBoard data were being asked to handle the complex responsibility of reading and writing that data to and from the disk. It also violated the Open-closed principle, as baking the file system IO directly into the fundamental data classes made the program less open to being extended in the event that we wanted to change to a different method of storing data.<br>
+There were also some minor changes made to the existing interfaces. For example, the ability to access command paramters by index was removed, in favor of only having the ability to access them by name. This simplified the interface by removing a redundant method, and also made the code more clear to read as now the parameter named was being used and not simply an integer literal.<br>
+There were no other major changes made to the class specifications.
 
  
  > ## Final deliverable
