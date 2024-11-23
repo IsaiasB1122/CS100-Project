@@ -31,13 +31,15 @@ const Member& MemberList::get_member(std::string name) {
     throw std::runtime_error("Member not found");
 }
 
-const Member& MembersList::add_member(Member member) {
-    Members* member = new Member();
-    member->name = name;
-    member->id = next_members_id;
+const Member& MemberList::add_member(Member member) {
+    Member* new_member = new Member();
+    new_member->name = member.name;
+    new_member->id = next_members_id;
     this->next_members_id += 1;
 
-    this->members.push_back(member);
+    this->members.push_back(new_member);
+
+    return *new_member;
 
 }
 
