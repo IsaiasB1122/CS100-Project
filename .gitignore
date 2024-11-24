@@ -8,4 +8,5 @@ Makefile
 CMakeFiles
 CMakeFiles/*
 testBoard
+lib/
 lib
