@@ -8,6 +8,7 @@
 #include <Add-Category.cpp>
 #include <Remove-Category.cpp>
 #include <Help.cpp>
+#include <List-Boards.cpp>
 
 void CommandManager::_index_commands() {
     // Include command registering here
@@ -17,4 +18,5 @@ void CommandManager::_index_commands() {
     register_command("add-category",CommandAddCategory);
     register_command("remove-category",CommandRemoveCategory);
     register_command("help", CommandOutputHelp);
+    register_command("list-boards", CommandListBoards);
 }

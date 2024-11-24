@@ -9,4 +9,4 @@ CMakeFiles
 CMakeFiles/*
 testBoard
 lib/
-test/googletest/
+lib
