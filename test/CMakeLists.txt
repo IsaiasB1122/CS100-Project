@@ -10,6 +10,5 @@ add_executable(run_tests
 	test_commands.cpp
 )
 
-TARGET_LINK_LIBRARIES(run_tests gmock gtest gtest_main cataboard_lib)
 TARGET_LINK_LIBRARIES(run_tests gmock gtest gtest_main cataboard_lib libstdc++fs.a)
 TARGET_COMPILE_DEFINITIONS(run_tests PRIVATE gtest_disable_pthreads=ON)
