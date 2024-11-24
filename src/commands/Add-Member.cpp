@@ -16,12 +16,12 @@ public:
 
     CommandManager::COMMAND_RUN_RESULT run(CommandParametersData parameters, std::ostream& out) {
         // Work
-        TaskBoard* board = this->parent->dir->add_board(parameters.get_parameter("name"));
+        MemberList* member = this->parent->dir->add_member(parameters.get_parameter("name"));
         // Write
         FileIOManager::directory_write_metadata(*this->parent->dir);
-        FileIOManager::taskboard_write(*board);
+        FileIOManager::member_list_write(*member);
         // Output
-        out << "ADD MEMBER " << board->to_string() << std::endl;
+        out << " NEW MEMBER " << member->to_string() << std::endl;
 
         return CommandManager::COMMAND_RUN_RESULT::GOOD;
     }
