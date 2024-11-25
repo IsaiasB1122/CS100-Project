@@ -357,3 +357,85 @@ TEST_F(CommandsTest, testAddCategory2) {
     ASSERT_EQ(board->categories.get_categories().size(),2);
     EXPECT_EQ(board->categories.get_category(0).name,"Finished");
 }
+TEST_F(CommandsTest, testRemoveCategory1) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
+
+    // pre
+    TaskBoard* board = manager.dir->add_board("Board1");
+    board->categories.add_category(CategoryInfo(1,"Finished"));
+    board->categories.add_category(CategoryInfo(2,"In Testing"));
+
+    in << "remove-category \"In Testing\" --board Board1" << std::endl;
+
+  
+
+    auto result = manager.parse_command(in, out);
+    std::getline(out, output);
+
+    EXPECT_EQ(output, "REMOVE CATEGORY [ 2 In Testing ]");
+
+    ASSERT_EQ(board->categories.get_categories().size(), 2);
+}
+TEST_F(CommandsTest, testRemoveCategory2) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
+
+    // pre
+    TaskBoard* board = manager.dir->add_board("Board1");
+    board->categories.add_category(CategoryInfo(1,"Finished"));
+    board->categories.add_category(CategoryInfo(2,"In Testing"));
+
+    in << "remove-category 1 --board Board1" << std::endl;
+
+  
+
+    auto result = manager.parse_command(in, out);
+    std::getline(out, output);
+
+    EXPECT_EQ(output, "REMOVE CATEGORY [ 1 Finished ]");
+
+    ASSERT_EQ(board->categories.get_categories().size(), 2);
+}
+
+TEST_F(CommandsTest, testRemoveCategory3) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
+
+    // pre
+    TaskBoard* board = manager.dir->add_board("Board1");
+    board->categories.add_category(CategoryInfo(1,"Finished"));
+    board->categories.add_category(CategoryInfo(2,"In Testing"));
+
+    in << "remove-category 0 --board Board1" << std::endl;
+
+    auto result = manager.parse_command(in, out);
+    std::getline(out, output);
+
+    EXPECT_THAT(output, testing::HasSubstr("ERROR"));
+
+    ASSERT_EQ(board->categories.get_categories().size(), 3);
+}
+
+
+
+
+
+
+TEST_F(CommandsTest, testRemoveCategoryx) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
+
+    // pre
+    TaskBoard* board = manager.dir->add_board("Board1");
+
+  
+
+    auto result = manager.parse_command(in, out);
+    std::getline(out, output);
+
+}

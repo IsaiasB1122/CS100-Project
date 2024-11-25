@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-class CommandListCategories : public Command {
+class CommandRemoveCategory : public Command {
 public:
     std::string get_name() {
         return "list-categories";
