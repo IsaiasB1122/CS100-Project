@@ -420,12 +420,7 @@ TEST_F(CommandsTest, testRemoveCategory3) {
     ASSERT_EQ(board->categories.get_categories().size(), 3);
 }
 
-
-
-
-
-
-TEST_F(CommandsTest, testRemoveCategoryx) {
+TEST_F(CommandsTest, testAddMember1) {
     std::stringstream in;
     std::stringstream out;
     std::string output;
@@ -433,9 +428,82 @@ TEST_F(CommandsTest, testRemoveCategoryx) {
     // pre
     TaskBoard* board = manager.dir->add_board("Board1");
 
-  
+    in << "add-member Bob Board1" << std::endl;
 
     auto result = manager.parse_command(in, out);
     std::getline(out, output);
 
+    EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
+    EXPECT_EQ(output, "ADD MEMBER [ 0 Bob ]");
+    ASSERT_EQ(board->members.get_members().size(),1);
+    EXPECT_EQ(board->members.get_member(0).name,"Bob");
 }
+
+TEST_F(CommandsTest, testAddMember2) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
+
+    // pre
+    TaskBoard* board = manager.dir->add_board("Board1");
+
+    in << "add-member Bob --board Board1" << std::endl;
+    
+    auto result = manager.parse_command(in, out);
+    std::getline(out, output);
+
+    EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
+    EXPECT_EQ(output, "ADD MEMBER [ 0 Bob ]");
+
+    in << "add-member --name John --board Board1" << std::endl;
+    result = manager.parse_command(in, out);
+    std::getline(out, output);
+    EXPECT_EQ(output, "ADD MEMBER [ 1 John ]");
+
+    ASSERT_EQ(board->members.get_members().size(),2);
+    EXPECT_EQ(board->members.get_member(0).name,"Bob");
+    EXPECT_EQ(board->members.get_member(1).name,"John");
+}
+
+TEST_F(CommandsTest, testRemoveMember1) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
+
+    // pre
+    TaskBoard* board = manager.dir->add_board("CoolBoard");
+    board->members.add_member(Member(0,"Bob"));
+
+    in << "remove-member --board CoolBoard Bob" << std::endl;
+
+    auto result = manager.parse_command(in, out);
+    std::getline(out, output);
+
+    EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
+    EXPECT_EQ(output, "REMOVE MEMBER [ 0 Bob ]");
+    ASSERT_EQ(board->members.get_members().size(),0);
+}
+
+TEST_F(CommandsTest, testRemoveMember2) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
+
+    // pre
+    TaskBoard* board = manager.dir->add_board("CoolBoard");
+    board->members.add_member(Member(0,"Bob"));
+    board->members.add_member(Member(1,"Xtra"));
+    board->members.add_member(Member(2,"Sam"));
+
+    in << "remove-member --board CoolBoard --member 2" << std::endl;
+
+    auto result = manager.parse_command(in, out);
+    std::getline(out, output);
+
+    EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
+    EXPECT_EQ(output, "REMOVE MEMBER [ 2 Sam ]");
+    ASSERT_EQ(board->members.get_members().size(),2);
+}
+
+
+
