@@ -18,7 +18,7 @@ public:
     const CategoryInfo& get_category(std::string name);
     const CategoryInfo& add_category(CategoryInfo category);
     void remove_category(uint32_t id);
-    void move_ctagory(uint32_t id, uint32_t index);
+    void move_category(uint32_t id, uint32_t index);
     void rename_category(uint32_t id, std::string name);
 
 
