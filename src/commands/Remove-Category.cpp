@@ -42,7 +42,7 @@ public:
             board->categories.remove_category(category.id);
 
             // Output success message with category info
-            out << "REMOVE CATEGORY " << category.id << " " << category.name << std::endl;
+            out << "REMOVE CATEGORY " << "[" << category.id << " " << category.name << "]" << std::endl;
         } catch (const std::invalid_argument&) {
             out << "ERROR: Category " << parameters.get_parameter("category") << " not found on board." << std::endl;
             return CommandManager::COMMAND_RUN_RESULT::ERROR;
