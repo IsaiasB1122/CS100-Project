@@ -507,3 +507,106 @@ TEST_F(CommandsTest, testRemoveMember2) {
 
 
 
+TEST_F(CommandsTest, testAddTask1) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
+
+    // pre
+    TaskBoard* board = manager.dir->add_board("Board1");
+
+    in << "add-task --board Board1 \"Implement a feature\"" << std::endl;
+
+    auto result = manager.parse_command(in, out);
+    std::getline(out, output);
+
+    EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
+    EXPECT_EQ(output, "ADD TASK [ 0 TODO Implement a feature ]");
+
+    ASSERT_EQ(board->get_tasks().size(),1);
+    EXPECT_EQ(board->get_tasks()[0]->name, "Implement a feature");
+    EXPECT_EQ(board->get_tasks()[0]->category_id, 0);
+}
+
+TEST_F(CommandsTest, testAddTask2) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
+
+    // pre
+    TaskBoard* board = manager.dir->add_board("Board1");
+    board->categories.add_category(CategoryInfo(1,"BackLog"));
+
+    in << "add-task \"Add more tasks\" --board Board1 --category Backlog" << std::endl;
+
+    auto result = manager.parse_command(in, out);
+    std::getline(out, output);
+
+    EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
+    EXPECT_EQ(output, "ADD TASK [ 0 Backlog Add more tasks ]");
+
+    ASSERT_EQ(board->get_tasks().size(),1);
+    EXPECT_EQ(board->get_tasks()[0]->name, "Add more tasks");
+    EXPECT_EQ(board->get_tasks()[0]->category_id, 1);
+}
+
+TEST_F(CommandsTest, testAddTask3) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
+
+    // pre
+    TaskBoard* board = manager.dir->add_board("Board1");
+    board->categories.add_category(CategoryInfo(1,"BackLog"));
+
+    in << "add-task \"Fix leak in ceiling\" --board Board1 --category EpicCategory" << std::endl;
+
+    auto result = manager.parse_command(in, out);
+    std::getline(out, output);
+
+    EXPECT_THAT(output, testing::HasSubstr("ERROR"));
+}
+
+TEST_F(CommandsTest, testRemoveTask1) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
+
+    // pre
+    TaskBoard* board = manager.dir->add_board("Board1");
+    board->categories.add_category(CategoryInfo(1,"BackLog"));
+    board->add_task("etc");
+    board->add_task("Implement a feature",1);
+
+    in << "remove-task 1 --board Board1" << std::endl;
+
+    auto result = manager.parse_command(in, out);
+    std::getline(out, output);
+
+    EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
+    EXPECT_EQ(output, "REMOVE TASK [ 1 Backlog Implement a feature ]");
+
+    ASSERT_EQ(board->get_tasks().size(),0);
+}
+
+TEST_F(CommandsTest, testRemoveTask2) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
+
+    // pre
+    TaskBoard* board = manager.dir->add_board("Board1");
+    board->categories.add_category(CategoryInfo(1,"BackLog"));
+    board->add_task("etc");
+    board->add_task("Implement a feature",1);
+
+    in << "remove-task \"Implement a feature\" --board Board1" << std::endl;
+
+    auto result = manager.parse_command(in, out);
+    std::getline(out, output);
+
+    EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
+    EXPECT_EQ(output, "REMOVE TASK [ 1 Backlog Implement a feature ]");
+
+    ASSERT_EQ(board->get_tasks().size(),0);
+}

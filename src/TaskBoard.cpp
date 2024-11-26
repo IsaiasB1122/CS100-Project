@@ -34,3 +34,11 @@ const Task& TaskBoard::add_task(std::string name, uint32_t category) {
 
     return *new_task;
 }
+
+void TaskBoard::remove_task(uint32_t id) {
+
+}
+
+const std::vector<Task*> TaskBoard::get_tasks() {
+    return std::vector<Task*>{};
+}
