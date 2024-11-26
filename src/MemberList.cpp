@@ -1,4 +1,3 @@
-
 #include <MemberList.hpp>
 
 MemberList::MemberList() {

@@ -6,10 +6,13 @@
 #include <Exit.cpp>
 #include <Add-Board.cpp>
 #include <Remove-Board.cpp>
+#include <Add-Member.cpp>
 
 void CommandManager::_index_commands() {
     // Include command registering here
     register_command("exit", CommandExit);
     register_command("add-board",CommandAddBoard);
     register_command("remove-board",CommandRemoveBoard);
+    register_command("add-member",CommandAddMember);
+
 }

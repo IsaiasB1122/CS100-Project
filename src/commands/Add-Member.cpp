@@ -1,5 +1,4 @@
 #include <Commands.hpp>
-
 #include <Directory.hpp>
 #include <lib/file_io.hpp>
 
@@ -11,18 +10,26 @@ public:
     std::string get_help() {
         return COMMAND_HELP_ADD_MEMBER;
     }
-    std::vector<std::string> get_required_parameters() {return {"name"};};
-    std::vector<std::string> get_optional_parameters() {return {};};
+    std::vector<std::string> get_required_parameters() { return {"name", "board"}; }
+    std::vector<std::string> get_optional_parameters() { return {}; }
 
     CommandManager::COMMAND_RUN_RESULT run(CommandParametersData parameters, std::ostream& out) {
-        // Work
-        MemberList* member = this->parent->dir->add_member(parameters.get_parameter("name"));
-        // Write
-        FileIOManager::directory_write_metadata(*this->parent->dir);
-        FileIOManager::member_list_write(*member);
-        // Output
-        out << " NEW MEMBER " << member->to_string() << std::endl;
+
+        TaskBoard* board = get_board(*this->parent->dir, parameters.get_parameter("board"));
+        if (board == nullptr) {
+            out << "ERROR: Board [" << parameters.get_parameter("board") << "] is not found." << std::endl;
+            return CommandManager::COMMAND_RUN_RESULT::ERROR; 
+        }
+
+        Member new_member;
+        new_member.name = parameters.get_parameter("name");
+        Member added_member = board->members.add_member(new_member);
+
+        FileIOManager::taskboard_write(*board);
+
+        out << " NEW MEMBER " << added_member.to_string() << std::endl;
 
         return CommandManager::COMMAND_RUN_RESULT::GOOD;
+
     }
 };

@@ -11,4 +11,7 @@ Exits program."
 #define COMMAND_HELP_REMOVE_BOARD \
 "todo"
 
+#define COMMAND_HELP_ADD_MEMBER \
+"todo"
+
 #endif
