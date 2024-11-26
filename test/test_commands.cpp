@@ -535,7 +535,7 @@ TEST_F(CommandsTest, testAddTask2) {
 
     // pre
     TaskBoard* board = manager.dir->add_board("Board1");
-    board->categories.add_category(CategoryInfo(1,"BackLog"));
+    board->categories.add_category(CategoryInfo(1,"Backlog"));
 
     in << "add-task \"Add more tasks\" --board Board1 --category Backlog" << std::endl;
 
@@ -574,7 +574,7 @@ TEST_F(CommandsTest, testRemoveTask1) {
 
     // pre
     TaskBoard* board = manager.dir->add_board("Board1");
-    board->categories.add_category(CategoryInfo(1,"BackLog"));
+    board->categories.add_category(CategoryInfo(1,"Backlog"));
     board->add_task("etc");
     board->add_task("Implement a feature",1);
 
@@ -586,7 +586,7 @@ TEST_F(CommandsTest, testRemoveTask1) {
     EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
     EXPECT_EQ(output, "REMOVE TASK [ 1 Backlog Implement a feature ]");
 
-    ASSERT_EQ(board->get_tasks().size(),0);
+    ASSERT_EQ(board->get_tasks().size(),1);
 }
 
 TEST_F(CommandsTest, testRemoveTask2) {
@@ -596,7 +596,7 @@ TEST_F(CommandsTest, testRemoveTask2) {
 
     // pre
     TaskBoard* board = manager.dir->add_board("Board1");
-    board->categories.add_category(CategoryInfo(1,"BackLog"));
+    board->categories.add_category(CategoryInfo(1,"Backlog"));
     board->add_task("etc");
     board->add_task("Implement a feature",1);
 
@@ -608,5 +608,5 @@ TEST_F(CommandsTest, testRemoveTask2) {
     EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
     EXPECT_EQ(output, "REMOVE TASK [ 1 Backlog Implement a feature ]");
 
-    ASSERT_EQ(board->get_tasks().size(),0);
+    ASSERT_EQ(board->get_tasks().size(),1);
 }
