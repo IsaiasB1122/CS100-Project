@@ -1,4 +1,6 @@
 #include <Commands.hpp>
+
+#include <iostream>
 #include <TaskBoard.hpp>
 #include <lib/file_io.hpp>
 #include <lib/dir_helpers.hpp>
@@ -10,11 +12,11 @@ public:
     }
 
     std::string get_help() {
-        return "Adds a category to a task board.";
+        return COMMAND_HELP_ADD_CATEGORY;
     }
-
-    std::vector<std::string> get_required_parameters() { return {"name", "board"}; }
-    std::vector<std::string> get_optional_parameters() { return {}; }
+  
+    std::vector<std::string> get_required_parameters() {return {"name","board"};};
+    std::vector<std::string> get_optional_parameters() {return {};};
 
     CommandManager::COMMAND_RUN_RESULT run(CommandParametersData parameters, std::ostream& out) {
         // Work

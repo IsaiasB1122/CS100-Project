@@ -12,6 +12,15 @@ CategoryList::~CategoryList() {
     }
 }
 
+
+void CategoryList::move_category(uint32_t id, uint32_t index) {
+
+}
+
+void CategoryList::rename_category(uint32_t id, std::string name) {
+
+}
+
 const std::vector<CategoryInfo*> CategoryList::get_categories() {
     return categories;
 }
