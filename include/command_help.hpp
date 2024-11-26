@@ -28,7 +28,8 @@ Otherwise, prints help message of the given command."
 
 #define COMMAND_HELP_LIST_BOARD_NOTES ""
 
-#define COMMAND_HELP_LIST_BOARDS ""
+#define COMMAND_HELP_LIST_BOARDS  \
+"Lists all boards that have been created."
 
 #define COMMAND_HELP_LIST_CATEGORIES ""
 
@@ -55,5 +56,7 @@ Otherwise, prints help message of the given command."
 #define COMMAND_HELP_SUMMARY ""
 
 #define COMMAND_HELP_UNSET ""
+
+
 
 #endif
