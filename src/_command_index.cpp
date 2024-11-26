@@ -8,7 +8,6 @@
 #include <Add-Category.cpp>
 #include <Help.cpp>
 #include <Add-Board-Note.cpp>
-#include <Add-Category.cpp>
 #include <Add-Member.cpp>
 #include <Add-Task.cpp>
 #include <Assign-Member.cpp>
