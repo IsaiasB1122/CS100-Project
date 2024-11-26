@@ -34,6 +34,9 @@ public:
     const Task& add_task(std::string name, uint32_t category = 0);
     void remove_task(uint32_t id);
     void move_task(uint32_t id, uint32_t category_id);
+    const std::vector<CategoryInfo*> get_categories();
+    const CategoryInfo& add_category(std::string name);
+    void remove_category(uint32_t id);
 
     std::vector<Task*> filter_task_name(std::string query, DataEntry::SORT_TYPE sort = DataEntry::SORT_TYPE::NONE);
 

@@ -22,7 +22,7 @@ public:
     void remove_member(uint32_t id);
     void rename_member(uint32_t id, std::string name);
 
-    std::vector<MemberList*> filter_member_name(std::string query, DataEntry::SORT_TYPE sort = DataEntry::SORT_TYPE::NONE);
+    std::vector<MemberList*> filter_member_name(std::string query, DataEntry::SORT_TYPE sort);
 
     friend class FileIOManager;
 };

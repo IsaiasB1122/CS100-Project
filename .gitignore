@@ -7,3 +7,6 @@ CMakeCache.txt
 Makefile
 CMakeFiles
 CMakeFiles/*
+testBoard
+lib/
+lib

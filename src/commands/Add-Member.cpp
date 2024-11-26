@@ -2,6 +2,8 @@
 #include <Directory.hpp>
 #include <lib/file_io.hpp>
 
+#include <iostream>
+
 class CommandAddMember : public Command {
 public:
     std::string get_name() {

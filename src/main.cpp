@@ -18,6 +18,7 @@
 
 #include <iostream>
 #include <cctype>
+#include <filesystem>
 
 void handle_usage() {
     std::cout << "Usage: cataboard <path to directory>" << std::endl;

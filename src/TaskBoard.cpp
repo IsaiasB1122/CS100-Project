@@ -34,3 +34,27 @@ const Task& TaskBoard::add_task(std::string name, uint32_t category) {
 
     return *new_task;
 }
+
+
+void TaskBoard::remove_task(uint32_t id) {
+
+}
+
+const std::vector<Task*> TaskBoard::get_tasks() {
+    return std::vector<Task*>{};
+}
+
+const CategoryInfo& TaskBoard::add_category(std::string name) {
+    CategoryInfo new_category;
+    new_category.name = name;
+    const CategoryInfo& added_category = categories.add_category(new_category);
+
+    categories_changed = true; // Mark as modified
+    return added_category;
+}
+
+void TaskBoard::remove_category(uint32_t id) {
+    categories.remove_category(id);
+
+    categories_changed = true; // Mark as modified
+}
