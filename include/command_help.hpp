@@ -14,4 +14,7 @@
 "Prints all commands available to user if command is not given.\n\
 Otherwise, prints help message of the given command."
 
+#define COMMAND_HELP_LIST_BOARDS  \
+"Lists all boards that have been created."
+
 #endif
