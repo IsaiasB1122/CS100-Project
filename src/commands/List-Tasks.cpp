@@ -1,4 +1,6 @@
 #include <Commands.hpp>
+#include <lib/dir_helpers.hpp>
+#include <lib/file_io.hpp>
 
 #include <iostream>
 
@@ -14,7 +16,37 @@ public:
     std::vector<std::string> get_optional_parameters() {return {"filter","category","sort"};};
 
     CommandManager::COMMAND_RUN_RESULT run(CommandParametersData parameters, std::ostream& out) {
-        out << "list tasks" << std::endl;
+        // Resolve board
+        TaskBoard* board = get_board(*this->parent->dir, parameters.get_parameter("board"));
+        if (board == nullptr) {
+            out << "ERROR: Board [" << parameters.get_parameter("board") << "] is not found." << std::endl;
+            return CommandManager::COMMAND_RUN_RESULT::ERROR; 
+        }
+
+        std::vector<Task*> tasks;
+        DataEntry::SORT_TYPE sort = DataEntry::SORT_TYPE::NONE;
+        // Resolve sort
+        if (parameters.has_parameter("sort")) {
+            std::string in_sort = "";
+            for (auto c : parameters.get_parameter("sort")) in_sort.push_back(std::tolower(c));
+
+            if (in_sort == "id") sort = DataEntry::SORT_TYPE::ID;
+            else if (in_sort == "recent") sort = DataEntry::SORT_TYPE::MODIFIED;
+        }
+        // Filter
+        std::string filter = "";
+        if (parameters.has_parameter("filter") or sort != DataEntry::SORT_TYPE::NONE) {
+            filter = parameters.get_parameter("filter");
+            tasks = board->filter_task_name(filter, sort);
+        }
+        else tasks = board->get_tasks();
+        // Filter category
+
+        // Out
+        for (auto t : tasks) {
+            out << t->to_string(*board) << std::endl;
+        }
+
         return CommandManager::COMMAND_RUN_RESULT::GOOD;
     }
 };
