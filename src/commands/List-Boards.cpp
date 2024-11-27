@@ -30,7 +30,7 @@ class CommandListBoards : public Command {
              
             vector<DataEntry*> filteredBoards = DataEntry::filter_data(boards_as_data_entry, filter, DataEntry::SORT_TYPE::NONE);
             if (filteredBoards.empty()) {
-                out << "No boards have: " << filter <<  endl;
+                out << "No boards in current directory" << filter <<  endl;
                 return CommandManager::COMMAND_RUN_RESULT::ERROR;
             }
             else {
