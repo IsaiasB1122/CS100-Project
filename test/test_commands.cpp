@@ -610,27 +610,3 @@ TEST_F(CommandsTest, testRemoveTask2) {
 
     ASSERT_EQ(board->get_tasks().size(),0);
 }
-// TEST_F(CommandsTest, testHelp1) {
-//     std::stringstream out;
-//     std::stringstream in;
-//     std::string output;
-
-//     std::string Help = 
-//         "Available Commands: \n"
-//         "-------------------\n"
-//         "<add-board>\n"
-//         "Creates a new board with a given name\n"
-//         "<add-board-note>\n"
-//         "\n"
-//         "<add-categoty>\n"
-//         "\n"
-//         "<add-member>\n"
-//         "\n"
-//         ;
-
-
-//     EXPECT_CALL(*mock_cmd1, get_help())
-
-
-//     EXPECT_EQ(result, )
-// }
