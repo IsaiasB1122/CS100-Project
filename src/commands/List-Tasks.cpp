@@ -41,7 +41,23 @@ public:
         }
         else tasks = board->get_tasks();
         // Filter category
+        if (parameters.has_parameter("category")) {
+            const std::string categoryParameter = parameters.get_parameter("category"); 
+            try {
+                const CategoryInfo& category = get_category(*board, categoryParameter);
+                std::vector<Task*> tasks_category_filtered;
 
+                for (auto task : tasks) {
+                    if (task->category_id == category.id) {
+                        tasks_category_filtered.push_back(task);
+                    }
+                }
+                tasks = tasks_category_filtered;
+            } catch(const std::exception& e) {
+                out << "No tasks in board that have category: " << categoryParameter <<  std::endl;
+                return CommandManager::COMMAND_RUN_RESULT::ERROR;
+            }
+        }
         // Out
         for (auto t : tasks) {
             out << t->to_string(*board) << std::endl;
