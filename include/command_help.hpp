@@ -57,9 +57,4 @@ Otherwise, prints help message of the given command."
 
 #define COMMAND_HELP_UNSET ""
 
-
-
-#define COMMAND_HELP_ADD_MEMBER \
-"todo"
-
 #endif

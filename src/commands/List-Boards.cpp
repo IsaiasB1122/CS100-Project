@@ -22,7 +22,7 @@ class CommandListBoards : public Command {
         CommandManager::COMMAND_RUN_RESULT run(CommandParametersData parameters, ostream& out){		
             string filter = parameters.get_parameter("filter");
             vector <TaskBoard*> boards = this->parent->dir->get_boards();
-            vector<DataEntry*> boards_as_data_entry;
+            vector <DataEntry*> boards_as_data_entry;
 
             for (auto board : boards) {
                 boards_as_data_entry.push_back(static_cast<DataEntry*>(board));
