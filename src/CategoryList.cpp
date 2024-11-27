@@ -3,7 +3,7 @@
 #include <stdexcept> 
 
 CategoryList::CategoryList() {
-    next_category_id = 0;
+    next_category_id = 1;
 }
 
 CategoryList::~CategoryList() {
