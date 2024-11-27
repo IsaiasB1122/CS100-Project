@@ -2,16 +2,43 @@
 #include "gmock/gmock.h"
 #include <lib/file_io.hpp>
 
+bool compare_task(Task& task1, Task& task2) {
+    if (!(task1.id == task2.id)) return false;
+    if (!(task1.name == task2.name)) return false;
+    if (!(task1.category_id == task2.category_id)) return false;
+    // TODO: Compare notes
+    if (task1.assigned_members.size() != task2.assigned_members.size()) return false;
+    for (size_t i = 0 ; i < task1.assigned_members.size(); i += 1) if (task1.assigned_members[i] != task2.assigned_members[i]) return false;
+    return true;
+}
+
+bool compare_categoryinfo(CategoryInfo& category1, CategoryInfo& category2) {
+    if (!(category1.id == category2.id)) return false;
+    if (!(category1.name == category2.name)) return false;
+
+    return true;
+}
+
+bool compare_categorylist(CategoryList& categorylist1, CategoryList& categorylist2) {
+    if (categorylist1.get_categories().size() != categorylist2.get_categories().size()) return false;
+    for (size_t i = 0; i < categorylist1.get_categories().size(); i += 1) {
+        if (!compare_categoryinfo(*categorylist1.get_categories()[i], *categorylist2.get_categories()[i] )) return false;
+    }
+
+    return true;
+}
 
 bool compare_board(TaskBoard& board1, TaskBoard& board2) {
     if (board1.id != board2.id) return false;
     if (board1.name != board2.name) return false;
-    //if (board1.get_tasks().size() != board2.get_tasks().size()) return false;
-    // TODO: Compare tasks
+    if (board1.get_tasks().size() != board2.get_tasks().size()) return false;
+    for (size_t i = 0; i < board1.get_tasks().size(); i += 1) {
+        if (!compare_task(*board1.get_tasks()[i],*board2.get_tasks()[i])) return false;
+    }
     
     // TODO: Compare NotesList
     // TODO: Compare MemberList
-    // TODO: Compare CategoryList
+    if (!compare_categorylist(board1.categories, board2.categories)) return false;
     return true;
 }
 
@@ -121,4 +148,31 @@ TEST_F(FileIOTest, DirectoryReadWriteMatchAddRemoveBoards) {
 
     EXPECT_TRUE(compare_dir(dir,dir3));
 
+};
+
+
+TEST_F(FileIOTest, DirectoryReadWriteMatchCategoriesTasks) {
+    // setup 
+    const std::string path ="_test/DirectoryReadWriteMatchAddBoards";
+    Directory dir;
+    Directory dir2;
+
+    TaskBoard* board = dir.add_board("board1");
+    board->add_category("Category1");
+    board->add_category("Category2");
+    board->add_category("Category3");
+    board->add_task("Task1",0);
+    board->add_task("Task2",0);
+    board->add_task("Task3",1);
+    board->add_task("Task3",2);
+    board->add_task("Some Task etc",3);
+    board->add_task("Non-ascii task チョメチョメ");
+
+
+    EXPECT_NO_THROW({
+        FileIOManager::directory_new_at_path(dir,path,"test");
+        FileIOManager::directory_load_from_path(dir2,path);
+    });
+
+    EXPECT_TRUE(compare_dir(dir,dir2));
 };
