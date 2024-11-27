@@ -31,6 +31,8 @@ public:
     CategoryList categories;
 
     const std::vector<Task*> get_tasks();
+    const Task& get_task(uint32_t id);
+    const Task& get_task(std::string name);
     const Task& add_task(std::string name, uint32_t category = 0);
     void remove_task(uint32_t id);
     void move_task(uint32_t id, uint32_t category_id);
