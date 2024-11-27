@@ -88,3 +88,13 @@ void TaskBoard::remove_category(uint32_t id) {
 
     categories_changed = true; // Mark as modified
 }
+
+std::vector<Task*> TaskBoard::filter_task_name(std::string query, DataEntry::SORT_TYPE sort) {
+    std::vector<DataEntry*> filtered;
+    std::vector<Task*> out;
+    for (auto t : tasks) filtered.push_back(t);
+    filtered = DataEntry::filter_data(filtered, query, sort);
+    for (auto t : filtered) out.push_back( reinterpret_cast<Task*>(t) );
+
+    return out;
+}
