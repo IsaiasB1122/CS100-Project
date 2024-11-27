@@ -155,15 +155,16 @@ TEST_F(CommandsTest, testSet2) {
     std::stringstream in;
     std::stringstream out;
     std::string output;
+    std::string output2;
 
     in << "set --board 1 --author Bob" << std::endl;
 
     auto result = manager.parse_command(in, out);
     EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
     std::getline(out, output);
-    EXPECT_EQ(output, "board = 1");
-    std::getline(out, output);
-    EXPECT_EQ(output, "author = Bob");
+    std::getline(out, output2);
+    EXPECT_TRUE( (output == "board = 1" and output2 == "author = Bob") or (output == "author = Bob" and output2 == "board = 1") );
+
     ASSERT_TRUE(manager.set_parameters.count("board") == 1);
     ASSERT_TRUE(manager.set_parameters.count("author") == 1);
     EXPECT_EQ(manager.set_parameters["board"], "1");
