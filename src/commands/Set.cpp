@@ -14,7 +14,11 @@ public:
     std::vector<std::string> get_optional_parameters() {return {};};
 
     CommandManager::COMMAND_RUN_RESULT run(CommandParametersData parameters, std::ostream& out) {
-        out << "set" << std::endl;
+        auto pairs = parameters.get_named_parameter_pairs();
+        for (auto p : pairs) {
+            this->parent->set_parameter(p.first, p.second);
+            out << p.first << " = " << p.second << std::endl;
+        }
         return CommandManager::COMMAND_RUN_RESULT::GOOD;
     }
 };

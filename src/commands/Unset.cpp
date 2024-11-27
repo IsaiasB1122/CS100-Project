@@ -14,7 +14,8 @@ public:
     std::vector<std::string> get_optional_parameters() {return {};};
 
     CommandManager::COMMAND_RUN_RESULT run(CommandParametersData parameters, std::ostream& out) {
-        out << "unset" << std::endl;
+        parent->unset_parameter(parameters.get_parameter("name"));
+        out << parameters.get_parameter("name") << " unset" << std::endl;
         return CommandManager::COMMAND_RUN_RESULT::GOOD;
     }
 };
