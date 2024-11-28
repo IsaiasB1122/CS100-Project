@@ -33,7 +33,7 @@ public:
         FileIOManager::taskboard_write(*board);
 
         // Output with corrected format
-        out << "ADD CATEGORY " << "[ " << category.id << " " << category.name << " ]" << std::endl;
+        out << "ADD CATEGORY " << category.to_string() << std::endl;
 
         return CommandManager::COMMAND_RUN_RESULT::GOOD;
     }

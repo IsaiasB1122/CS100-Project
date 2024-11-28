@@ -13,7 +13,7 @@ DataEntry::DataEntry(uint32_t id, std::string name) {
     this->name = name;
 }
 
-std::string DataEntry::to_string() {
+std::string DataEntry::to_string() const {
     return "[ " + std::to_string(this->id) + " " + this->name + " ]";
 }
 
