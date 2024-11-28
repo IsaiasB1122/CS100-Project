@@ -1,7 +1,5 @@
 #include <MemberList.hpp>
 
-// TEMPORAY FOR STUBS, REMOVE WHEN ACTUALLY IMPLEMENTING!
-const Member dummy(0,"dummy");
 
 MemberList::MemberList() {
     next_members_id = 0;
