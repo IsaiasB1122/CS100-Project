@@ -5,6 +5,8 @@
 #include <lib/file_io.hpp>
 #include <filesystem>
 #include <string>
+#include <chrono>
+#include <thread>
 
 
 
@@ -535,7 +537,7 @@ TEST_F(CommandsTest, testAddTask2) {
 
     // pre
     TaskBoard* board = manager.dir->add_board("Board1");
-    board->categories.add_category(CategoryInfo(1,"BackLog"));
+    board->categories.add_category(CategoryInfo(1,"Backlog"));
 
     in << "add-task \"Add more tasks\" --board Board1 --category Backlog" << std::endl;
 
@@ -574,7 +576,7 @@ TEST_F(CommandsTest, testRemoveTask1) {
 
     // pre
     TaskBoard* board = manager.dir->add_board("Board1");
-    board->categories.add_category(CategoryInfo(1,"BackLog"));
+    board->categories.add_category(CategoryInfo(1,"Backlog"));
     board->add_task("etc");
     board->add_task("Implement a feature",1);
 
@@ -586,7 +588,7 @@ TEST_F(CommandsTest, testRemoveTask1) {
     EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
     EXPECT_EQ(output, "REMOVE TASK [ 1 Backlog Implement a feature ]");
 
-    ASSERT_EQ(board->get_tasks().size(),0);
+    ASSERT_EQ(board->get_tasks().size(),1);
 }
 
 TEST_F(CommandsTest, testRemoveTask2) {
@@ -596,7 +598,7 @@ TEST_F(CommandsTest, testRemoveTask2) {
 
     // pre
     TaskBoard* board = manager.dir->add_board("Board1");
-    board->categories.add_category(CategoryInfo(1,"BackLog"));
+    board->categories.add_category(CategoryInfo(1,"Backlog"));
     board->add_task("etc");
     board->add_task("Implement a feature",1);
 
@@ -608,5 +610,100 @@ TEST_F(CommandsTest, testRemoveTask2) {
     EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
     EXPECT_EQ(output, "REMOVE TASK [ 1 Backlog Implement a feature ]");
 
-    ASSERT_EQ(board->get_tasks().size(),0);
+    ASSERT_EQ(board->get_tasks().size(),1);
 }
+
+TEST_F(CommandsTest, testListTasks1) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
+
+    // pre
+    TaskBoard* board = manager.dir->add_board("Board1");
+    board->categories.add_category(CategoryInfo(1,"Backlog"));
+    board->categories.add_category(CategoryInfo(2,"Testing"));
+    Task t0 = board->add_task("Add more tasks",1);
+    Task t1 = board->add_task("Implement a feature");
+    Task t2 = board->add_task("Print the papers");
+    Task t3 = board->add_task("Cut the papers into pieces");
+    Task t4 = board->add_task("Sell the papers");
+    Task t5 = board->add_task("Determine what is paper",2);
+
+    in << "list-tasks Board1" << std::endl;
+
+    auto result = manager.parse_command(in, out);
+    EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
+    
+    std::getline(out, output);
+    EXPECT_EQ(output, "[ 0 Backlog Add more tasks ]");
+    std::getline(out, output);
+    EXPECT_EQ(output, "[ 1 TODO Implement a feature ]");
+    std::getline(out, output);
+    EXPECT_EQ(output, "[ 2 TODO Print the papers ]");
+    std::getline(out, output);
+    EXPECT_EQ(output, "[ 3 TODO Cut the papers into pieces ]");
+    std::getline(out, output);
+    EXPECT_EQ(output, "[ 4 TODO Sell the papers ]");
+    std::getline(out, output);
+    EXPECT_EQ(output, "[ 5 Testing Determine what is paper ]");
+    
+}
+
+TEST_F(CommandsTest, testListTasks2) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
+
+    // pre
+    TaskBoard* board = manager.dir->add_board("Board1");
+    board->categories.add_category(CategoryInfo(1,"Backlog"));
+    board->categories.add_category(CategoryInfo(2,"Testing"));
+    Task t0 = board->add_task("Add more tasks",1);
+    Task t1 = board->add_task("Implement a feature");
+    Task t2 = board->add_task("Print the papers");
+    Task t3 = board->add_task("Cut the papers into pieces");
+    Task t4 = board->add_task("Sell the papers");
+    Task t5 = board->add_task("Determine what is paper",2);
+
+    in << "list-tasks Board1 --filter paper" << std::endl;
+
+    auto result = manager.parse_command(in, out);
+    EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
+    
+    std::getline(out, output);
+    EXPECT_EQ(output, "[ 2 TODO Print the papers ]");
+    std::getline(out, output);
+    EXPECT_EQ(output, "[ 3 TODO Cut the papers into pieces ]");
+    std::getline(out, output);
+    EXPECT_EQ(output, "[ 4 TODO Sell the papers ]");
+    std::getline(out, output);
+    EXPECT_EQ(output, "[ 5 Testing Determine what is paper ]");
+    
+}
+
+TEST_F(CommandsTest, testListTasks3) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
+
+    // pre
+    TaskBoard* board = manager.dir->add_board("Board1");
+    board->categories.add_category(CategoryInfo(1,"Backlog"));
+    board->categories.add_category(CategoryInfo(2,"Testing"));
+    Task t0 = board->add_task("Add more tasks",1);
+    Task t1 = board->add_task("Implement a feature");
+    Task t2 = board->add_task("Print the papers");
+    Task t3 = board->add_task("Cut the papers into pieces");
+    Task t4 = board->add_task("Sell the papers");
+    Task t5 = board->add_task("Determine what is paper",2);
+
+    in << "list-tasks Board1 --category Testing" << std::endl;
+
+    auto result = manager.parse_command(in, out);
+    EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
+    
+    std::getline(out, output);
+    EXPECT_EQ(output, "[ 5 Testing Determine what is paper ]");
+    
+}
+// TODO: Add unit test to test sorting by modified
