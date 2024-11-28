@@ -4,13 +4,19 @@
 #include <cstring>
 #include <cstdio>
 
+Directory::Directory() {
+    next_id = 0;
+    default_categories.add_category({CategoryInfo(0,"TODO")});
+}
 
 TaskBoard* Directory::add_board(std::string name) {
     TaskBoard* board = new TaskBoard(this);
 
     board->name = name;
     board->id = this->next_id;
-    board->categories = this->default_categories;
+    for (auto category : this->default_categories.get_categories()) {
+        board->categories.add_category(CategoryInfo(category->id,category->name));
+    }
     std::time(&board->creation_time);
     std::time(&board->modified_time);
 
