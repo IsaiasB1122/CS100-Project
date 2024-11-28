@@ -3,6 +3,8 @@
 
 #include <cstdint>
 #include <vector>
+#include <stdexcept> 
+
 
 #include <Member.hpp>
 
