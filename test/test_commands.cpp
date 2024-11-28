@@ -468,6 +468,64 @@ TEST_F(CommandsTest, testAddMember2) {
     EXPECT_EQ(board->members.get_member(1).name,"John");
 }
 
+TEST_F(CommandsTest, testListMembers1) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
+
+    // pre
+    TaskBoard* board = manager.dir->add_board("CoolBoard");
+    board->members.add_member(Member(0,"Bob"));
+    board->members.add_member(Member(1,"Billy"));
+    board->members.add_member(Member(2,"Sam"));
+    board->members.add_member(Member(3,"Salamander"));
+    board->members.add_member(Member(4,"Xian"));
+    board->members.add_member(Member(5,"Roberto"));
+
+    in << "list-members CoolBoard" << std::endl;
+    
+    auto result = manager.parse_command(in, out);
+
+    EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
+    std::getline(out, output);
+    EXPECT_EQ(output, "[ 0 Bob ]");
+    std::getline(out, output);
+    EXPECT_EQ(output, "[ 1 Billy ]");
+    std::getline(out, output);
+    EXPECT_EQ(output, "[ 2 Sam ]");
+    std::getline(out, output);
+    EXPECT_EQ(output, "[ 3 Salamander ]");
+    std::getline(out, output);
+    EXPECT_EQ(output, "[ 4 Xian ]");
+    std::getline(out, output);
+    EXPECT_EQ(output, "[ 5 Roberto ]");
+}
+
+TEST_F(CommandsTest, testListMembers2) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
+
+    // pre
+    TaskBoard* board = manager.dir->add_board("CoolBoard");
+    board->members.add_member(Member(0,"Bob"));
+    board->members.add_member(Member(1,"Billy"));
+    board->members.add_member(Member(2,"Sam"));
+    board->members.add_member(Member(3,"Salamander"));
+    board->members.add_member(Member(4,"Xian"));
+    board->members.add_member(Member(5,"Roberto"));
+
+    in << "list-members --filter ob CoolBoard" << std::endl;
+    
+    auto result = manager.parse_command(in, out);
+
+    EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
+    std::getline(out, output);
+    EXPECT_EQ(output, "[ 0 Bob ]");
+    std::getline(out, output);
+    EXPECT_EQ(output, "[ 5 Roberto ]");
+}
+
 TEST_F(CommandsTest, testRemoveMember1) {
     std::stringstream in;
     std::stringstream out;
