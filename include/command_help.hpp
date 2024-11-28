@@ -57,6 +57,4 @@ Otherwise, prints help message of the given command."
 
 #define COMMAND_HELP_UNSET ""
 
-
-
 #endif

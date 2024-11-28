@@ -1,8 +1,5 @@
-
 #include <MemberList.hpp>
 
-// TEMPORAY FOR STUBS, REMOVE WHEN ACTUALLY IMPLEMENTING!
-const Member dummy(0,"dummy");
 
 MemberList::MemberList() {
     next_members_id = 0;
@@ -15,23 +12,42 @@ MemberList::~MemberList() {
 }
 
 const std::vector<Member*> MemberList::get_members() {
-    return std::vector<Member*>{};
+    std::vector<Member*> members;
+    for (auto m : this->members) members.push_back(m);
+    return members;
 }
+
 const Member& MemberList::get_member(uint32_t id) {
-    return dummy;
+    for (auto it = members.begin(); it != members.end(); ++it) {
+        if ((*it)->id == id) return **it; 
+    }
+    throw std::runtime_error("Member not found");
 }
+
 const Member& MemberList::get_member(std::string name) {
-    return dummy;
+    for (auto it = members.begin(); it != members.end(); ++it) {
+        if ((*it)->name == name) return **it; 
+    }
+    throw std::runtime_error("Member not found");
 }
-const Member& MemberList::add_member(Member category) {
-    return dummy;
+
+const Member& MemberList::add_member(Member member) {
+    Member* new_member = new Member();
+    new_member->name = member.name;
+    new_member->id = next_members_id;
+    this->next_members_id += 1;
+
+    this->members.push_back(new_member);
+
+    return *new_member;
+
 }
+
 void MemberList::remove_member(uint32_t id) {
-
-}
-void MemberList::rename_member(uint32_t id, std::string name) { 
-
-}
-std::vector<MemberList*> MemberList::filter_member_name(std::string query, DataEntry::SORT_TYPE sort) {
-    return std::vector<MemberList*>{};
+    for (auto m = this->members.begin(); m < this->members.end(); m += 1) {
+        if ((*m)->id == id) {
+            this->members.erase(m);
+            delete *m;
+        }
+    }
 }
