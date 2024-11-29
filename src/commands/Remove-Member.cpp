@@ -21,27 +21,13 @@ public:
         }
 
         std::string member_name = parameters.get_parameter("member");
-        Member* member = nullptr;
-
-        try {
-            member = &board->members.get_member(member_name);
-        } catch (const std::runtime_error& e) {
-            out << "ERROR: Member [" << member_name << "] not found on board [" << parameters.get_parameter("board") << "]." << std::endl;
-            return CommandManager::COMMAND_RUN_RESULT::ERROR;
-        }
-
-
-        uint32_t member_id = member->id;
-        std::string member_string = member->to_string();
-
-
-        board->members.remove_member(member_id);
+        Member member_to_remove = board->members.get_member(member_name);
+        uint32_t id = member_to_remove.id;
+        board->members.remove_member(id);
         board->members_changed = true;
         FileIOManager::taskboard_write(*board);
-        FileIOManager::directory_write_metadata(*this->parent->dir);
 
-
-        out << "REMOVE MEMBER " << member_string << std::endl;
+        out << "REMOVE MEMBER " << member_to_remove.to_string() << std::endl;
 
         return CommandManager::COMMAND_RUN_RESULT::GOOD;
     }
