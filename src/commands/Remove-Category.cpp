@@ -11,7 +11,7 @@ public:
         return "remove-category";
     }
     std::string get_help() {
-        return COMMAND_HELP_LIST_CATEGORIES;
+        return COMMAND_HELP_REMOVE_CATEGORY;
     }
     std::vector<std::string> get_required_parameters() {return {"category","board"};};
     std::vector<std::string> get_optional_parameters() {return {};};
@@ -27,25 +27,37 @@ public:
         // Attempt to remove the category by name
         try {
             const CategoryInfo& category = board->categories.get_category(parameters.get_parameter("category"));
-         board->categories.remove_category(category.id);
+            
+            if (category.id == 0) {
+            out << "ERROR: Category ID 0 cannot be removed." << std::endl;
+            return CommandManager::COMMAND_RUN_RESULT::ERROR;
+        }
 
+        board->categories.remove_category(category.id);
+        
            // Output success message with category info
-          out << "REMOVE CATEGORY" << category.id << category.name << std::endl;
+           out << "REMOVE CATEGORY " << category.to_string() << std::endl;
         }
         catch (const std::invalid_argument&) {
 			// If category is not found by name, attempt removal by ID
 			try {
 				uint32_t id = std::stoul(parameters.get_parameter("category"));
 				const CategoryInfo& category = board->categories.get_category(id);
+
+                if (category.id == 0) {
+                out << "ERROR: Category ID 0 cannot be removed." << std::endl;
+                return CommandManager::COMMAND_RUN_RESULT::ERROR;
+            }
+
 				board->categories.remove_category(category.id);
 
-				// Output success message with category info
-				out << "REMOVE CATEGORY " << category.id << " " << category.name << std::endl;
-			} catch (const std::invalid_argument&) {
-				out << "ERROR: Category " << parameters.get_parameter("category") << " not found on board." << std::endl;
-				return CommandManager::COMMAND_RUN_RESULT::ERROR;
-			}
-		}
+            // Output success message with category info
+            out << "REMOVE CATEGORY " << category.to_string() << std::endl;
+        } catch (const std::invalid_argument&) {
+            out << "ERROR: Category " << parameters.get_parameter("category") << " not found on board." << std::endl;
+            return CommandManager::COMMAND_RUN_RESULT::ERROR;
+        }
+    }
 
 		// Write the updated task board
 		FileIOManager::taskboard_write(*board);

@@ -30,9 +30,7 @@ const Task& TaskBoard::add_task(std::string name, uint32_t category) {
 
     this->tasks.push_back(new_task);
     this->tasks_changed = true;
-
-    this->next_task_id += 1;
-
+    this->next_task_id +=1;
     return *new_task;
 }
 
@@ -76,10 +74,9 @@ const Task& TaskBoard::get_task(std::string name) {
 
 const CategoryInfo& TaskBoard::add_category(std::string name) {
     CategoryInfo new_category;
-    new_category.name = name;
+    new_category.name = name;    
     const CategoryInfo& added_category = categories.add_category(new_category);
-
-    categories_changed = true; // Mark as modified
+    this->categories_changed = true;
     return added_category;
 }
 

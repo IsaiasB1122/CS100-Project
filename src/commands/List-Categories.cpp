@@ -8,7 +8,7 @@ public:
         return "list-categories";
     }
     std::string get_help() {
-        return COMMAND_HELP_REMOVE_CATEGORY;
+        return COMMAND_HELP_LIST_CATEGORIES;
     }
     std::vector<std::string> get_required_parameters() {return {"board"};};
     std::vector<std::string> get_optional_parameters() {return {"filter"};};

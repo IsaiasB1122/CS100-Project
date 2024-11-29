@@ -340,7 +340,7 @@ TEST_F(CommandsTest, testAddCategory1) {
     EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
     EXPECT_EQ(output, "ADD CATEGORY [ 1 Finished ]");
     ASSERT_EQ(board->categories.get_categories().size(),2);
-    EXPECT_EQ(board->categories.get_category(0).name,"Finished");
+    EXPECT_EQ(board->categories.get_category(1).name,"Finished");
 }
 TEST_F(CommandsTest, testAddCategory2) {
     std::stringstream in;
@@ -357,8 +357,8 @@ TEST_F(CommandsTest, testAddCategory2) {
 
     EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
     EXPECT_EQ(output, "ADD CATEGORY [ 1 In Testing ]");
-    ASSERT_EQ(board->categories.get_categories().size(),2);
-    EXPECT_EQ(board->categories.get_category(0).name,"Finished");
+    ASSERT_EQ(board->categories.get_categories().size(), 2);
+    EXPECT_EQ(board->categories.get_category(1).name,"In Testing");
 }
 TEST_F(CommandsTest, testRemoveCategory1) {
     std::stringstream in;
