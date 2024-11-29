@@ -610,3 +610,104 @@ TEST_F(CommandsTest, testRemoveTask2) {
 
     ASSERT_EQ(board->get_tasks().size(),0);
 }
+TEST_F(CommandsTest, testHelp1) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
+    
+    in << "help list-boards" << std::endl;
+    auto result = manager.parse_command(in,out);
+    std::getline(out, output);
+
+    std::string expectedResult =  std::string(COMMAND_HELP_LIST_BOARDS) + "\n";
+
+    EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
+    ASSERT_EQ(out.str(), expectedResult);
+}
+TEST_F(CommandsTest, testHelp2) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
+
+    in << "help ajshdjashdla" << std::endl;
+    auto result = manager.parse_command(in,out);
+    std::getline(out,output);
+
+    std::string expectedResult = "No command found for: ajshdjashdla\n";
+
+    EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
+    ASSERT_EQ(out.str(), expectedResult);
+}
+TEST_F(CommandsTest, testHelp3) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
+
+    in << "help" << std::endl;
+    auto result = manager.parse_command(in,out);
+    std::getline(out,output);
+
+    std::string expectedResult = 
+        "Available Commands: \n"
+        "-------------------\n"
+        "<add-board>\n"
+        "Creates a new board with a given name\n"
+        "<add-board-note>\n"
+        "Creates a new board note with the given name\n"
+        "<add-category>\n"
+        "Adds a category with the given name to the given board\n"
+        "<add-member>\n"
+        "Adds member to a board\n"
+        "<add-task>\n"
+        "Adds task to a board. Category is optional.\n"
+        "<assign-member>\n"
+        "Assigns a task to a member of a board.\n"
+        "<categorize-task>\n"
+        "Sets task's category to new category.\n"
+        "<exit>\n"
+        "Exits program.\n"
+        "<help>\n"
+        "Prints all commands available to user if command is not given.\n"
+        "Otherwise, prints help message of the given command.\n"
+        "<list-board-notes>\n"
+        "Returns list of boards, filtered by [filter].\n"
+        "<list-boards>\n"
+        "Lists all boards that have been created.\n"
+        "<list-categories>\n"
+        "Removes the category with given id from the given board.\n"
+        "<list-members>\n"
+        "List the members of a board. Filter is optional.\n"
+        "<list-tasks>\n"
+        "Lists tasks in the board. The filter will filter by task name.\n"
+        "Category filters by category\n"
+        "Sort accepts options ID, RECENT, OLD. Defaults to ID\n"
+        "Recent = Most recently modified. Old = Least recently modified\n"
+        "<move-category>\n"
+        "Moves the category to the given position (starting from 1)\n"
+        "<remove-board>\n"
+        "Deletes a board with a given name\n"
+        "<remove-board-note>\n"
+        "Removes a given note from a board.\n"
+        "<remove-category>\n"
+        "Lists categories in a given board\n"
+        "Listed in the order they are shown on the summary left->right\n"
+        "<remove-member>\n"
+        "Removes a member of a given board.\n"
+        "<remove-task>\n"
+        "Removes a task of a given board.\n"
+        "<set>\n"
+        "Sets the given parameter name's saved value to be the value\n"
+        "Until unset is run with that same name,\n"
+        "all parameters with that name will get that value\n"
+        "<show-board-note>\n"
+        "Shows the note of a given board.\n"
+        "<show-task>\n"
+        "Shows the task of a given board\n"
+        "<summary>\n"
+        "Prints a pretty kanban-style summary\n"
+        "<unset>\n"
+        "Unsets the given parameter\n";
+
+        EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
+        ASSERT_EQ(out.str(), expectedResult);
+}
