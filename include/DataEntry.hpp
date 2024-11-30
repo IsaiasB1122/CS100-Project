@@ -18,7 +18,7 @@ public:
     DataEntry(uint32_t id, std::string name);
 
     static std::vector<DataEntry*> filter_data(std::vector<DataEntry*> data, std::string filter = "", SORT_TYPE sort = SORT_TYPE::NONE);
-    std::string to_string();
+    std::string to_string() const;
 };
 
 
