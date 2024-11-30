@@ -238,7 +238,7 @@ TEST_F(CommandsTest, testListBoards2) {
     manager.dir->add_board("Task Board Group 1");
     manager.dir->add_board("Group 2");
 
-    in << "list-boards board" << std::endl;
+    in << "list-boards Board" << std::endl;
 
     auto result = manager.parse_command(in, out);
     EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
