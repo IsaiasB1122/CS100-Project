@@ -11,8 +11,8 @@ class NoteList {
 public:
     const std::vector<Note*> get_notes();
     const Note& get_note(uint32_t id);
-    const Note& add_note(std::string title, std::string text, const Member& author);
-    const Note& edit_note(std::string title, std::string text, const Member& author);
+    const Note& add_note(std::string title, std::string text, uint32_t author_id = -1);
+    //const Note& edit_note(std::string title, std::string text, const Member& author);
     void remove_note(uint32_t id);
 
 
