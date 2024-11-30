@@ -58,6 +58,12 @@ public:
                 return CommandManager::COMMAND_RUN_RESULT::ERROR;
             }
         }
+        //Filter member
+        //list-tasks <board> [filter] [category] [sort]
+        if (parameters.has_parameter("member")) {
+            std::cout << "hello" << std::endl;
+            const std::string memberFiler = parameters.get_parameter("member")
+        }
         // Out
         for (auto t : tasks) {
             out << t->to_string(*board) << std::endl;
