@@ -1,6 +1,10 @@
 #include <stdexcept>
 #include <NoteList.hpp>
 
+NoteList::NoteList() {
+    next_note_id = 0;
+}
+
 const std::vector<Note*> NoteList::get_notes() {
     return notes;
 }
@@ -13,7 +17,7 @@ const Note& NoteList::get_note(uint32_t id) {
     }
     throw std::invalid_argument("");
 }
-const Note& NoteList::add_note(std::string title, std::string text, uint32_t author_id = -1) {
+const Note& NoteList::add_note(std::string title, std::string text, uint32_t author_id) {
     Note* n = new Note(next_note_id,title, text, author_id);
     notes.push_back(n);
 

@@ -36,13 +36,14 @@ public:
             }
         }
         // Add note
-        board->notes.add_note(parameters.get_parameter("title"),parameters.get_parameter("text"),author_id);
+        Note n = board->notes.add_note(parameters.get_parameter("title"),parameters.get_parameter("text"),author_id);
         
         // Write
         board->notes_changed = true;
-        taskboard_write(*board);
+        FileIOManager::taskboard_write(*board);
 
         // Output
+        out << "ADD NOTE " << n.to_string() << std::endl;
 
         return CommandManager::COMMAND_RUN_RESULT::GOOD;
     }

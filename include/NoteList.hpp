@@ -9,6 +9,7 @@ class NoteList {
     std::vector<Note*> notes;
     uint32_t next_note_id;
 public:
+    NoteList();
     const std::vector<Note*> get_notes();
     const Note& get_note(uint32_t id);
     const Note& add_note(std::string title, std::string text, uint32_t author_id = -1);
