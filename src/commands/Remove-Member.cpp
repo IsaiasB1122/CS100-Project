@@ -20,8 +20,8 @@ public:
             return CommandManager::COMMAND_RUN_RESULT::ERROR;
         }
 
-        Member member_name;
-        Member member_to_remove = board->members.get_member(member_name);
+        std::string member_name = parameters.get_parameter("member");
+        Member member_to_remove = get_member(*board, member_name);
         uint32_t id = member_to_remove.id;
         board->members.remove_member(id);
         board->members_changed = true;
