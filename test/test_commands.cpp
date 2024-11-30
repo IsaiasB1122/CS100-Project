@@ -261,7 +261,7 @@ TEST_F(CommandsTest, testAddBoardNote1) {
     board->members.add_member(Member(2,"d3"));
     board->members.add_member(Member(3,"Siddharth"));
 
-    in << "add-board-note \"TODO: Finish task categories\" \"We need to add more task categories.\\nI hope we can meet sometime!\" --author Siddharth --board Board2" << std::endl;
+    in << "add-board-note \"TODO: Finish task categories\" \"We need to add more task categories.<br>I hope we can meet sometime!\" --author Siddharth --board Board2" << std::endl;
 
     auto result = manager.parse_command(in, out);
     EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
@@ -271,7 +271,7 @@ TEST_F(CommandsTest, testAddBoardNote1) {
     
     ASSERT_EQ(board->notes.get_notes().size(),1);
     EXPECT_EQ(board->notes.get_note(0).name,"TODO: Finish task categories");
-    EXPECT_EQ(board->notes.get_note(0).text,"We need to add more task categories.\nI hope we can meet sometime!");
+    EXPECT_EQ(board->notes.get_note(0).text,"We need to add more task categories.<br>I hope we can meet sometime!");
     EXPECT_EQ(board->notes.get_note(0).author_id, 3);
 }
 
