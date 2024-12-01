@@ -37,9 +37,9 @@ public:
             out << "Error: Member [" << member_name << "] not found." << std::endl;
             return CommandManager::COMMAND_RUN_RESULT::ERROR;
         }
-
-        uint32_t id = member_to_assign.id;
-        task.assigned_members.push_back(id);
+        uint32_t task_id = task.id;
+        uint32_t member_id = member_to_assign.id;
+        board->assign_member(task_id, member_id);
         task.changed = true;
 
         FileIOManager::taskboard_write(*board);
