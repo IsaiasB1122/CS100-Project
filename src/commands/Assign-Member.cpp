@@ -16,7 +16,8 @@ public:
     CommandManager::COMMAND_RUN_RESULT run(CommandParametersData parameters, std::ostream& out) {
         TaskBoard* board = get_board(*this->parent->dir, parameters.get_parameter("board"));
         if (board == nullptr) {
-            throw std::runtime_error("Board [" + parameters.get_parameter("board") + "] not found.");
+            out << "ERROR: Board [" << parameters.get_parameter("board") << "] is not found." << std::endl;
+            return CommandManager::COMMAND_RUN_RESULT::ERROR;
         }
 
         std::string task_name = parameters.get_parameter("task");

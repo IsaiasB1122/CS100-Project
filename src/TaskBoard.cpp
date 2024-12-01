@@ -100,8 +100,13 @@ void TaskBoard::assign_member(uint32_t task_id, uint32_t member_id) {
     // assumes ids are valid
     for (auto t : tasks) {
         if (t->id == task_id) {
-            t->changed = true;
-            t->assigned_members.push_back(member_id);
+            for (auto assigned_member : t->assigned_members) {
+                if (assigned_member == member_id) {
+                    throw std::runtime_error("Member with ID [" + std::to_string(member_id) + "] is already assigned to Task with ID [" + std::to_string(task_id) + "].");
+                }
+            }
+        t->changed = true;
+        t->assigned_members.push_back(member_id);
         }
     }
 }
