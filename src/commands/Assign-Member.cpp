@@ -21,6 +21,13 @@ public:
         }
 
 
+        std::string task_name = parameters.get_parameter("task");
+        Task task = get_task(*board, task_name);
+        std::string member_name = parameters.get_parameter("member");
+        Member member_to_assign = get_member(*board, member_name);
+        uint32_t id = member_to_assign.id;
+        task.assigned_members.push_back(id);
+        out << "ASSIGN " << member_to_assign.to_string() << " to " << task.to_string(*board) << std::endl;
 
         
         return CommandManager::COMMAND_RUN_RESULT::GOOD;
