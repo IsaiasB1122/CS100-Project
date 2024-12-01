@@ -766,3 +766,121 @@ TEST_F(CommandsTest, testListTasks3) {
     
 }
 // TODO: Add unit test to test sorting by modified
+
+
+TEST_F(CommandsTest, testAssignMember1) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
+
+    // pre
+    TaskBoard* board = manager.dir->add_board("Board1");
+    board->categories.add_category(CategoryInfo(1,"Backlog"));
+    board->categories.add_category(CategoryInfo(2,"Testing"));
+    Member m0 = board->members.add_member(Member(0,"Bob"));
+    board->members.add_member(Member(1,"1"));
+    board->members.add_member(Member(2,"2"));
+    board->members.add_member(Member(3,"3"));
+    board->members.add_member(Member(4,"4"));
+    board->members.add_member(Member(5,"5"));
+    board->members.add_member(Member(6,"6"));
+    board->members.add_member(Member(7,"7"));
+    board->members.add_member(Member(8,"8"));
+    Member m9 =board->members.add_member(Member(9,"Shizuku"));
+    board->add_task("dummy",1);
+    board->add_task("dummy",1);
+    board->add_task("dummy",1);
+    board->add_task("dummy",1);
+    board->add_task("dummy",1);
+    Task t5 = board->add_task("Determine what is paper",2);
+
+    in << "assign-member 5 Bob Board1" << std::endl;
+
+    auto result = manager.parse_command(in, out);
+    EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
+    
+    std::getline(out, output);
+    EXPECT_EQ(output, "ASSIGN [ 0 Bob ] to [ 5 Testing Determine what is paper ]");
+
+    ASSERT_EQ(board->get_task(5).assigned_members.size(),1);
+    EXPECT_EQ(board->get_task(5).assigned_members[0],0);
+}
+
+TEST_F(CommandsTest, testAssignMember2) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
+
+    // pre
+    TaskBoard* board = manager.dir->add_board("Board1");
+    board->categories.add_category(CategoryInfo(1,"Backlog"));
+    board->categories.add_category(CategoryInfo(2,"Testing"));
+    Member m0 = board->members.add_member(Member(0,"Bob"));
+    board->members.add_member(Member(1,"1"));
+    board->members.add_member(Member(2,"2"));
+    board->members.add_member(Member(3,"3"));
+    board->members.add_member(Member(4,"4"));
+    board->members.add_member(Member(5,"5"));
+    board->members.add_member(Member(6,"6"));
+    board->members.add_member(Member(7,"7"));
+    board->members.add_member(Member(8,"8"));
+    Member m9 =board->members.add_member(Member(9,"Shizuku"));
+    board->add_task("dummy",1);
+    board->add_task("dummy",1);
+    board->add_task("dummy",1);
+    board->add_task("dummy",1);
+    board->add_task("dummy",1);
+    Task t5 = board->add_task("Determine what is paper",2);
+
+    in << "assign-member 5 Shizuku Board1" << std::endl;
+
+    auto result = manager.parse_command(in, out);
+    EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
+    
+    std::getline(out, output);
+    EXPECT_EQ(output, "ASSIGN [ 9 Shizuku ] to [ 5 Testing Determine what is paper ]");
+
+    ASSERT_EQ(board->get_task(5).assigned_members.size(),1);
+    EXPECT_EQ(board->get_task(5).assigned_members[0],9);
+}
+
+TEST_F(CommandsTest, testAssignMember3) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
+
+    // pre
+    TaskBoard* board = manager.dir->add_board("Board1");
+    board->categories.add_category(CategoryInfo(1,"Backlog"));
+    board->categories.add_category(CategoryInfo(2,"Testing"));
+    Member m0 = board->members.add_member(Member(0,"Bob"));
+    board->members.add_member(Member(1,"1"));
+    board->members.add_member(Member(2,"2"));
+    board->members.add_member(Member(3,"3"));
+    board->members.add_member(Member(4,"4"));
+    board->members.add_member(Member(5,"5"));
+    board->members.add_member(Member(6,"6"));
+    board->members.add_member(Member(7,"7"));
+    board->members.add_member(Member(8,"8"));
+    Member m9 =board->members.add_member(Member(9,"Shizuku"));
+    board->add_task("dummy",1);
+    board->add_task("dummy",1);
+    board->add_task("dummy",1);
+    board->add_task("dummy",1);
+    board->add_task("dummy",1);
+    Task t5 = board->add_task("Determine what is paper",2);
+
+    in << "assign-member 5 Bob Board1" << std::endl;
+    auto result = manager.parse_command(in, out);
+    EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
+    in << "assign-member 5 Bob Board1" << std::endl;
+    result = manager.parse_command(in, out);
+    EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
+    
+    std::getline(out, output);
+    EXPECT_EQ(output, "ASSIGN [ 0 Bob ] to [ 5 Testing Determine what is paper ]");
+    EXPECT_THAT(output, testing::HasSubstr("ERROR"));
+
+    ASSERT_EQ(board->get_task(5).assigned_members.size(),1);
+    EXPECT_EQ(board->get_task(5).assigned_members[0],9);
+}
