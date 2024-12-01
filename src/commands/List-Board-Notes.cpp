@@ -14,7 +14,7 @@ public:
         return COMMAND_HELP_LIST_BOARD_NOTES;
     }
     std::vector<std::string> get_required_parameters() {return {"board",};};
-    std::vector<std::string> get_optional_parameters() {return {"filter","sort","full"};};
+    std::vector<std::string> get_optional_parameters() {return {"filter","author","sort","full"};};
 
     CommandManager::COMMAND_RUN_RESULT run(CommandParametersData parameters, std::ostream& out) {
         // Resolve board
@@ -34,6 +34,7 @@ public:
         }
         // Filter
         std::vector<Note*> notes;
+        std::vector<Note*>& final_notes = notes;
         std::string filter = "";
         if (parameters.has_parameter("filter") or sort != DataEntry::SORT_TYPE::NONE) {
             filter = parameters.get_parameter("filter");
@@ -41,7 +42,28 @@ public:
         }
         else notes = board->notes.get_notes();
 
-        for (auto n : notes){
+        // Filter via author
+        std::vector<Note*> author_filter_notes;
+        if (parameters.has_parameter("author")) {
+            // Resolve author id
+            uint32_t author_id = -1; // -1 will just be largest u32.
+            if (parameters.has_parameter("author")) {
+                try {
+                    author_id = get_member(*board,parameters.get_parameter("author")).id;
+                }
+                catch(const std::invalid_argument e)
+                {
+                    out << "ERROR: Member [" << parameters.get_parameter("author") << "] does not exist." << std::endl;
+                    return CommandManager::COMMAND_RUN_RESULT::ERROR;
+                }
+            }
+            for (auto n : final_notes) {
+                if (n->author_id == author_id) author_filter_notes.push_back(n);
+            }
+            final_notes = author_filter_notes;
+        }
+
+        for (auto n : final_notes){
             if (parameters.has_parameter("full")) out << n->to_string_full(*board) << std::endl;
             else out << n->to_string() << std::endl;
         }
