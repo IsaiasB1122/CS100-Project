@@ -38,9 +38,17 @@ public:
             out << "Error: Member [" << member_name << "] not found." << std::endl;
             return CommandManager::COMMAND_RUN_RESULT::ERROR;
         }
+
         uint32_t task_id = task.id;
         uint32_t member_id = member_to_assign.id;
-        board->assign_member(task_id, member_id);
+
+        try {
+            board->assign_member(task.id, member_to_assign.id); 
+        } catch (const std::runtime_error& e) {
+            out << "ERROR: " << e.what() << std::endl;
+            return CommandManager::COMMAND_RUN_RESULT::ERROR;
+        }
+
         task.changed = true;
 
         FileIOManager::taskboard_write(*board);
