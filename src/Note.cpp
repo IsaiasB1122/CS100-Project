@@ -31,7 +31,7 @@ std::string Note::to_string_full(const TaskBoard& board) const {
     }
     out.append("\n\"");
     std::string s;
-    unsigned int matched_index = -1;
+    int matched_index = -1;
     for (auto c : text) {
         switch (matched_index) {
             case -1:
