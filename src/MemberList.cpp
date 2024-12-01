@@ -44,10 +44,12 @@ const Member& MemberList::add_member(Member member) {
 }
 
 void MemberList::remove_member(uint32_t id) {
-    for (auto m = this->members.begin(); m < this->members.end(); m += 1) {
+    for (auto m = this->members.begin(); m != this->members.end(); ) {
         if ((*m)->id == id) {
-            this->members.erase(m);
-            delete *m;
+            delete *m;       
+            m = this->members.erase(m); 
+        } else {
+            ++m; 
         }
     }
 }
