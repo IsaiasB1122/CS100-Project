@@ -21,13 +21,23 @@ public:
         }
 
         std::string member_name = parameters.get_parameter("member");
-        Member member_to_remove = get_member(*board, member_name);
-        uint32_t id = member_to_remove.id;
-        board->members.remove_member(id);
-        board->members_changed = true;
-        FileIOManager::taskboard_write(*board);
+        try {
+            Member member_to_remove = get_member(*board, member_name);
+            uint32_t id = member_to_remove.id;
 
-        out << "REMOVE MEMBER " << member_to_remove.to_string() << std::endl;
+            board->members.remove_member(id);
+            board->members_changed = true;
+            FileIOManager::taskboard_write(*board);
+
+            out << "REMOVE MEMBER " << member_to_remove.to_string() << std::endl;
+        } catch (const std::invalid_argument& e) {
+            out << "ERROR: Member [" << member_name << "] not found on board [" 
+                << parameters.get_parameter("board") << "]." << std::endl;
+            return CommandManager::COMMAND_RUN_RESULT::ERROR;
+        } catch (const std::runtime_error& e) {
+            out << "ERROR: Failed to remove member [" << member_name << "]: " << e.what() << std::endl;
+            return CommandManager::COMMAND_RUN_RESULT::ERROR;
+        }
 
         return CommandManager::COMMAND_RUN_RESULT::GOOD;
     }
