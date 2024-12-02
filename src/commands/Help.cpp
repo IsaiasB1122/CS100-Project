@@ -33,11 +33,20 @@ class CommandOutputHelp : public Command {
 					}	
 				}
 				else { //when there is no parameter after "help"
-					out << "Available Commands: " << endl;
+						//format:
+						// - COMMAND_NAME <parameters...>
+						// # lines describe command
+						// >> lines show example command input
+						// > lines show example command output
+						// <parameters> are required
+						// [parameters] are optional
+					out << "COMMAND LIST" << endl;
+					out << "<parameters> are required" << endl;
+					out << "[parameters] are optional" << endl;
 					out << "-------------------" << endl; 
 					for(const auto& c : parent->command_map) {
-						out << "<" << c.first << ">" << endl;
-						out << c.second->get_help() << endl;
+						out << "||" << c.first << "||" << endl;
+						out << " > " << c.second->get_help() << endl;
 					}
 				}			
 			return CommandManager::COMMAND_RUN_RESULT::GOOD;			
