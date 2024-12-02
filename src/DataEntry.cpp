@@ -28,7 +28,7 @@ std::vector<DataEntry*> DataEntry::filter_data(std::vector<DataEntry*> data, std
             for (auto data_name_i = 0; data_name_i < d->name.size(); data_name_i += 1) {
                 for (auto query_name_i = 0; query_name_i < filter.size(); query_name_i += 1) {
                     if (data_name_i + query_name_i > d->name.size()) break;
-                    if (filter[query_name_i] != d->name[data_name_i + query_name_i]) break;
+                    if ( std::tolower(filter[query_name_i]) != std::tolower(d->name[data_name_i + query_name_i])) break;
                     if (query_name_i == filter.size()-1) {
                         pass = true;
                         goto end_check;
