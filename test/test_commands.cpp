@@ -789,3 +789,45 @@ TEST_F(CommandsTest, testListTasks3) {
     
 }
 // TODO: Add unit test to test sorting by modified
+
+TEST_F(CommandsTest, testHelp1) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
+
+    in << "help list-boards" << std::endl;
+    auto result = manager.parse_command(in,out);
+    std::getline(out, output);
+
+    std::string expectedResult =  std::string(COMMAND_HELP_LIST_BOARDS) + "\n";
+
+    EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
+    ASSERT_EQ(out.str(), expectedResult);
+}
+TEST_F(CommandsTest, testHelp2) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
+
+    in << "help ajshdjashdla" << std::endl;
+    auto result = manager.parse_command(in,out);
+    std::getline(out,output);
+
+    std::string expectedResult = "No command found for: ajshdjashdla\n";
+
+    EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
+    ASSERT_EQ(out.str(), expectedResult);
+}
+TEST_F(CommandsTest, testHelp3) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
+
+    in << "help help" << std::endl;
+    auto result = manager.parse_command(in,out);
+    std::getline(out,output);
+
+    std::string expectedResult = std::string(COMMAND_HELP_OUTPUT_HELP) + "\n";
+    EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
+    ASSERT_EQ(out.str(), expectedResult);
+}
