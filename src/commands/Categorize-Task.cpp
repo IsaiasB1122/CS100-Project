@@ -37,14 +37,6 @@ public:
 
     // Get the category
     const CategoryInfo* category = nullptr;
-    const std::vector<CategoryInfo*> categories = board->get_categories();
-    for (auto& cat : categories) {
-        if (cat->name == parameters.get_parameter("category") || 
-            std::to_string(cat->id) == parameters.get_parameter("category")) {
-            category = cat;
-            break;
-        }
-    }
     // Resolve category
     uint32_t category_id = 0;
     try {
