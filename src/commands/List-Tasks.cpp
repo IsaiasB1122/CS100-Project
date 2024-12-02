@@ -1,6 +1,7 @@
 #include <Commands.hpp>
 #include <lib/dir_helpers.hpp>
 #include <lib/file_io.hpp>
+#include <MemberList.hpp>
 
 #include <iostream>
 
@@ -13,7 +14,7 @@ public:
         return COMMAND_HELP_LIST_TASKS;
     }
     std::vector<std::string> get_required_parameters() {return {"board"};};
-    std::vector<std::string> get_optional_parameters() {return {"filter","category","sort"};};
+    std::vector<std::string> get_optional_parameters() {return {"filter","category","sort","member"};};
 
     CommandManager::COMMAND_RUN_RESULT run(CommandParametersData parameters, std::ostream& out) {
         // Resolve board
@@ -57,6 +58,26 @@ public:
                 out << "No tasks in board that have category: " << categoryParameter <<  std::endl;
                 return CommandManager::COMMAND_RUN_RESULT::ERROR;
             }
+        }
+        //need to filter task by member
+        //want to add member as an optional parameter and then an 
+        //additional filtering step at the end that runs 
+        //if the member parameter is given
+        //get member given below
+//         const Member& MemberList::get_member(std::string name) {
+//     for (auto it = members.begin(); it != members.end(); ++it) {
+//         if ((*it)->name == name) return **it; 
+//     }
+//     throw std::runtime_error("Member not found");
+// }
+        if (parameters.has_parameter("member")) {
+            const std::string memberParameter = parameters.get_parameter("member");
+            std::vector<Member*> memberlistFiltered;
+
+            // for (auto& task : tasks) {
+            //     if (task->assigned_members)
+            // }
+            // const Member& member = get_member(memberParameter);
         }
         // Out
         for (auto t : tasks) {
