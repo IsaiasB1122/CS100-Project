@@ -789,3 +789,61 @@ TEST_F(CommandsTest, testListTasks3) {
     
 }
 // TODO: Add unit test to test sorting by modified
+
+TEST_F(CommandsTest, testCategorizeTask1) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
+
+    // pre
+    TaskBoard* board = manager.dir->add_board("Board1");
+    board->categories.add_category(CategoryInfo(1,"Backlog"));
+    board->add_task("Implement a feature");
+
+    in << "categorize-task \"Implement a feature\" --category Backlog --board Board1" << std::endl;
+    auto result = manager.parse_command(in, out);
+    EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
+
+    std::getline(out, output);
+    EXPECT_EQ(output, "CATEGORIZE TASK [ 1 Backlog Implement a feature ] TODO-->Backlog");
+
+    EXPECT_EQ(board->get_task(0).category_id, 1);
+}
+TEST_F(CommandsTest, testCategorizeTask2) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
+
+    // pre
+    TaskBoard* board = manager.dir->add_board("Board1");
+    board->categories.add_category(CategoryInfo(1,"Backlog"));
+    board->add_task("Implement a feature");
+
+    in << "categorize-task \"Implement a feature\" --category 1 --board Board1" << std::endl;
+    auto result = manager.parse_command(in, out);
+    EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
+
+    std::getline(out, output);
+    EXPECT_EQ(output, "CATEGORIZE TASK [ 1 Backlog Implement a feature ] TODO-->Backlog");
+
+    EXPECT_EQ(board->get_task(0).category_id, 1);
+}
+TEST_F(CommandsTest, testCategorizeTask3) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
+
+    // pre
+    TaskBoard* board = manager.dir->add_board("Board1");
+    board->categories.add_category(CategoryInfo(1,"Backlog"));
+    board->add_task("Implement a feature");
+
+    in << "categorize-task \"Implement a feature\" --category EpicCategory --board Board1" << std::endl;
+    auto result = manager.parse_command(in, out);
+    EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
+
+    std::getline(out, output);
+    EXPECT_THAT(output, testing::HasSubstr("ERROR"));
+
+    EXPECT_EQ(board->get_task(0).category_id, 0);
+}
