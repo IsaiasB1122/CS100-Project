@@ -879,8 +879,9 @@ TEST_F(CommandsTest, testAssignMember3) {
     
     std::getline(out, output);
     EXPECT_EQ(output, "ASSIGN [ 0 Bob ] to [ 5 Testing Determine what is paper ]");
+    std::getline(out, output);
     EXPECT_THAT(output, testing::HasSubstr("ERROR"));
 
     ASSERT_EQ(board->get_task(5).assigned_members.size(),1);
-    EXPECT_EQ(board->get_task(5).assigned_members[0],9);
+    EXPECT_EQ(board->get_task(5).assigned_members[0],0);
 }
