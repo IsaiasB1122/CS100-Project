@@ -32,14 +32,7 @@ class CommandOutputHelp : public Command {
 						out << "No command found for: " << requestedCommand << endl;
 					}	
 				}
-				else { //when there is no parameter after "help"
-						//format:
-						// - COMMAND_NAME <parameters...>
-						// # lines describe command
-						// >> lines show example command input
-						// > lines show example command output
-						// <parameters> are required
-						// [parameters] are optional
+				else { 
 					out << "COMMAND LIST" << endl;
 					out << "<parameters> are required" << endl;
 					out << "[parameters] are optional" << endl;
