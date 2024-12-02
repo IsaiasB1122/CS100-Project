@@ -379,6 +379,7 @@ public:
         uint32_t assigned_member_num;
         std::fread(&assigned_member_num,4,1,f);
         // read assigned members
+        task.assigned_members.reserve(assigned_member_num);
         for (uint32_t i = 0; i < assigned_member_num; i += 1) std::fread(&task.assigned_members[i],4,1,f);
         // Read notelist
         note_list_read(task.notes, f);

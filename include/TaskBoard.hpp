@@ -40,6 +40,8 @@ public:
     const CategoryInfo& add_category(std::string name);
     void remove_category(uint32_t id);
 
+    void assign_member(uint32_t task_id, uint32_t member_id);
+
     std::vector<Task*> filter_task_name(std::string query, DataEntry::SORT_TYPE sort = DataEntry::SORT_TYPE::NONE);
 
     friend class FileIOManager;
