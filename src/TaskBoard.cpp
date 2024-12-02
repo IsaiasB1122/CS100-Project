@@ -71,7 +71,9 @@ const Task& TaskBoard::get_task(std::string name) {
     }
     throw std::invalid_argument("");
 }
-
+const std::vector<CategoryInfo*> TaskBoard::get_categories() {
+    return categories.get_categories(); 
+}
 const CategoryInfo& TaskBoard::add_category(std::string name) {
     CategoryInfo new_category;
     new_category.name = name;    

@@ -56,6 +56,38 @@ const CategoryInfo& get_category(TaskBoard& board, std::string category) {
     }
 }
 
+const Member& get_member(TaskBoard& board, std::string member) {
+    // First try name
+    auto members = board.members.get_members();
+    for (auto c : members) {
+        if (c->name == member) return *c;
+    }
+    // Now try as ID
+    uint32_t id;
+    try {
+        id = std::stoul(member);
+        return board.members.get_member(id);
+    }
+    catch (std::invalid_argument) {
+        throw std::invalid_argument("");
+    }
+}
 
+const Note& get_board_note(TaskBoard& board, std::string note) {
+    // First try name
+    auto notes = board.notes.get_notes();
+    for (auto c : notes) {
+        if (c->name == note) return *c;
+    }
+    // Now try as ID
+    uint32_t id;
+    try {
+        id = std::stoul(note);
+        return board.notes.get_note(id);
+    }
+    catch (std::invalid_argument) {
+        throw std::invalid_argument("");
+    }
+}
 
 #endif

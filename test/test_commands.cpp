@@ -256,9 +256,12 @@ TEST_F(CommandsTest, testAddBoardNote1) {
 
     // pre
     TaskBoard* board = manager.dir->add_board("Board2");
+    board->members.add_member(Member(0,"d1"));
+    board->members.add_member(Member(1,"d2"));
+    board->members.add_member(Member(2,"d3"));
     board->members.add_member(Member(3,"Siddharth"));
 
-    in << "add-board-note \"TODO: Finish task categories\" \"We need to add more task categories.\nI hope we can meet sometime!\" --author Siddharth --board Board2" << std::endl;
+    in << "add-board-note \"TODO: Finish task categories\" \"We need to add more task categories.<br>I hope we can meet sometime!\" --author Siddharth --board Board2" << std::endl;
 
     auto result = manager.parse_command(in, out);
     EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
@@ -268,10 +271,30 @@ TEST_F(CommandsTest, testAddBoardNote1) {
     
     ASSERT_EQ(board->notes.get_notes().size(),1);
     EXPECT_EQ(board->notes.get_note(0).name,"TODO: Finish task categories");
-    EXPECT_EQ(board->notes.get_note(0).text,"We need to add more task categories.\nI hope we can meet sometime!");
+    EXPECT_EQ(board->notes.get_note(0).text,"We need to add more task categories.<br>I hope we can meet sometime!");
     EXPECT_EQ(board->notes.get_note(0).author_id, 3);
+}
 
+TEST_F(CommandsTest, testAddBoardNote2) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
 
+    // pre
+    TaskBoard* board = manager.dir->add_board("Board2");
+
+    in << "add-board-note MyNote --text \"\" --board Board2" << std::endl;
+
+    auto result = manager.parse_command(in, out);
+    EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
+    
+    std::getline(out, output);
+    EXPECT_EQ(output, "ADD NOTE [ 0 MyNote ]");
+    
+    ASSERT_EQ(board->notes.get_notes().size(),1);
+    EXPECT_EQ(board->notes.get_note(0).name,"MyNote");
+    EXPECT_EQ(board->notes.get_note(0).text,"");
+    EXPECT_EQ(board->notes.get_note(0).author_id, -1);
 }
 
 TEST_F(CommandsTest, testRemoveBoardNote1) {
@@ -282,7 +305,7 @@ TEST_F(CommandsTest, testRemoveBoardNote1) {
     // pre
     Member dummy(0,"dummy");
     TaskBoard* board = manager.dir->add_board("Board2");
-    board->notes.add_note("TODO: Finish task categories","",dummy);
+    board->notes.add_note("TODO: Finish task categories","",dummy.id);
 
     in << "remove-board-note 0 Board2" << std::endl;
 
@@ -308,9 +331,9 @@ TEST_F(CommandsTest, testListBoardNotes1) {
     Member m0 = board->members.add_member(Member(0,"Amanda"));
     Member m1 = board->members.add_member(Member(1,"Siddharth"));
     board->notes.add_note("TODO: Finish task categories",
-    "We need more task categories.\nI hope we can meet sometime!",m0);
+    "We need more task categories.\\nI hope we can meet sometime!",m0.id);
     board->notes.add_note("RE: TODO: Finish task categories",
-    "But I thought we already made all of them? :p",m1);
+    "But I thought we already made all of them? :p",m1.id);
     
 
     in << "list-board-notes Board2" << std::endl;
