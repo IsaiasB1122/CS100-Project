@@ -25,7 +25,7 @@ public:
         try {
             task = get_task(*board, task_name); 
         } catch (const std::exception& e) {
-            out << "Error: Task [" << task_name << "] not found." << std::endl;
+            out << "ERROR: Task [" << task_name << "] not found." << std::endl;
             return CommandManager::COMMAND_RUN_RESULT::ERROR;
         }
 
@@ -35,7 +35,7 @@ public:
         try {
             member_to_assign = get_member(*board, member_name);
         } catch (const std::exception& e) {
-            out << "Error: Member [" << member_name << "] not found." << std::endl;
+            out << "ERROR: Member [" << member_name << "] not found." << std::endl;
             return CommandManager::COMMAND_RUN_RESULT::ERROR;
         }
 
@@ -48,8 +48,6 @@ public:
             out << "ERROR: " << e.what() << std::endl;
             return CommandManager::COMMAND_RUN_RESULT::ERROR;
         }
-
-        task.changed = true;
 
         FileIOManager::taskboard_write(*board);
         out << "ASSIGN " << member_to_assign.to_string() << " to " << task.to_string(*board) << std::endl;
