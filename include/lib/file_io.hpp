@@ -512,14 +512,11 @@ public:
         }
         // write metadata
         taskboard_write_metadata(board);
-        if (board.tasks_changed) {
-            board.tasks_changed = false;
-            // Write any takss that have been changed
-            for (auto task : board.tasks) {
-                if (task->changed) {
-                    task->changed = false;
-                    task_write(*task, board);
-                }
+        // Write any takss that have been changed
+        for (auto task : board.tasks) {
+            if (task->changed) {
+                task->changed = false;
+                task_write(*task, board);
             }
         }
         if (board.categories_changed) {
