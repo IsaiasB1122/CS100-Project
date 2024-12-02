@@ -31,6 +31,7 @@ class Directory {
     void write_metadata();
 
 public:
+    Directory();
     class invalid_path : std::runtime_error {using std::runtime_error::runtime_error;};
     class unsupported_version : std::runtime_error {using std::runtime_error::runtime_error;};
     CategoryList default_categories;

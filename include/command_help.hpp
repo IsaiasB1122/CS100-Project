@@ -106,6 +106,4 @@ Otherwise, prints help message of the given command."
 "unset <name>\n"\
 "Unsets the given parameter"
 
-
-
 #endif

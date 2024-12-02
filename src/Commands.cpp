@@ -5,10 +5,19 @@
 #include <iomanip>
 
 std::string CommandParametersData::get_parameter(std::string name) {
-    return this->named_parameters[name];
+    // Return given parameter if present
+    if (this->named_parameters.count(name)) return this->named_parameters[name];
+    // Otherwise return from set if exists
+    else {
+        return this->parent->set_parameters[name];
+    }
 }
 bool CommandParametersData::has_parameter(std::string name) {
-    return this->named_parameters.count(name);
+    return this->named_parameters.count(name) + this->parent->set_parameters.count(name);
+}
+
+const std::map<std::string, std::string>& CommandParametersData::get_named_parameter_pairs() {
+    return this->named_parameters;
 }
 
 void CommandManager::set_parameter(std::string name, std::string value) {
@@ -81,9 +90,10 @@ CommandManager::COMMAND_PARSE_RESULT CommandManager::parse_command(std::istream&
         named_parameters[*arg] = positional_parameters[i];
     }
     // Now check that all required exist and throw error if not
-    for (auto arg : required_parameters) if (!named_parameters.count(arg)) return CommandManager::BAD_PARAMETERS;
+    for (auto arg : required_parameters) if (! (named_parameters.count(arg) or set_parameters.count(arg) )) return CommandManager::BAD_PARAMETERS;
 
     CommandParametersData paramdata;
+    paramdata.parent = this;
     paramdata.named_parameters = named_parameters;
     paramdata.positional_parameters = positional_parameters;
 

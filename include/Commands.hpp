@@ -40,6 +40,7 @@ class CommandParametersData {
 public:
     std::string get_parameter(std::string name);
     bool has_parameter(std::string name);
+    const std::map<std::string, std::string>& get_named_parameter_pairs();
 
     friend class CommandManager;
 };

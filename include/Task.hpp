@@ -4,6 +4,8 @@
 #include <DataEntry.hpp>
 #include <NoteList.hpp>
 
+class TaskBoard;
+
 class Task : public DataEntry {
 public:
     uint32_t category_id;
@@ -11,6 +13,7 @@ public:
     NoteList notes;
     bool changed;
 
+    std::string to_string(TaskBoard& board) const;
 
     friend class FileIOManager;
 };
