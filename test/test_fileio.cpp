@@ -176,3 +176,35 @@ TEST_F(FileIOTest, DirectoryReadWriteMatchCategoriesTasks) {
 
     EXPECT_TRUE(compare_dir(dir,dir2));
 };
+
+TEST_F(FileIOTest, DirectoryReadWriteMatchCategoriesTasksMembers) {
+    // setup 
+    const std::string path ="_test/DirectoryReadWriteMatchAddBoards";
+    Directory dir;
+    Directory dir2;
+
+    TaskBoard* board = dir.add_board("board1");
+    board->add_category("Category1");
+    board->add_category("Category2");
+    board->add_category("Category3");
+    board->add_task("Task1",0);
+    board->add_task("Task2",0);
+    board->add_task("Task3",1);
+    board->add_task("Task3",2);
+    board->add_task("Some Task etc",3);
+    board->add_task("Non-ascii task チョメチョメ");
+    board->members.add_member(Member(0,"Bob"));
+    board->members.add_member(Member(1,"John"));
+    board->assign_member(0,0);
+    board->assign_member(0,1);
+    board->assign_member(1,1);
+    board->assign_member(2,0);
+
+
+    EXPECT_NO_THROW({
+        FileIOManager::directory_new_at_path(dir,path,"test");
+        FileIOManager::directory_load_from_path(dir2,path);
+    });
+
+    EXPECT_TRUE(compare_dir(dir,dir2));
+};
