@@ -379,6 +379,7 @@ public:
         uint32_t assigned_member_num;
         std::fread(&assigned_member_num,4,1,f);
         // read assigned members
+        task.assigned_members.reserve(assigned_member_num);
         for (uint32_t i = 0; i < assigned_member_num; i += 1) std::fread(&task.assigned_members[i],4,1,f);
         // Read notelist
         note_list_read(task.notes, f);
@@ -512,14 +513,11 @@ public:
         }
         // write metadata
         taskboard_write_metadata(board);
-        if (board.tasks_changed) {
-            board.tasks_changed = false;
-            // Write any takss that have been changed
-            for (auto task : board.tasks) {
-                if (task->changed) {
-                    task->changed = false;
-                    task_write(*task, board);
-                }
+        // Write any takss that have been changed
+        for (auto task : board.tasks) {
+            if (task->changed) {
+                task->changed = false;
+                task_write(*task, board);
             }
         }
         if (board.categories_changed) {

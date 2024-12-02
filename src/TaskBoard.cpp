@@ -71,6 +71,14 @@ const Task& TaskBoard::get_task(std::string name) {
     }
     throw std::invalid_argument("");
 }
+
+void TaskBoard::move_task(uint32_t id, uint32_t category_id) {
+    // Find the task with the given ID and update its category to category_id
+    Task& task = const_cast<Task&>(get_task(id));  // Use reference (non-const) for modification
+    task.category_id = category_id;  // Now we can modify 'task'
+    task.changed = true;
+}
+
 const std::vector<CategoryInfo*> TaskBoard::get_categories() {
     return categories.get_categories(); 
 }
@@ -96,4 +104,19 @@ std::vector<Task*> TaskBoard::filter_task_name(std::string query, DataEntry::SOR
     for (auto t : filtered) out.push_back( reinterpret_cast<Task*>(t) );
 
     return out;
+}
+
+void TaskBoard::assign_member(uint32_t task_id, uint32_t member_id) {
+    // assumes ids are valid
+    for (auto t : tasks) {
+        if (t->id == task_id) {
+            for (auto assigned_member : t->assigned_members) {
+                if (assigned_member == member_id) {
+                    throw std::runtime_error("Member with ID [" + std::to_string(member_id) + "] is already assigned to Task with ID [" + std::to_string(task_id) + "].");
+                }
+            }
+        t->changed = true;
+        t->assigned_members.push_back(member_id);
+        }
+    }
 }
