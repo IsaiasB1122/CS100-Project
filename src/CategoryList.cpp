@@ -1,6 +1,7 @@
 
 #include <CategoryList.hpp>
 #include <stdexcept> 
+#include <algorithm>
 
 CategoryList::CategoryList() {
     next_category_id = 0;
@@ -45,18 +46,18 @@ const CategoryInfo& CategoryList::get_category(std::string name) {
 
 const CategoryInfo& CategoryList::add_category(CategoryInfo category) {
     category.id = next_category_id++; // Assign a unique ID to the category
-    CategoryInfo* new_category = new CategoryInfo(category);
-    categories.push_back(new_category);
-    return *new_category;
+    categories.push_back(new CategoryInfo(category));
+    return *categories.back();
 }
 
 void CategoryList::remove_category(uint32_t id) {
-    for (auto it = categories.begin(); it != categories.end(); ++it) {
-        if ((*it)->id == id) {
+    auto it = std::find_if(categories.begin(), categories.end(),
+        [id](const CategoryInfo* category) { 
+            return category->id == id; });
 
-            categories.erase(it); // Remove from the list
-            return;
-        }
+    if (it != categories.end()) {
+        categories.erase(it);
+    } else {
+        throw std::invalid_argument("Category ID not found");
     }
-    throw std::invalid_argument("Category with the given ID does not exist.");
 }

@@ -3,6 +3,7 @@
 
 #include <DataEntry.hpp>
 
+class TaskBoard;
 
 class Note : public DataEntry {
 public:
@@ -10,6 +11,8 @@ public:
     Note(uint32_t id, std::string name, std::string text, uint32_t author_id);
     std::string text;
     uint32_t author_id;
+
+    std::string to_string_full(const TaskBoard& board) const;
 };
 
 
