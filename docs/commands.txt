@@ -135,13 +135,13 @@ move-category <category> <position> <board>
 > [0	TODO]
 > [1	Finished]
 > [2	In Testing]
->> move-category "In Testing" 2 --Board1
+>> move-category "In Testing" 2 --board Board1
 > MOVE CATEGORY	[2	In Testing]	#3 --> #2
 >> list-categories Board1
 > [0	TODO]
 > [2	In Testing]
 > [1	Finished]
->> move-category "In Testing" 4 --Board1
+>> move-category "In Testing" 4 --board Board1
 > ERROR: Category #4 out of range. (board [0	Board1] only has 3 categories)
 
 add-member <name> <board>
