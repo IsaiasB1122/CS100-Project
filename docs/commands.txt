@@ -34,8 +34,8 @@ set [...]
 >> set --board 0
 > board = 0
 >> set --board 1 --author Bob
-> board = 1
 > author = Bob
+> board = 1
 
 unset <name>
 # Unsets the given parameter
@@ -47,19 +47,19 @@ unset <name>
 list-boards [filter]
 # Returns list of boards, filtered by [filter].
 >> list-boards
-> [0	Board1]
+> [0 Board1]
 > [1 Task Board Group 1]
 > [2 Group 2]
 >> list-boards board
 > [0 Board1]
 > [1 Task Board Group 1]
 
-new-board <name>
+add-board <name>
 # Creates a new board with the given name
->> new-board Board1
-> NEW BOARD	[0	Board1]
->> new-board "Final Project Board"
-> NEW BOARD	[1	Final Project Board ]
+>> add-board Board1
+> ADD BOARD	[0	Board1]
+>> add-board "Final Project Board"
+> ADD BOARD	[1	Final Project Board ]
 
 remove-board <board>
 # Deletes the given board
@@ -102,9 +102,9 @@ list-board-notes <board> [filter] [sort] [full]
 add-category <name> <board>
 # Adds a category with the given name to the given board
 >> add-category Finished Board1
-> NEW CATEGORY	[1	Finished]
+> ADD CATEGORY	[1	Finished]
 >> add-category "In Testing" --board Board1
-> NEW CATEGORY	[2	In Testing]
+> ADD CATEGORY	[2	In Testing]
 
 remove-category <category> <board>
 # Removes the category with given id from the given board
@@ -146,7 +146,7 @@ move-category <category> <position> <board>
 
 add-member <name> <board>
 >> add-member Bob Board1
-> NEW MEMBER [0	Bob]
+> ADD MEMBER [0	Bob]
 >> add-member Bob --board EpicBoard
 > NEW MEMBER [16	Bob]
 
@@ -170,11 +170,11 @@ remove-member <member> <board>
 
 add-task <name> <board> [category]
 >> add-task "Add more tasks" Board1 --category Backlog
-> NEW TASK [0	Backlog	Add more tasks]
+> ADD TASK [0	Backlog	Add more tasks]
 >> add-task --board Board1 "Implement a feature" 
-> NEW TASK [1	TODO	Implement a feature]
+> ADD TASK [1	TODO	Implement a feature]
 >> add-task --board Board1 "Fix leak in ceiling" --category EpicCategory
-> ERROR: Category "EpicCategory" does not match any Category name or ID of board [0	Board1]
+> ERROR: Category [EpicCategory] does not exist.
 
 categorize-task <task> <category> <board>
 # Sets task's category to new category
