@@ -59,11 +59,7 @@ public:
                 return CommandManager::COMMAND_RUN_RESULT::ERROR;
             }
         }
-        //need to filter task by member
-        //want to add member as an optional parameter and then an 
-        //additional filtering step at the end that runs 
-        //if the member parameter is given
-        //get member given below
+        //filter member
         if (parameters.has_parameter("member")) {
             std::string memberParameter = parameters.get_parameter("member");
             try {
