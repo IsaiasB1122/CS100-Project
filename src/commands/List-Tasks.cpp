@@ -1,7 +1,7 @@
 #include <Commands.hpp>
 #include <lib/dir_helpers.hpp>
 #include <lib/file_io.hpp>
-#include <MemberList.hpp>
+#include <TaskBoard.hpp>
 
 #include <iostream>
 
@@ -64,28 +64,34 @@ public:
         //additional filtering step at the end that runs 
         //if the member parameter is given
         //get member given below
-//         const Member& MemberList::get_member(std::string name) {
-//     for (auto it = members.begin(); it != members.end(); ++it) {
-//         if ((*it)->name == name) return **it; 
-//     }
-//     throw std::runtime_error("Member not found");
-// }
         if (parameters.has_parameter("member")) {
-            const std::string memberParameter = parameters.get_parameter("member");
-            std::vector<Member*> memberlistFiltered;
-        // uint32_t task_id = task.id;
-        // uint32_t member_id = member_to_assign.id;
-
-            // for (auto& task : tasks) {
-            //     if (task->assigned_members)
-            // }
-            // const Member& member = get_member(memberParameter);
+            std::string memberParameter = parameters.get_parameter("member");
+            try {
+                const Member& member = board->members.get_member(memberParameter);
+                std::vector<Task*> filteredTaskList;
+                for (auto task : tasks) {
+                    bool memberFound = false;
+                    for (auto assignedMemberID : task->assigned_members) {
+                        if (assignedMemberID == member.id) {
+                            memberFound = true;
+                            break;
+                        }
+                    }
+                    if (memberFound) {
+                        filteredTaskList.push_back(task);
+                    }
+                }
+                tasks = filteredTaskList;
+            } catch (const std::exception& e) {
+                out << "Member [" << memberParameter << "] not found." << std::endl;
+                return CommandManager::COMMAND_RUN_RESULT::ERROR;
+            }
+            
         }
         // Out
         for (auto t : tasks) {
             out << t->to_string(*board) << std::endl;
         }
-
         return CommandManager::COMMAND_RUN_RESULT::GOOD;
     }
 };
