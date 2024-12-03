@@ -22,28 +22,36 @@ public:
             return CommandManager::COMMAND_RUN_RESULT::ERROR;
         }
 
-        std::string category_name = parameters.get_parameter("category");
         uint32_t new_position = std::stoul(parameters.get_parameter("position")) - 1; // Convert to 0-based index
 
         try {
-            const CategoryInfo& category = board->categories.get_category(category_name);  // Find the category
-            uint32_t category_id = category.id;
-            board->categories.move_category(category_id, new_position);
-
-            out << "MOVE CATEGORY\t[" << category.id << "\t" << category.name << "]\t#" 
-                << category.id + 1 << " --> #" << new_position + 1 << std::endl;
-
-            FileIOManager::taskboard_write(*board);  // Save changes
-        } 
-            catch (const std::out_of_range&) {
-                out << "ERROR: Category #" << new_position + 1 << " out of range. (board " << board->to_string() 
-                << " only has " << board->categories.get_categories().size() << " categories)" << std::endl;
-                return CommandManager::COMMAND_RUN_RESULT::ERROR;
-            } 
-            catch (const std::exception& e) {
-                out << "ERROR: " << e.what() << std::endl;
+            // Resolve category
+            uint32_t category_id = 0;
+            try {
+                category_id = get_category(*board,parameters.get_parameter("category")).id;
+            }
+            catch(const std::invalid_argument e)
+            {
+                out << "ERROR: Category [" << parameters.get_parameter("category") << "] does not exist." << std::endl;
                 return CommandManager::COMMAND_RUN_RESULT::ERROR;
             }
-            return CommandManager::COMMAND_RUN_RESULT::GOOD;
+            const CategoryInfo& category = board->categories.get_category(category_id);
+            uint32_t old_position = board->categories.move_category(category_id, new_position) + 1;
+
+            out << "MOVE CATEGORY " << category.to_string() << " #" << old_position << " --> #" << new_position + 1 << std::endl;
+
+            board->categories_changed = true;
+            FileIOManager::taskboard_write(*board);  // Save changes
+        } 
+        catch (const std::out_of_range&) {
+            out << "ERROR: Category #" << new_position + 1 << " out of range. (board " << board->to_string() 
+            << " only has " << board->categories.get_categories().size() << " categories)" << std::endl;
+            return CommandManager::COMMAND_RUN_RESULT::ERROR;
+        } 
+        catch (const std::exception& e) {
+            out << "ERROR: " << e.what() << std::endl;
+            return CommandManager::COMMAND_RUN_RESULT::ERROR;
+        }
+        return CommandManager::COMMAND_RUN_RESULT::GOOD;
     }
 };
