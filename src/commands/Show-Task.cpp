@@ -23,9 +23,9 @@ public:
             return CommandManager::COMMAND_RUN_RESULT::ERROR; 
         }
         // Resolve task
-        const Task* task;
+        Task task;
         try {
-            task = &get_task(*board,parameters.get_parameter("task"));
+            task = get_task(*board,parameters.get_parameter("task"));
         }
         catch(const std::invalid_argument e)
         {
@@ -34,7 +34,7 @@ public:
         }
 
         // Output
-        out << task->to_string_full(*board) << std::endl;
+        out << task.to_string_full(*board) << std::endl;
 
         return CommandManager::COMMAND_RUN_RESULT::GOOD;
     }
