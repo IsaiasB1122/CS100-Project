@@ -14,6 +14,8 @@ public:
     bool changed;
 
     std::string to_string(TaskBoard& board) const;
+    std::string to_string_full(TaskBoard& board) const;
+
 
     friend class FileIOManager;
 };
