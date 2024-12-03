@@ -1010,3 +1010,69 @@ TEST_F(CommandsTest, testAssignMember3) {
     ASSERT_EQ(board->get_task(5).assigned_members.size(),1);
     EXPECT_EQ(board->get_task(5).assigned_members[0],0);
 }
+
+TEST_F(CommandsTest, testMoveCategory1) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
+
+    // pre
+    TaskBoard* board = manager.dir->add_board("Board1");
+    board->add_category("Finished");
+    board->add_category("In Testing");
+
+    ASSERT_EQ(board->categories.get_categories().size(), 3);
+    EXPECT_EQ(board->categories.get_categories()[0]->name, "TODO");
+    EXPECT_EQ(board->categories.get_categories()[0]->id, 0);
+    EXPECT_EQ(board->categories.get_categories()[1]->name, "Finished");
+    EXPECT_EQ(board->categories.get_categories()[1]->id, 1);
+    EXPECT_EQ(board->categories.get_categories()[2]->name, "In Testing");
+    EXPECT_EQ(board->categories.get_categories()[2]->id, 2);
+
+    in << "move-category \"In Testing\" 2 --Board Board1" << std::endl;
+    auto result = manager.parse_command(in, out);
+    EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
+    std::getline(out, output);
+
+    ASSERT_EQ(board->categories.get_categories().size(), 3);
+    EXPECT_EQ(board->categories.get_categories()[0]->name, "TODO");
+    EXPECT_EQ(board->categories.get_categories()[0]->id, 0);
+    EXPECT_EQ(board->categories.get_categories()[1]->name, "In Testing");
+    EXPECT_EQ(board->categories.get_categories()[1]->id, 2);
+    EXPECT_EQ(board->categories.get_categories()[2]->name, "Finished");
+    EXPECT_EQ(board->categories.get_categories()[2]->id, 1);
+}
+
+TEST_F(CommandsTest, testMoveCategory2) {
+    std::stringstream in;
+    std::stringstream out;
+    std::string output;
+
+    // pre
+    TaskBoard* board = manager.dir->add_board("Board1");
+    board->add_category("Finished");
+    board->add_category("In Testing");
+
+    ASSERT_EQ(board->categories.get_categories().size(), 3);
+    EXPECT_EQ(board->categories.get_categories()[0]->name, "TODO");
+    EXPECT_EQ(board->categories.get_categories()[0]->id, 0);
+    EXPECT_EQ(board->categories.get_categories()[1]->name, "Finished");
+    EXPECT_EQ(board->categories.get_categories()[1]->id, 1);
+    EXPECT_EQ(board->categories.get_categories()[2]->name, "In Testing");
+    EXPECT_EQ(board->categories.get_categories()[2]->id, 2);
+
+    in << "move-category \"In Testing\" 4 --Board Board1" << std::endl;
+    auto result = manager.parse_command(in, out);
+    EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
+    std::getline(out, output);
+
+    EXPECT_THAT(output, testing::HasSubstr("ERROR"));
+
+    ASSERT_EQ(board->categories.get_categories().size(), 3);
+    EXPECT_EQ(board->categories.get_categories()[0]->name, "TODO");
+    EXPECT_EQ(board->categories.get_categories()[0]->id, 0);
+    EXPECT_EQ(board->categories.get_categories()[1]->name, "Finished");
+    EXPECT_EQ(board->categories.get_categories()[1]->id, 1);
+    EXPECT_EQ(board->categories.get_categories()[2]->name, "In Testing");
+    EXPECT_EQ(board->categories.get_categories()[2]->id, 2);
+}
