@@ -13,6 +13,7 @@
 "Deletes a board with a given name"
 
 #define COMMAND_HELP_OUTPUT_HELP \
+"help [command]\n" \
 "Prints all commands available to user if command is not given.\n\
 Otherwise, prints help message of the given command."
 
