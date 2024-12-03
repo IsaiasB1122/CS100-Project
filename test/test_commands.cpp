@@ -1034,6 +1034,8 @@ TEST_F(CommandsTest, testMoveCategory1) {
     EXPECT_EQ(result, CommandManager::COMMAND_PARSE_RESULT::OK);
     std::getline(out, output);
 
+    EXPECT_EQ(output,"MOVE CATEGORY [ 2 In Testing ] #3 --> #2");
+
     ASSERT_EQ(board->categories.get_categories().size(), 3);
     EXPECT_EQ(board->categories.get_categories()[0]->name, "TODO");
     EXPECT_EQ(board->categories.get_categories()[0]->id, 0);
