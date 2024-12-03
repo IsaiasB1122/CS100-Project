@@ -73,6 +73,8 @@ public:
         if (parameters.has_parameter("member")) {
             const std::string memberParameter = parameters.get_parameter("member");
             std::vector<Member*> memberlistFiltered;
+        // uint32_t task_id = task.id;
+        // uint32_t member_id = member_to_assign.id;
 
             // for (auto& task : tasks) {
             //     if (task->assigned_members)
