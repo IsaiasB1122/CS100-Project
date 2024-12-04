@@ -1,7 +1,8 @@
 #include <Commands.hpp>
 #include <Directory.hpp>
 #include <lib/file_io.hpp>
-
+#include <TaskBoard.hpp>
+#include <lib/dir_helpers.hpp>
 #include <iostream>
 
 class CommandAddMember : public Command {

@@ -1,4 +1,8 @@
 #include <Commands.hpp>
+#include <TaskBoard.hpp>
+#include <Task.hpp>
+#include <lib/dir_helpers.hpp>
+#include <lib/file_io.hpp>
 
 #include <iostream>
 

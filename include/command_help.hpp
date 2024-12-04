@@ -13,6 +13,7 @@
 "Deletes a board with a given name"
 
 #define COMMAND_HELP_OUTPUT_HELP \
+"help [command]\n" \
 "Prints all commands available to user if command is not given.\n\
 Otherwise, prints help message of the given command."
 
@@ -58,7 +59,7 @@ Otherwise, prints help message of the given command."
 "List the members of a board. Filter is optional."
 
 #define COMMAND_HELP_LIST_TASKS \
-"list-tasks <board> [filter] [category] [sort]\n"\
+"list-tasks <board> [filter] [category] [sort] [member]\n"\
 "Lists tasks in the board. The filter will filter by task name.\n"\
 "Category filters by category\n" \
 "Sort accepts options ID, RECENT, OLD. Defaults to ID\n"\

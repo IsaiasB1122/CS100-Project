@@ -1,6 +1,7 @@
 #include <Commands.hpp>
 #include <lib/dir_helpers.hpp>
 #include <lib/file_io.hpp>
+#include <TaskBoard.hpp>
 
 #include <iostream>
 
@@ -13,7 +14,7 @@ public:
         return COMMAND_HELP_LIST_TASKS;
     }
     std::vector<std::string> get_required_parameters() {return {"board"};};
-    std::vector<std::string> get_optional_parameters() {return {"filter","category","sort"};};
+    std::vector<std::string> get_optional_parameters() {return {"filter","category","sort","member"};};
 
     CommandManager::COMMAND_RUN_RESULT run(CommandParametersData parameters, std::ostream& out) {
         // Resolve board
@@ -58,11 +59,35 @@ public:
                 return CommandManager::COMMAND_RUN_RESULT::ERROR;
             }
         }
+        //filter member
+        if (parameters.has_parameter("member")) {
+            std::string memberParameter = parameters.get_parameter("member");
+            try {
+                const Member& member = board->members.get_member(memberParameter);
+                std::vector<Task*> filteredTaskList;
+                for (auto task : tasks) {
+                    bool memberFound = false;
+                    for (auto assignedMemberID : task->assigned_members) {
+                        if (assignedMemberID == member.id) {
+                            memberFound = true;
+                            break;
+                        }
+                    }
+                    if (memberFound) {
+                        filteredTaskList.push_back(task);
+                    }
+                }
+                tasks = filteredTaskList;
+            } catch (const std::exception& e) {
+                out << "Member [" << memberParameter << "] not found." << std::endl;
+                return CommandManager::COMMAND_RUN_RESULT::ERROR;
+            }
+            
+        }
         // Out
         for (auto t : tasks) {
             out << t->to_string(*board) << std::endl;
         }
-
         return CommandManager::COMMAND_RUN_RESULT::GOOD;
     }
 };
