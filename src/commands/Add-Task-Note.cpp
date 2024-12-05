@@ -35,9 +35,16 @@ std::string get_name() {
         }
         //need to assign a note to a task.
         const Task& task = get_task(*board, parameters.get_parameter("task"));
-        Note n = task.notes.add_note(parameters.get_parameter("task"),parameters.get_parameter("text"),author_id);
-       
+        NoteList& notes = const_cast<NoteList&>(task.notes);
+        const Note& n = notes.add_note(parameters.get_parameter("title"), parameters.get_parameter("text"), author_id);
+        
+        board->notes_changed = true;
+        FileIOManager::taskboard_write(*board);
+        
         out << "ADD TASK NOTE " << n.to_string() << std::endl;
         return CommandManager::COMMAND_RUN_RESULT::GOOD;
+
+        //task object has a notelist member
+        //everything would be under notelist task
     }
 };
