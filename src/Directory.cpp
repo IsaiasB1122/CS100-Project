@@ -9,6 +9,12 @@ Directory::Directory() {
     default_categories.add_category({CategoryInfo(0,"TODO")});
 }
 
+Directory::~Directory() {
+    for (auto board : boards) {
+        delete board;
+    }
+}
+
 TaskBoard* Directory::add_board(std::string name) {
     TaskBoard* board = new TaskBoard(this);
 

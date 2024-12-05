@@ -8,6 +8,7 @@ class TaskBoard;
 
 class Task : public DataEntry {
 public:
+    Task();
     uint32_t category_id;
     std::vector<uint32_t> assigned_members;
     NoteList notes;

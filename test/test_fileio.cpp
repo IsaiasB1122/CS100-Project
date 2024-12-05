@@ -104,13 +104,23 @@ TEST_F(FileIOTest, DirectoryReadWriteMatchAddBoards) {
     Directory dir;
     Directory dir2;
 
-    dir.add_board("board1");
-    dir.add_board("board2");
-    dir.add_board("board3");
-    dir.add_board("board4");
-
     EXPECT_NO_THROW({
         FileIOManager::directory_new_at_path(dir,path,"test");
+    });
+
+    auto t1 = dir.add_board("board1");
+    auto t2 = dir.add_board("board2");
+    auto t3 = dir.add_board("board3");
+    auto t4 = dir.add_board("board4");
+
+    FileIOManager::directory_write_metadata(dir);
+    FileIOManager::taskboard_write(*t1);
+    FileIOManager::taskboard_write(*t2);
+    FileIOManager::taskboard_write(*t3);
+    FileIOManager::taskboard_write(*t4);
+
+
+    EXPECT_NO_THROW({
         FileIOManager::directory_load_from_path(dir2,path);
     });
 
@@ -123,13 +133,22 @@ TEST_F(FileIOTest, DirectoryReadWriteMatchAddRemoveBoards) {
     Directory dir;
     Directory dir2;
 
-    dir.add_board("board1");
-    dir.add_board("board2");
-    dir.add_board("board3");
-    dir.add_board("board4");
-
     EXPECT_NO_THROW({
         FileIOManager::directory_new_at_path(dir,path,"test");
+    });
+
+    auto t1 = dir.add_board("board1");
+    auto t2 = dir.add_board("board2");
+    auto t3 = dir.add_board("board3");
+    auto t4 = dir.add_board("board4");
+
+    FileIOManager::directory_write_metadata(dir);
+    FileIOManager::taskboard_write(*t1);
+    FileIOManager::taskboard_write(*t2);
+    FileIOManager::taskboard_write(*t3);
+    FileIOManager::taskboard_write(*t4);
+
+    EXPECT_NO_THROW({
         FileIOManager::directory_load_from_path(dir2,path);
     });
 
@@ -139,6 +158,7 @@ TEST_F(FileIOTest, DirectoryReadWriteMatchAddRemoveBoards) {
     FileIOManager::taskboard_delete(dir2,0);
     dir2.remove_board(dir2.get_board(2));
     FileIOManager::taskboard_delete(dir2,2);
+    FileIOManager::directory_write_metadata(dir2);
 
     Directory dir3;
     EXPECT_NO_THROW({
@@ -146,7 +166,8 @@ TEST_F(FileIOTest, DirectoryReadWriteMatchAddRemoveBoards) {
         FileIOManager::directory_load_from_path(dir3,path);
     });
 
-    EXPECT_TRUE(compare_dir(dir,dir3));
+    EXPECT_FALSE(compare_dir(dir,dir3));
+    EXPECT_TRUE(compare_dir(dir2,dir3));
 
 };
 
@@ -156,6 +177,10 @@ TEST_F(FileIOTest, DirectoryReadWriteMatchCategoriesTasks) {
     const std::string path ="_test/DirectoryReadWriteMatchAddBoards";
     Directory dir;
     Directory dir2;
+
+    EXPECT_NO_THROW({
+        FileIOManager::directory_new_at_path(dir,path,"test");
+    });
 
     TaskBoard* board = dir.add_board("board1");
     board->add_category("Category1");
@@ -168,9 +193,10 @@ TEST_F(FileIOTest, DirectoryReadWriteMatchCategoriesTasks) {
     board->add_task("Some Task etc",3);
     board->add_task("Non-ascii task チョメチョメ");
 
+    FileIOManager::directory_write_metadata(dir);
+    FileIOManager::taskboard_write(*board);
 
     EXPECT_NO_THROW({
-        FileIOManager::directory_new_at_path(dir,path,"test");
         FileIOManager::directory_load_from_path(dir2,path);
     });
 
@@ -182,6 +208,10 @@ TEST_F(FileIOTest, DirectoryReadWriteMatchCategoriesTasksMembers) {
     const std::string path ="_test/DirectoryReadWriteMatchAddBoards";
     Directory dir;
     Directory dir2;
+
+    EXPECT_NO_THROW({
+        FileIOManager::directory_new_at_path(dir,path,"test");
+    });
 
     TaskBoard* board = dir.add_board("board1");
     board->add_category("Category1");
@@ -200,9 +230,10 @@ TEST_F(FileIOTest, DirectoryReadWriteMatchCategoriesTasksMembers) {
     board->assign_member(1,1);
     board->assign_member(2,0);
 
+    FileIOManager::directory_write_metadata(dir);
+    FileIOManager::taskboard_write(*board);
 
     EXPECT_NO_THROW({
-        FileIOManager::directory_new_at_path(dir,path,"test");
         FileIOManager::directory_load_from_path(dir2,path);
     });
 

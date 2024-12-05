@@ -3,6 +3,12 @@
 #include <TaskBoard.hpp>
 #include <stdexcept>
 
+Task::Task() {
+    this->id = 0;
+    this->category_id = 0;
+    this->changed = false;
+}
+
 std::string Task::to_string(TaskBoard& board) const {
     std::string category_name;
     try  {
