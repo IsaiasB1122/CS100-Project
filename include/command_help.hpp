@@ -100,8 +100,11 @@ Otherwise, prints help message of the given command."
 "Shows the task of a given board"
 
 #define COMMAND_HELP_SUMMARY \
-"summary <board> [start] [end]\n"\
-"Prints a pretty kanban-style summary"\
+"summary <board> [start] [end] [limit]\n"\
+"Prints a pretty kanban-style summary\n"\
+"[start] and [end] give the category indexes to print from, "\
+"[limit] limits the number of rows to show"
+
 
 #define COMMAND_HELP_UNSET \
 "unset <name>\n"\
