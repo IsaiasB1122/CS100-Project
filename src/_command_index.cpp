@@ -27,6 +27,7 @@
 #include <Show-Task.cpp>
 #include <Summary.cpp>
 #include <Unset.cpp>
+#include <Add-Task-Note.cpp>
 
 void CommandManager::_index_commands() {
     // Include command registering here
@@ -55,4 +56,5 @@ void CommandManager::_index_commands() {
     register_command("show-task",CommandShowTask);
     register_command("summary",CommandSummary);
     register_command("unset",CommandUnset);
+    register_command("add-task-note",CommandAddTaskNote);
 }
