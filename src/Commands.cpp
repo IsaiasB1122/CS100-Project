@@ -27,6 +27,12 @@ void CommandManager::unset_parameter(std::string name) {
     this->set_parameters.erase(name);
 }
 
+CommandManager::~CommandManager() {
+    for (auto pair : command_map) {
+        delete (pair.second);
+    }
+}
+
 CommandManager::COMMAND_PARSE_RESULT CommandManager::parse_command(std::istream& in, std::ostream& out) {
     // Very unoptimized
     std::stringstream ss;

@@ -33,10 +33,12 @@ public:
             return CommandManager::COMMAND_RUN_RESULT::ERROR;
         }
 
+        std::string category_string = category.to_string();
+
         board->categories.remove_category(category.id);
         
            // Output success message with category info
-           out << "REMOVE CATEGORY " << category.to_string() << std::endl;
+           out << "REMOVE CATEGORY " << category_string << std::endl;
         }
         catch (const std::invalid_argument&) {
 			// If category is not found by name, attempt removal by ID
@@ -49,10 +51,11 @@ public:
                 return CommandManager::COMMAND_RUN_RESULT::ERROR;
             }
 
+                std::string category_string = category.to_string();
 				board->categories.remove_category(category.id);
 
             // Output success message with category info
-            out << "REMOVE CATEGORY " << category.to_string() << std::endl;
+            out << "REMOVE CATEGORY " << category_string << std::endl;
         } catch (const std::invalid_argument&) {
             out << "ERROR: Category " << parameters.get_parameter("category") << " not found on board." << std::endl;
             return CommandManager::COMMAND_RUN_RESULT::ERROR;
@@ -60,6 +63,7 @@ public:
     }
 
 		// Write the updated task board
+        board->categories_changed = true;
 		FileIOManager::taskboard_write(*board);
 
 		return CommandManager::COMMAND_RUN_RESULT::GOOD;

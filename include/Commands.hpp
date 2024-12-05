@@ -16,6 +16,8 @@ public:
     enum COMMAND_PARSE_RESULT {BAD_COMMAND, BAD_PARAMETERS, OK, OK_EXIT_AFTER, BAD_EXIT_AFTER};
     enum COMMAND_RUN_RESULT {ERROR, GOOD};
 
+    ~CommandManager();
+
     std::map<std::string,std::string> set_parameters;
     std::map<std::string, Command*> command_map;
 

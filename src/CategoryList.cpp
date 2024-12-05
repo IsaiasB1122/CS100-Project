@@ -67,13 +67,14 @@ const CategoryInfo& CategoryList::add_category(CategoryInfo category) {
 }
 
 void CategoryList::remove_category(uint32_t id) {
-    auto it = std::find_if(categories.begin(), categories.end(),
-        [id](const CategoryInfo* category) { 
-            return category->id == id; });
-
-    if (it != categories.end()) {
-        categories.erase(it);
-    } else {
-        throw std::invalid_argument("Category ID not found");
+    for (auto it = categories.begin(); it < categories.end(); it += 1) {
+        if ((*it)->id == id)
+        {
+            CategoryInfo* tp = *it;
+            categories.erase(it);
+            delete tp;
+            return;
+        }
     }
+    throw std::logic_error("Bad call to remove_category on missing id");
 }

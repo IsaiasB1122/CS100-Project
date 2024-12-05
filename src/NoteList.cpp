@@ -4,6 +4,11 @@
 NoteList::NoteList() {
     next_note_id = 0;
 }
+NoteList::~NoteList() {
+    for (auto note : notes) {
+        delete note;
+    }
+}
 
 const std::vector<Note*> NoteList::get_notes() {
     return notes;
