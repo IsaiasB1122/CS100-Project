@@ -17,7 +17,6 @@ std::string get_name() {
     CommandManager::COMMAND_RUN_RESULT run(CommandParametersData parameters, std::ostream& out) {
         //first, get the board
         TaskBoard* board = get_board(*this->parent->dir, parameters.get_parameter("board"));
-        std::vector<Task*> tasks = board->get_tasks(); 
         if (board == nullptr) {
             out << "ERROR: Board [" << parameters.get_parameter("board") << "] is not found." << std::endl;
             return CommandManager::COMMAND_RUN_RESULT::ERROR; 
@@ -33,12 +32,17 @@ std::string get_name() {
                 return CommandManager::COMMAND_RUN_RESULT::ERROR;
             }
         }
-        //need to assign a note to a task.
-        const Task& task = get_task(*board, parameters.get_parameter("task"));
-        NoteList& notes = const_cast<NoteList&>(task.notes);
-        const Note& n = notes.add_note(parameters.get_parameter("title"), parameters.get_parameter("text"), author_id);
+        //assign a note to a task.
+        //first, get the task
+        const Task& getTask = get_task(*board, parameters.get_parameter("task"));
+        //initialize another object so the "changed" memeber can be modified
+        Task task = getTask;
         
-        board->notes_changed = true;
+        //get the notes
+        NoteList& notes = task.notes;   
+        const Note& n = notes.add_note(parameters.get_parameter("title"), parameters.get_parameter("text"), author_id);
+    
+        task.changed = true;
         FileIOManager::taskboard_write(*board);
         
         out << "ADD TASK NOTE " << n.to_string() << std::endl;
