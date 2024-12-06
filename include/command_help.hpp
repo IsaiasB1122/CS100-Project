@@ -110,4 +110,8 @@ Otherwise, prints help message of the given command."
 "unset <name>\n"\
 "Unsets the given parameter"
 
+#define COMMAND_HELP_ADD_TASK_NOTE \
+"add-task-note <title> <text> <board> <task> [author]\n"\
+"Adds a note to a task"
+
 #endif
