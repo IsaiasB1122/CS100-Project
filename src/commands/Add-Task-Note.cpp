@@ -21,34 +21,30 @@ std::string get_name() {
             out << "ERROR: Board [" << parameters.get_parameter("board") << "] is not found." << std::endl;
             return CommandManager::COMMAND_RUN_RESULT::ERROR; 
         }
-        uint32_t author_id = -1; // -1 will just be largest u32.
+        uint32_t author_id = -1;
         if (parameters.has_parameter("author")) {
+            std::string authorOfTask = parameters.get_parameter("author");
             try {
-                author_id = get_member(*board,parameters.get_parameter("author")).id;
+                author_id = get_member(*board, authorOfTask).id;
             }
-            catch(const std::invalid_argument e)
-            {
-                out << "ERROR: Member [" << parameters.get_parameter("author") << "] does not exist." << std::endl;
+            catch(const std::invalid_argument e) {
+                out << "ERROR: Member [" << authorOfTask << "] does not exist." << std::endl;
                 return CommandManager::COMMAND_RUN_RESULT::ERROR;
             }
         }
         //assign a note to a task.
         //first, get the task
-        const Task& getTask = get_task(*board, parameters.get_parameter("task"));
-        //initialize another object so the "changed" memeber can be modified
-        Task task = getTask;
-        
-        //get the notes
-        NoteList& notes = task.notes;   
+        const Task& task = get_task(*board, parameters.get_parameter("task"));
+        //initialize another object so the "changed" member can be modified to true
+        Task& nonConstTask = const_cast<Task&>(task);
+        //get the notes 
+        NoteList& notes = nonConstTask.notes;   
         const Note& n = notes.add_note(parameters.get_parameter("title"), parameters.get_parameter("text"), author_id);
     
-        task.changed = true;
+        nonConstTask.changed = true;
         FileIOManager::taskboard_write(*board);
         
         out << "ADD TASK NOTE " << n.to_string() << std::endl;
         return CommandManager::COMMAND_RUN_RESULT::GOOD;
-
-        //task object has a notelist member
-        //everything would be under notelist task
     }
 };
