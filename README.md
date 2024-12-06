@@ -108,18 +108,33 @@ Several redundant and unneeded methods were also trimmed for he purpose of keepi
 There were no other major changes made to the class specifications.
 
  
- > ## Final deliverable
- > All group members will give a demo to the reader during lab time. ou should schedule your demo on Calendly with the same reader who took your second scrum meeting. The reader will check the demo and the project GitHub repository and ask a few questions to all the team members. 
- > Before the demo, you should do the following:
- > * Complete the sections below (i.e. Screenshots, Installation/Usage, Testing)
- > * Plan one more sprint (that you will not necessarily complete before the end of the quarter). Your In-progress and In-testing columns should be empty (you are not doing more work currently) but your TODO column should have a full sprint plan in it as you have done before. This should include any known bugs (there should be some) or new features you would like to add. These should appear as issues/cards on your Project board.
- > * Make sure your README file and Project board are up-to-date reflecting the current status of your project (e.g. any changes that you have made during the project such as changes to your class diagram). Previous versions should still be visible through your commit history.
->  * Each team member should also submit the Individual Contributions Form on Canvas for this final phase. In this form, you need to fill in the names of all team members, the percentage of work contributed by each member for the final phase, and a description of their contributions. Remember that each team member should submit the form individually.
- 
  ## Screenshots
  > Screenshots of the input/output after running your application
  ## Installation/Usage
- > Instructions on installing and running your application
+ ### Compilation
+ The program is intended to compile with CMake, GNU Make, and GCC.<br>
+ Other build setups using CMake may work but are not tested.<br>
+ Steps to compile on unix:<br>
+```
+mkdir build # make build directory for out-of-source build (reccomended)
+cmake ../
+make
+# Will produce project executable at ../bin
+```
+### Usage
+To use, run the program with a directory to use for storage as the first argument<br>
+Run `help` command to list commands
+```
+cataboard /usr/cataboard-dir # Run with cataboard-dir as our data directory.
+> add-board --board Board # Create a new TaskBaord named Board
+> set --board Board # For this session, set the board parameter to use our new board
+> add-task "My Task" # Add a new task to our task board
+...
+```
+
  ## Testing
- > How was your project tested/validated? If you used CI, you should have a "build passing" badge in this README.
- 
+ > The project is tested via unit tests and practical tests.
+ > A unit test suite for File IO verifies that the project's data structures can be read and written without data loss or corruption
+ > A unit test suite for commands tests the program functionality and input-output mapping by ensuring that a representative set of commands will produce the right output and effects.
+ > In addition, we test informally by creating test directories with the project and trying to use the program as though we were a user.
+ > We check for memory issues using valgrind memcheck, primarily via a script that runs it on the unit tests.
