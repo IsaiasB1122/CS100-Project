@@ -109,7 +109,9 @@ There were no other major changes made to the class specifications.
 
  
  ## Screenshots
- > Screenshots of the input/output after running your application
+ > Screenshots of the input/output after running the application
+  ![](docs/Screenshotcataboard.png)
+
  ## Installation/Usage
  ### Compilation
  The program is intended to compile with CMake, GNU Make, and GCC.<br>
